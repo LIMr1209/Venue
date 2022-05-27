@@ -23,6 +23,13 @@ namespace DefaultNamespace
 
         private void Awake()
         {
+            loadAssetBundle();
+            mainCameraClone = FindObjectOfType<CinemachineBrain>().gameObject;
+            addThird();
+        }
+
+        public void loadAssetBundle()
+        {
             //从本地加载AssetBundle资源（LoadFromFile）
             firstAssetBundle=AssetBundle.LoadFromFile(Application.dataPath + firstAsset);
             if(firstAssetBundle==null)
@@ -30,13 +37,10 @@ namespace DefaultNamespace
                 return;
             }
             thirdAssetBundle=AssetBundle.LoadFromFile(Application.dataPath + thirdAsset);
-            if(firstAssetBundle==null)
+            if(thirdAssetBundle==null)
             {
                 return;
             }
-
-            mainCameraClone = FindObjectOfType<CinemachineBrain>().gameObject;
-            addThird();
         }
 
         private void Start()
@@ -66,24 +70,22 @@ namespace DefaultNamespace
         
         public void swithVisul(Vector3 location , Vector3 rotation)
         {
+            // firstAssetBundle.Unload(true);  // true 卸载assetBundle和加载的资源  false 卸载 assetBundle
+            // thirdAssetBundle.Unload(true);
+            // Destroy(GameObject.Find("PlayerFollowCamera"));
+            // Destroy(GameObject.FindGameObjectWithTag("Player"));
+            // loadAssetBundle();
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject p in players)
             {
                 Destroy(p);
             }
             //
-            CinemachineVirtualCamera[] playerFollowCameras = GameObject.FindObjectsOfType<CinemachineVirtualCamera>();
+            CinemachineVirtualCamera[] playerFollowCameras = FindObjectsOfType<CinemachineVirtualCamera>();
             foreach (CinemachineVirtualCamera p in playerFollowCameras)
             {
                 Destroy(p.gameObject);
             }
-            // GameObject[] cameras = GameObject.FindGameObjectsWithTag("MainCamera");
-            // foreach (GameObject p in cameras)
-            // {
-            //     Destroy(p);
-            // }
-            // Destroy(GameObject.Find("PlayerFollowCamera"));
-            // Destroy(GameObject.Find("MainCamera"));
 
             if(visual){
                 addThird(location, rotation);

@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEditor;
+using Object = System.Object;
 
 namespace DefaultNamespace
 {
@@ -16,13 +17,23 @@ namespace DefaultNamespace
         private void Awake()
         {
             GameObject model = Resources.Load<GameObject>(sceneModel);
+            Debug.Log(model.GetInstanceID()); // ID
+            // Destroy(model); // 不允许销毁资产以避免数据丢失。如果确实要删除资产，请使用DestroyImmediate
+            // Resources.UnloadUnusedAssets(); // 卸载无引用的所有资源  消耗性能
             GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);
-            // var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));
-            MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer t in meshRender)
+            // Resources.UnloadAsset(model); // 卸载资源 被引用无法卸载
+            var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));
+            foreach (Object t in tArray)
             {
-                t.gameObject.AddComponent<MeshCollider>();
+                MeshRenderer d = t as MeshRenderer;
+                d.gameObject.AddComponent<MeshCollider>();
+                
             }
+            // MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
+            // foreach (MeshRenderer t in meshRender)
+            // {
+            //     t.gameObject.AddComponent<MeshCollider>();
+            // }
             
             Camera[] cameras = newModel.gameObject.GetComponentsInChildren<Camera>();
             foreach (Camera c in cameras)

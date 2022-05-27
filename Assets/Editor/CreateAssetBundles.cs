@@ -12,7 +12,25 @@ public class CreateAssetBundles
         {
             Directory.CreateDirectory(assetBundleDirectory);
         }
+
+        // AssetBundleBuild[] builds = new AssetBundleBuild[3];
+        // AssetBundleBuild build = new AssetBundleBuild();
+        // build.assetBundleName = "firstprefabs";
+        // build.assetBundleVariant = "plugin";
+        // build.assetNames = new[]
+        // {
+        //     "Assets/Plugins/StarterAssets/FirstPersonController/Prefabs/MainCamera.prefab",
+        //     "Assets/Plugins/StarterAssets/FirstPersonController/Prefabs/PlayerFollowCamera.prefab",
+        //     "Assets/Plugins/StarterAssets/FirstPersonController/Prefabs/PlayerCapsule.prefab"
+        // };
+            
+        // builds[0] = build;
+        // BuildPipeline.BuildAssetBundles(assetBundleDirectory, builds.ToArray(), BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+
         //三个参数：第一个是创建的目录位置，第二个是AssetBundle的压缩方式，第三个是创建的平台。
-        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.None, BuildTarget.StandaloneWindows);
+        // 压缩方式 默认  LZMA
+        // UncompressedAssetBundle 不压缩
+        // ChunkBasedCompression lz4 压缩  折中
+        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
     }
 }
