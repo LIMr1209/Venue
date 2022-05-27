@@ -1,21 +1,23 @@
 ﻿using System;
 using Cinemachine;
+using StarterAssets;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public class AddController : MonoBehaviour
     {
-        private bool visual = false;
+        private bool visual = false;// 第一人称 第三人称切换
 
         private GameObject playerFollowCameraClone;
         private GameObject mainCameraClone;
+        private bool disableController = true; // 视角控制器禁用启用
         
         private string firstAsset = "/AssetBundles/" + "firstprefabs.plugin";
         private string thirdAsset = "/AssetBundles/" + "thirdprefabs.plugin"; // //最后一个字符串是AssetBundle的名字
 
-        private AssetBundle firstAssetBundle;
-        private AssetBundle thirdAssetBundle;
+        private AssetBundle firstAssetBundle;  // 第一人称 assetbindle
+        private AssetBundle thirdAssetBundle;  // 第三人称 assetbindle
         
         //第二种方式就是使用AssetBundle(AssetBundle是一个资源的集合，可以是Unity3D所支持的任何资源格式)。   
 
@@ -50,6 +52,16 @@ namespace DefaultNamespace
             {
                 swithVisul(location, rotation);
             }
+            // if (Input.GetKeyDown("n"))
+            // {
+            //     disableController = !disableController;
+            //     Cursor.visible = !disableController;
+            //     Cursor.lockState=CursorLockMode.None; // 光标行为是不修改
+            //     if (player.TryGetComponent<FirstPersonController>(out FirstPersonController first))
+            //         first.enabled = disableController;
+            //     if (player.TryGetComponent<ThirdPersonController>(out ThirdPersonController third))
+            //         third.enabled = disableController;
+            // }
         }
         
         public void swithVisul(Vector3 location , Vector3 rotation)
