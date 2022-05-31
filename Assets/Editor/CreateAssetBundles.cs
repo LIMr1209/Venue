@@ -31,6 +31,7 @@ public class CreateAssetBundles
         // 压缩方式 默认  LZMA
         // UncompressedAssetBundle 不压缩
         // ChunkBasedCompression lz4 压缩  折中
-        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
+        // WebGL 构建
+        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
     }
 }

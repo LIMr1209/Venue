@@ -1,7 +1,8 @@
-﻿using System;
+﻿using System.Collections;
+using System.IO;
 using Cinemachine;
-using StarterAssets;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace
 {
@@ -12,9 +13,7 @@ namespace DefaultNamespace
         private GameObject playerFollowCameraClone;
         private GameObject mainCameraClone;
         private bool disableController = true; // 视角控制器禁用启用
-        
-        private string firstAsset = "/AssetBundles/" + "firstprefabs.plugin";
-        private string thirdAsset = "/AssetBundles/" + "thirdprefabs.plugin"; // //最后一个字符串是AssetBundle的名字
+        private bool hasController = false;
 
         private AssetBundle firstAssetBundle;  // 第一人称 assetbindle
         private AssetBundle thirdAssetBundle;  // 第三人称 assetbindle
@@ -23,24 +22,51 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            loadAssetBundle();
+            StartCoroutine(loadAssetBundle());
             mainCameraClone = FindObjectOfType<CinemachineBrain>().gameObject;
-            addThird();
         }
 
-        public void loadAssetBundle()
+        IEnumerator loadAssetBundle()
         {
-            //从本地加载AssetBundle资源（LoadFromFile）
-            firstAssetBundle=AssetBundle.LoadFromFile(Application.dataPath + firstAsset);
-            if(firstAssetBundle==null)
-            {
-                return;
-            }
-            thirdAssetBundle=AssetBundle.LoadFromFile(Application.dataPath + thirdAsset);
-            if(thirdAssetBundle==null)
-            {
-                return;
-            }
+             // 从本地加载AssetBundle资源（LoadFromFile）
+             string firstPath = Path.Combine(Application.dataPath, Globle.AssetBundleDir, Globle.FirstAssetBundle);
+             string thirdPath = Path.Combine(Application.dataPath, Globle.AssetBundleDir, Globle.ThirdAssetBundle);
+             firstAssetBundle=AssetBundle.LoadFromFile(firstPath);
+             if(firstAssetBundle==null)
+             {
+                 yield return null;
+             }
+             thirdAssetBundle=AssetBundle.LoadFromFile(thirdPath);
+             if(thirdAssetBundle==null)
+             {
+                 yield return null;
+             }
+            // string firstUri = "http://127.0.0.1:8000/StreamingAssets/"+Globle.FirstAssetBundle;
+            // UnityWebRequest firstRequest = UnityWebRequestAssetBundle.GetAssetBundle(firstUri); // 获取assetBundle
+            // yield return firstRequest.SendWebRequest();
+            //
+            // if (firstRequest.result != UnityWebRequest.Result.Success)
+            // {
+            //     Debug.Log(firstRequest.error);
+            // }
+            // else
+            // {
+            //     firstAssetBundle = DownloadHandlerAssetBundle.GetContent(firstRequest);
+            //     Debug.Log(firstAssetBundle);
+            // }
+            // string thirdUri = "http://127.0.0.1:8000/StreamingAssets/"+Globle.ThirdAssetBundle;
+            // UnityWebRequest thirdRequest = UnityWebRequestAssetBundle.GetAssetBundle(thirdUri); // 获取assetBundle
+            // yield return thirdRequest.SendWebRequest();
+            //
+            // if (thirdRequest.result != UnityWebRequest.Result.Success)
+            // {
+            //     Debug.Log(thirdRequest.error);
+            // }
+            // else
+            // {
+            //     thirdAssetBundle = DownloadHandlerAssetBundle.GetContent(thirdRequest);
+            //     Debug.Log(thirdAssetBundle);
+            // }
         }
 
         private void Start()
@@ -49,23 +75,30 @@ namespace DefaultNamespace
         }
         private void Update()
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            Vector3 location = player.transform.localPosition;
-            Vector3 rotation = player.transform.localRotation.eulerAngles;
-            if (Input.GetKeyDown("v"))
+            if (!hasController)
             {
-                swithVisul(location, rotation);
+                addThird();
             }
-            // if (Input.GetKeyDown("n"))
-            // {
-            //     disableController = !disableController;
-            //     Cursor.visible = !disableController;
-            //     Cursor.lockState=CursorLockMode.None; // 光标行为是不修改
-            //     if (player.TryGetComponent<FirstPersonController>(out FirstPersonController first))
-            //         first.enabled = disableController;
-            //     if (player.TryGetComponent<ThirdPersonController>(out ThirdPersonController third))
-            //         third.enabled = disableController;
-            // }
+            else
+            {
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                Vector3 location = player.transform.localPosition;
+                Vector3 rotation = player.transform.localRotation.eulerAngles;
+                if (Input.GetKeyDown("v"))
+                {
+                    swithVisul(location, rotation);
+                }
+                // if (Input.GetKeyDown("n"))
+                // {
+                //     disableController = !disableController;
+                //     Cursor.visible = !disableController;
+                //     Cursor.lockState=CursorLockMode.None; // 光标行为是不修改
+                //     if (player.TryGetComponent<FirstPersonController>(out FirstPersonController first))
+                //         first.enabled = disableController;
+                //     if (player.TryGetComponent<ThirdPersonController>(out ThirdPersonController third))
+                //         third.enabled = disableController;
+                // }
+            }
         }
         
         public void swithVisul(Vector3 location , Vector3 rotation)
@@ -123,18 +156,22 @@ namespace DefaultNamespace
 
         public void addFirst(Vector3 location , Vector3 rotation)
         {
-            GameObject playerFollowCamera=firstAssetBundle.LoadAsset<GameObject>("PlayerFollowCamera.prefab"); //字符串是AssetBundle中资源名称
-            playerFollowCameraClone = Instantiate(playerFollowCamera);
-            // GameObject mainCamera=firstAssetBundle.LoadAsset<GameObject>("MainCamera.prefab"); //字符串是AssetBundle中资源名称
-            // mainCameraClone = Instantiate(mainCamera);
-            GameObject playerCapsule=firstAssetBundle.LoadAsset<GameObject>("PlayerCapsule.prefab"); //字符串是AssetBundle中资源名称
-            GameObject playerCapsuleClone = Instantiate(playerCapsule, location, Quaternion.Euler(rotation));
-            CinemachineVirtualCamera virtualCamera = playerFollowCameraClone.GetComponent<CinemachineVirtualCamera>();
-            // Transform cinemachineTarget =
-            //     GameObject.FindGameObjectWithTag("CinemachineTarget").GetComponent<Transform>();
-            Transform cinemachineTarget =
-                playerCapsuleClone.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-            virtualCamera.Follow = cinemachineTarget;
+            if (firstAssetBundle)
+            {
+                GameObject playerFollowCamera=firstAssetBundle.LoadAsset<GameObject>("PlayerFollowCamera.prefab"); //字符串是AssetBundle中资源名称
+                playerFollowCameraClone = Instantiate(playerFollowCamera);
+                // GameObject mainCamera=firstAssetBundle.LoadAsset<GameObject>("MainCamera.prefab"); //字符串是AssetBundle中资源名称
+                // mainCameraClone = Instantiate(mainCamera);
+                GameObject playerCapsule=firstAssetBundle.LoadAsset<GameObject>("PlayerCapsule.prefab"); //字符串是AssetBundle中资源名称
+                GameObject playerCapsuleClone = Instantiate(playerCapsule, location, Quaternion.Euler(rotation));
+                CinemachineVirtualCamera virtualCamera = playerFollowCameraClone.GetComponent<CinemachineVirtualCamera>();
+                // Transform cinemachineTarget =
+                //     GameObject.FindGameObjectWithTag("CinemachineTarget").GetComponent<Transform>();
+                Transform cinemachineTarget =
+                    playerCapsuleClone.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                virtualCamera.Follow = cinemachineTarget;
+                hasController = true;
+            }
         }
 
         public void addThird()
@@ -146,19 +183,23 @@ namespace DefaultNamespace
 
         public void addThird(Vector3 location , Vector3 rotation)
         {
-            GameObject playerFollowCamera=thirdAssetBundle.LoadAsset<GameObject>("PlayerFollowCamera.prefab"); //字符串是AssetBundle中资源名称
-            playerFollowCameraClone = Instantiate(playerFollowCamera);
-            // GameObject mainCamera=thirdAssetBundle.LoadAsset<GameObject>("MainCamera.prefab"); //字符串是AssetBundle中资源名称
-            // mainCameraClone = Instantiate(mainCamera);
-            GameObject playerArmature=thirdAssetBundle.LoadAsset<GameObject>("PlayerArmature.prefab"); //字符串是AssetBundle中资源名称
-            GameObject playerArmatureClone = Instantiate(playerArmature, location, Quaternion.Euler(rotation));
-            CinemachineVirtualCamera virtualCamera = playerFollowCameraClone.GetComponent<CinemachineVirtualCamera>();
-            // Transform cinemachineTarget =
-            //     GameObject.FindGameObjectWithTag("CinemachineTarget").GetComponent<Transform>();
-            Transform cinemachineTarget =
-                playerArmatureClone.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-            virtualCamera.Follow = cinemachineTarget;
-            // playerArmatureClone.GetComponent<ThirdPersonController>()._mainCamera = mainCameraClone; // 切换视角时 相机缺失 很奇怪
+            if (thirdAssetBundle)
+            {
+                GameObject playerFollowCamera=thirdAssetBundle.LoadAsset<GameObject>("PlayerFollowCamera.prefab"); //字符串是AssetBundle中资源名称
+                playerFollowCameraClone = Instantiate(playerFollowCamera);
+                // GameObject mainCamera=thirdAssetBundle.LoadAsset<GameObject>("MainCamera.prefab"); //字符串是AssetBundle中资源名称
+                // mainCameraClone = Instantiate(mainCamera);
+                GameObject playerArmature=thirdAssetBundle.LoadAsset<GameObject>("PlayerArmature.prefab"); //字符串是AssetBundle中资源名称
+                GameObject playerArmatureClone = Instantiate(playerArmature, location, Quaternion.Euler(rotation));
+                CinemachineVirtualCamera virtualCamera = playerFollowCameraClone.GetComponent<CinemachineVirtualCamera>();
+                // Transform cinemachineTarget =
+                //     GameObject.FindGameObjectWithTag("CinemachineTarget").GetComponent<Transform>();
+                Transform cinemachineTarget =
+                    playerArmatureClone.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                virtualCamera.Follow = cinemachineTarget;
+                hasController = true;
+                // playerArmatureClone.GetComponent<ThirdPersonController>()._mainCamera = mainCameraClone; // 切换视角时 相机缺失 很奇怪
+            }
         }
     }
 }

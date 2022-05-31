@@ -1,7 +1,5 @@
-﻿using System;
-using UnityEngine;
-using UnityEditor;
-using Object = System.Object;
+﻿using UnityEngine;
+using System.Runtime.InteropServices;
 
 namespace DefaultNamespace
 {
@@ -14,6 +12,12 @@ namespace DefaultNamespace
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "Models/场馆";
 
+        [DllImport("__Internal")]
+        private static extern int GetWindowWidth();
+        [DllImport("__Internal")]
+        private static extern int GetWindowHeight();
+        [DllImport("__Internal")]
+        private static extern void ResetCanvasSize(int width, int height);
         private void Awake()
         {
             GameObject model = Resources.Load<GameObject>(sceneModel);
@@ -39,6 +43,13 @@ namespace DefaultNamespace
             {
                 c.enabled = false;
             }
+        }
+
+        private void Update()
+        {
+            int width = GetWindowWidth();
+            int height = GetWindowHeight();
+            ResetCanvasSize(width, height);
         }
     }
 }

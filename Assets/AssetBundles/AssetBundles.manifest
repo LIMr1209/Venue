@@ -1,10 +1,10 @@
 ManifestFileVersion: 0
-CRC: 1967627751
+CRC: 519938932
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: firstprefabs.plugin
+      Name: firstcontroller.plugin
       Dependencies: {}
     Info_1:
-      Name: thirdprefabs.plugin
+      Name: thirdcontroller.plugin
       Dependencies: {}
