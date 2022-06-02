@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Unity.Plastic.Newtonsoft.Json;
 using Qiniu.Http;
 using System.Text;
 namespace Qiniu.Storage

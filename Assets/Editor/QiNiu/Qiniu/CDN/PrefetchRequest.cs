@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace Qiniu.CDN
 {

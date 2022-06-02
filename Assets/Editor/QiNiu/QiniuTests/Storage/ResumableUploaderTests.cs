@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Net;
 using System.IO;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace Qiniu.Storage.Tests
 {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Qiniu.Util;
 using Qiniu.Http;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace Qiniu.Storage
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using Qiniu.Util;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace Qiniu.Storage
 {

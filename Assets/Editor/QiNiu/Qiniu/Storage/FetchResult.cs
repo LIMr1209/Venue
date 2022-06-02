@@ -1,5 +1,5 @@
 ﻿using Qiniu.Http;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 using System.Text;
 namespace Qiniu.Storage
 {

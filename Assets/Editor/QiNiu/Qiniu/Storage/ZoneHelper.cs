@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using Qiniu.Http;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 
 namespace Qiniu.Storage
 {

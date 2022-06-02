@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Newtonsoft.Json;
+using Unity.Plastic.Newtonsoft.Json;
 using Qiniu.Storage;
 namespace Qiniu.Util
 {

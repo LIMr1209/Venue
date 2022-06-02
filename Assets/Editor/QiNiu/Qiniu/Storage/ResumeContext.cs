@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Unity.Plastic.Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Qiniu.Storage
