@@ -43,13 +43,14 @@ namespace DefaultNamespace
             {
                 c.enabled = false;
             }
+            
         }
 
         private void Update()
         {
-            int width = GetWindowWidth();
-            int height = GetWindowHeight();
-            ResetCanvasSize(width, height);
+            // int width = GetWindowWidth();
+            // int height = GetWindowHeight();
+            // ResetCanvasSize(width, height);
         }
     }
 }
