@@ -33,17 +33,16 @@ public class GameManager : MonoBehaviour
 
         if (loadFont)
         {
-            string fontPath = "/AssetsBundles/assetbundel/";
-            AssetBundle abFonta = AssetBundle.LoadFromFile(Application.dataPath + fontPath + "pingfangsca.ab");
+            AssetBundle abFonta = AssetBundle.LoadFromFile(Application.dataPath + "/AssetsBundles/pingfangsca.ab");
             TMP_FontAsset fonta = abFonta.LoadAsset<TMP_FontAsset>("PingFangSCA");
 
-            AssetBundle abFontaa = AssetBundle.LoadFromFile(Application.dataPath + fontPath + "pingfangscafont.ab");
+            AssetBundle abFontaa = AssetBundle.LoadFromFile(Application.dataPath + "/AssetsBundles/pingfangscafont.ab");
             Font fontaa = abFontaa.LoadAsset<Font>("PingFangSCAfont");
 
-            AssetBundle abFontb = AssetBundle.LoadFromFile(Application.dataPath + fontPath + "pingfangscb.ab");
+            AssetBundle abFontb = AssetBundle.LoadFromFile(Application.dataPath + "/AssetsBundles/pingfangscb.ab");
             TMP_FontAsset fontb = abFontb.LoadAsset<TMP_FontAsset>("PingFangSCB");
 
-            AssetBundle abFontbb = AssetBundle.LoadFromFile(Application.dataPath + fontPath + "pingfangscbfont.ab");
+            AssetBundle abFontbb = AssetBundle.LoadFromFile(Application.dataPath + "/AssetsBundles/pingfangscbfont.ab");
             Font fontbb = abFontbb.LoadAsset<Font>("PingFangSCBfont");
 
             loadFont = false;

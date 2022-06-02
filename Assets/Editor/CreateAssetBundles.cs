@@ -37,7 +37,7 @@ public class CreateAssetBundles
 
 
 
-    [MenuItem("AB/标记名称(可多选)/AssetBundel")]
+    [MenuItem("AB/标记名称(可多选)/UI")]
     public static void OnSetAssetsBundleName()
     {
         UnityEngine.Object[] objItem = Selection.objects;
@@ -45,7 +45,24 @@ public class CreateAssetBundles
         {
             string a_path = AssetDatabase.GetAssetPath(item);
             AssetImporter asset = AssetImporter.GetAtPath(a_path);
-            //int BeginIndex = a_path.IndexOf("UI");
+            int BeginIndex = a_path.IndexOf("UI");
+            int LastIndex = a_path.IndexOf(".");
+            int len = LastIndex - BeginIndex;
+            string bundleName = a_path.Substring(BeginIndex, len);
+            asset.assetBundleName = bundleName;
+            asset.assetBundleVariant = "ab";
+            asset.SaveAndReimport();
+        }
+    }
+
+    [MenuItem("AB/标记名称(可多选)/其他")]
+    public static void OnSetAssetsBundleNames()
+    {
+        UnityEngine.Object[] objItem = Selection.objects;
+        foreach (UnityEngine.Object item in objItem)
+        {
+            string a_path = AssetDatabase.GetAssetPath(item);
+            AssetImporter asset = AssetImporter.GetAtPath(a_path);
             int BeginIndex = a_path.IndexOf(item.name);
             int LastIndex = a_path.IndexOf(".");
             int len = LastIndex - BeginIndex;
@@ -56,7 +73,7 @@ public class CreateAssetBundles
         }
     }
 
-    
+
 
 
 

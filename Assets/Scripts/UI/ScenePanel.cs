@@ -86,7 +86,7 @@ public class ScenePanel : MonoBehaviour
         //OnUIdicActionFalse();
         //obj.SetActive(true);
 
-        string path = Application.dataPath + "/AssetsBundles/assetbundel/uiprefabs/" + _path;
+        string path = Application.dataPath + "/AssetsBundles/uiprefabs/" + _path;
         GameObject obj = Instantiate( GameManager.instances.OnLoadUIPanel(path,_path));
         UIdic.Add(_path, obj.GetComponent<UIbase>());
         obj.transform.SetParent(transform);
