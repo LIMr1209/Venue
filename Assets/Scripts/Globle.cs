@@ -5,7 +5,7 @@ namespace DefaultNamespace
     public class Globle : MonoBehaviour
     {
         // 全局变量
-        public static string AssetHost = "https://s3.taihuoniao.com/venue"; // 资源文件 域名
+        public static string AssetHost = "https://s3.taihuoniao.com"; // 资源文件 域名
         public static string ServiceHost = "http://render-dev.d3ingo.com/venue"; // 后端业务 域名
 
         public static string QiNiuPrefix = "unity/venue"; // 七牛资源前缀

@@ -3,7 +3,7 @@ CRC: 4166466798
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7262b9bf23a8aeb2d645f060d8b78dae
+    Hash: 9a069d1f4be17180b6bc9f942b17b6ae
   TypeTreeHash:
     serializedVersion: 2
     Hash: f1f3281e9c74f90bf058e8461320afcb
@@ -21,4 +21,4 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/AssetsPackages/Fonts/PingFangSCBfont.otf
 Dependencies:
-- D:/WorkPart/venue/Assets/AssetsBundles/pingfangscafont.ab
+- C:/Users/thn/Desktop/Venue/Assets/AssetsBundles/pingfangscafont.ab

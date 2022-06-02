@@ -1,39 +1,42 @@
 ManifestFileVersion: 0
-CRC: 245134175
+CRC: 3141815070
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: thirdcontroller.plugin
-      Dependencies: {}
-    Info_1:
-      Name: firstcontroller.plugin
-      Dependencies: {}
-    Info_2:
-      Name: uiprefabs/otherpanel.ab
-      Dependencies:
-        Dependency_0: pingfangsca.ab
-        Dependency_1: pingfangscb.ab
-    Info_3:
-      Name: uiprefabs/scenepanel.ab
-      Dependencies:
-        Dependency_0: pingfangsca.ab
-    Info_4:
-      Name: uiprefabs/sharepanel.ab
-      Dependencies:
-        Dependency_0: pingfangsca.ab
-    Info_5:
-      Name: pingfangsca.ab
-      Dependencies:
-        Dependency_0: pingfangscafont.ab
-    Info_6:
-      Name: pingfangscafont.ab
-      Dependencies:
-        Dependency_0: pingfangscbfont.ab
-    Info_7:
       Name: pingfangscb.ab
       Dependencies:
         Dependency_0: pingfangscbfont.ab
-    Info_8:
+    Info_1:
+      Name: uiprefabs/scenepanel.ab
+      Dependencies:
+        Dependency_0: pingfangsca.ab
+    Info_2:
+      Name: pingfangscafont.ab
+      Dependencies:
+        Dependency_0: pingfangscbfont.ab
+    Info_3:
+      Name: uiprefabs/otherpanel.ab
+      Dependencies:
+        Dependency_0: pingfangscb.ab
+        Dependency_1: pingfangsca.ab
+    Info_4:
+      Name: pingfangsca.ab
+      Dependencies:
+        Dependency_0: pingfangscafont.ab
+    Info_5:
       Name: pingfangscbfont.ab
       Dependencies:
         Dependency_0: pingfangscafont.ab
+    Info_6:
+      Name: uiprefabs/sharepanel.ab
+      Dependencies:
+        Dependency_0: pingfangsca.ab
+    Info_7:
+      Name: controller/playercapsule.ab
+      Dependencies: {}
+    Info_8:
+      Name: controller/playerfollowcamera.ab
+      Dependencies: {}
+    Info_9:
+      Name: controller/playerarmature.ab
+      Dependencies: {}

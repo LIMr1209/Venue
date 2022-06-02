@@ -3,7 +3,7 @@ CRC: 2096935823
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a29c6d06760fa1db5a614c881dd18759
+    Hash: fb92148af51eaeb9b69003567279c40b
   TypeTreeHash:
     serializedVersion: 2
     Hash: 879352d9470dda0fa121906a7213a13d
@@ -67,4 +67,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/AssetsPackages/prefabs/UIPrefabs/ScenePanel.prefab
 Dependencies:
-- D:/WorkPart/venue/Assets/AssetsBundles/pingfangsca.ab
+- C:/Users/thn/Desktop/Venue/Assets/AssetsBundles/pingfangsca.ab

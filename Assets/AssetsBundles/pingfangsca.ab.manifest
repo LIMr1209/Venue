@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4189242744
+CRC: 1542181748
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: a055959f86b59a4f15e042cfeebee88e
+    Hash: d5b8894cd3099cc9fca3e23690c42bb1
   TypeTreeHash:
     serializedVersion: 2
     Hash: e13787671dc5479918d412382ef15893
@@ -45,4 +45,4 @@ SerializeReferenceClassIdentifiers:
 Assets:
 - Assets/AssetsPackages/Fonts/PingFangSCA.asset
 Dependencies:
-- D:/WorkPart/venue/Assets/AssetsBundles/pingfangscafont.ab
+- C:/Users/thn/Desktop/Venue/Assets/AssetsBundles/pingfangscafont.ab

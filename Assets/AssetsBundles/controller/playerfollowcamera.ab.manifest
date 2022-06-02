@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 555240057
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2980dac70b80978504495642780a0ead
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 205d03ab120ec9046f3adcc393714018
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: bd6043bde05a7fc4cba197d06915c1e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b7f59e54f2bfd184b9dd451a678d089b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Cinemachine
+  ClassName: Cinemachine.CinemachineBrain/VcamActivatedEvent
+- AssemblyName: Cinemachine
+  ClassName: Cinemachine.CinemachineVirtualCameraBase/TransitionParams
+- AssemblyName: Cinemachine
+  ClassName: Cinemachine.LensSettings
+- AssemblyName: Cinemachine
+  ClassName: Cinemachine.NoiseSettings/NoiseParams
+- AssemblyName: Cinemachine
+  ClassName: Cinemachine.NoiseSettings/TransformNoiseParams
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+Assets:
+- Assets/AssetsPackages/Controller/First/PlayerFollowCamera.prefab
+Dependencies: []
