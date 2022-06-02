@@ -16,7 +16,7 @@ namespace DefaultNamespace
         public static string QiNiuSecretKey = "r-NUrKsnRBEwTQxbLONVrK9tPuncXyHmcq4BkSc7"; //七牛 QiNiuSecretKey
 
 
-        public static string AssetBundleDir = "AssetBundles";  // assetBundle 一级目录
+        public static string AssetBundleDir = "AssetsBundle";  // assetBundle 一级目录
         public static string FirstAssetBundle = "firstcontroller.plugin"; // 第一人称 assetBundle 名称
         public static string ThirdAssetBundle = "thirdcontroller.plugin"; // 第三人称 assetBundle 名称
         

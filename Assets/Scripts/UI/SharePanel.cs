@@ -13,6 +13,9 @@ public class SharePanel : UIbase
         txt = transform.Find("img_bg/img_linkbg/img_bg/txt_link").GetComponent<TMP_Text>();
         btn_Copylink = transform.Find("img_bg/img_linkbg/btn_Copylink").GetComponent<Button>();
         btn_Copylink.onClick.AddListener(OnCopy);
+
+
+       
     }
 
     // Update is called once per frame

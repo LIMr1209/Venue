@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 765302709
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b8793e5d22a465845f319c5a3c50cc1e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f1f3281e9c74f90bf058e8461320afcb
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetsPackages/Fonts/PingFangSCAfont.otf
+Dependencies:
+- D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscbfont.ab

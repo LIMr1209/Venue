@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 1693096923
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: thirdcontroller.plugin
+      Dependencies: {}
+    Info_1:
+      Name: firstcontroller.plugin
+      Dependencies: {}
+    Info_2:
+      Name: assetbundel/uiprefabs/otherpanel.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangsca.ab
+        Dependency_1: assetbundel/pingfangscafont.ab
+        Dependency_2: assetbundel/pingfangscb.ab
+        Dependency_3: assetbundel/pingfangscbfont.ab
+    Info_3:
+      Name: assetbundel/uiprefabs/scenepanel.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangsca.ab
+    Info_4:
+      Name: assetbundel/uiprefabs/sharepanel.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangsca.ab
+        Dependency_1: assetbundel/pingfangscafont.ab
+        Dependency_2: assetbundel/pingfangscbfont.ab
+    Info_5:
+      Name: assetbundel/pingfangsca.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangscafont.ab
+    Info_6:
+      Name: assetbundel/pingfangscafont.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangscbfont.ab
+    Info_7:
+      Name: assetbundel/pingfangscb.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangscbfont.ab
+    Info_8:
+      Name: assetbundel/pingfangscbfont.ab
+      Dependencies:
+        Dependency_0: assetbundel/pingfangscafont.ab

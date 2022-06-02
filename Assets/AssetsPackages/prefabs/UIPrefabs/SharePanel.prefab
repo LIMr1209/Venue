@@ -681,8 +681,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: https://thn.soul.ly/orWLC
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
+  m_sharedMaterial: {fileID: 868840665139354042, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1165,6 +1165,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4792d8bedcb3bb3408e05d0c7faf8180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tmplist:
+  - {fileID: 4306346031766569342}
+  - {fileID: 4306346031025743733}
+  - {fileID: 4306346030409092890}
+  - {fileID: 4306346032113268380}
+  A: {fileID: 11400000, guid: 6aba84d46ed7cfe48878a52e54b4280b, type: 2}
+  B: {fileID: 11400000, guid: cc368bed29b6f9a41b2baa319c3e837b, type: 2}
 --- !u!1 &4306346032113268380
 GameObject:
   m_ObjectHideFlags: 0

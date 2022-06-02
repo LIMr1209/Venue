@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.IO;
+using UnityEngine.Networking;
+using TMPro;
 
 public class ScenePanel : MonoBehaviour
 {
@@ -23,6 +26,8 @@ public class ScenePanel : MonoBehaviour
 
     void Start()
     {
+        
+
         btn_Other = transform.Find("img_bottonbg/btn_other").GetComponent<Button>();
         btn_Other.onClick.AddListener(OnActionOtherPanel);
         btn_Share = transform.Find("img_bottonbg/btn_share").GetComponent<Button>();
@@ -73,8 +78,16 @@ public class ScenePanel : MonoBehaviour
 
     private void OnSetPanel(string _path,Vector3 point)
     {
-        string path = "prefabs/UIPrefabs/" + _path;
-        GameObject obj = Instantiate(Resources.Load(path)) as GameObject;
+        //string path = "prefabs/UIPrefabs/" + _path;
+        //GameObject obj = Instantiate(Resources.Load(path)) as GameObject;
+        //UIdic.Add(_path, obj.GetComponent<UIbase>());
+        //obj.transform.SetParent(transform);
+        //obj.transform.localPosition = point;
+        //OnUIdicActionFalse();
+        //obj.SetActive(true);
+
+        string path = Application.dataPath + "/AssetsBundles/assetbundel/uiprefabs/" + _path;
+        GameObject obj = Instantiate( GameManager.instances.OnLoadUIPanel(path,_path));
         UIdic.Add(_path, obj.GetComponent<UIbase>());
         obj.transform.SetParent(transform);
         obj.transform.localPosition = point;

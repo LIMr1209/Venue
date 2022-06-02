@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class UIbase : MonoBehaviour
 {
-    // Start is called before the first frame update
     bool isAction = true;
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

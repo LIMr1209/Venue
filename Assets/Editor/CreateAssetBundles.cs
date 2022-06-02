@@ -3,11 +3,11 @@ using UnityEngine.Windows;
 
 public class CreateAssetBundles
 {
-    [MenuItem("AB/Build AssetBundles")]
+    [MenuItem("AB/Build/AssetBundles")]
     static void BuildAllAssetBundles()
     {
         //要创建的目录
-        string assetBundleDirectory = "Assets/AssetBundles";
+        string assetBundleDirectory = "Assets/AssetsBundles";
         if(!Directory.Exists(assetBundleDirectory))
         {
             Directory.CreateDirectory(assetBundleDirectory);
@@ -34,4 +34,81 @@ public class CreateAssetBundles
         // WebGL 构建
         BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
     }
+
+
+
+    [MenuItem("AB/标记名称(可多选)/AssetBundel")]
+    public static void OnSetAssetsBundleName()
+    {
+        UnityEngine.Object[] objItem = Selection.objects;
+        foreach (UnityEngine.Object item in objItem)
+        {
+            string a_path = AssetDatabase.GetAssetPath(item);
+            AssetImporter asset = AssetImporter.GetAtPath(a_path);
+            //int BeginIndex = a_path.IndexOf("UI");
+            int BeginIndex = a_path.IndexOf(item.name);
+            int LastIndex = a_path.IndexOf(".");
+            int len = LastIndex - BeginIndex;
+            string bundleName = a_path.Substring(BeginIndex, len);
+            asset.assetBundleName = "AssetBundel/"+bundleName;
+            asset.assetBundleVariant = "ab";
+            asset.SaveAndReimport();
+        }
+    }
+
+    [MenuItem("AB/标记名称(可多选)/Firstcontroller")]
+    public static void OnSetFirstcontrollerName()
+    {
+        UnityEngine.Object[] objItem = Selection.objects;
+        foreach (UnityEngine.Object item in objItem)
+        {
+            string a_path = AssetDatabase.GetAssetPath(item);
+            AssetImporter asset = AssetImporter.GetAtPath(a_path);
+            int BeginIndex = a_path.IndexOf(item.name);
+            int LastIndex = a_path.IndexOf(".");
+            int len = LastIndex - BeginIndex;
+            string bundleName = a_path.Substring(BeginIndex, len);
+            asset.assetBundleName = "Firstcontroller/" + bundleName;
+            asset.assetBundleVariant = "ab";
+            asset.SaveAndReimport();
+        }
+    }
+
+    [MenuItem("AB/标记名称(可多选)/Thirdcontroller")]
+    public static void OnSetThirdcontrollerName()
+    {
+        UnityEngine.Object[] objItem = Selection.objects;
+        foreach (UnityEngine.Object item in objItem)
+        {
+            string a_path = AssetDatabase.GetAssetPath(item);
+            AssetImporter asset = AssetImporter.GetAtPath(a_path);
+            int BeginIndex = a_path.IndexOf(item.name);
+            int LastIndex = a_path.IndexOf(".");
+            int len = LastIndex - BeginIndex;
+            string bundleName = a_path.Substring(BeginIndex, len);
+            asset.assetBundleName = "Thirdcontroller/" + bundleName;
+            asset.assetBundleVariant = "ab";
+            asset.SaveAndReimport();
+        }
+    }
+
+
+
+    [MenuItem("AB/清除标记(可多选)")]
+    public static void OnClearBundleName()
+    {
+        UnityEngine.Object[] objItem = Selection.objects;
+        foreach (UnityEngine.Object item in objItem)
+        {
+            string a_path = AssetDatabase.GetAssetPath(item);
+            AssetImporter asset = AssetImporter.GetAtPath(a_path);
+            asset.assetBundleName = null;
+            asset.assetBundleVariant = null;
+            asset.SaveAndReimport();
+        }
+    }
+
+
+
+
 }
