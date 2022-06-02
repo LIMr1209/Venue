@@ -11,8 +11,9 @@ namespace DefaultNamespace.UI
         {
 #if UNITY_EDITOR
             string path = Path.Combine(Application.dataPath, Globle.AssetBundleDir, filepath);
+            string uri="file:///"+path;
 #else
-            string path = Path.Combine(Globle.AssetPrefix, filepath).Replace("\\", "");
+            string url = Path.Combine(Globle.AssetPrefix, filepath).Replace("\\", "");
 #endif
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(path); // 获取assetBundle
             request.SendWebRequest();
