@@ -18,7 +18,7 @@ namespace DefaultNamespace
         public static string AesKey = "12345678901234561234567890123456"; // aes 解密 key
 
 
-        public static string AssetBundleDir = "AssetBundles";  // assetBundle 一级目录
+        public static string AssetBundleDir = "AssetsBundles";  // assetBundle 一级目录
         public static string FirstAssetBundle = "firstcontroller.plugin"; // 第一人称 assetBundle 名称
         public static string ThirdAssetBundle = "thirdcontroller.plugin"; // 第三人称 assetBundle 名称
         

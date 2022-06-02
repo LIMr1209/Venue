@@ -16,7 +16,6 @@ namespace Editor
         public static void Upload()
         {
 
-            Debug.Log(111);
             UploadApplication();
             // EditorCoroutine.start(UploadApplication());
 
@@ -25,15 +24,7 @@ namespace Editor
         public static void  UploadApplication()
         {
             List<string> files = new List<string>();
-            DirectoryInfo theFolder = new DirectoryInfo(Application.dataPath);
-            DirectoryInfo[] dirInfo = theFolder.GetDirectories();
-            foreach (DirectoryInfo NextFolder in dirInfo)
-            {
-                if (NextFolder.Name.EndsWith("AssetBundles") || NextFolder.Name.EndsWith("Resources"))
-                {
-                    ForeachFile(NextFolder.FullName, ref  files); 
-                }
-            }
+            ForeachFile(Path.Combine(Application.dataPath,Globle.AssetBundleDir), ref files); 
             foreach (string i  in files)
             {
                 HttpResult result = UploadFile(i);
@@ -54,11 +45,8 @@ namespace Editor
      
             foreach (FileInfo fileItem in file) //遍历文件
             {
-                if (!FilterFile(fileItem))
-                {
-                    string result = Path.Combine(fileItem.DirectoryName, fileItem.Name);
-                    files.Add(result);
-                }
+                string result = Path.Combine(fileItem.DirectoryName, fileItem.Name);
+                files.Add(result);
             }
             //遍历文件夹
             foreach (DirectoryInfo NextFolder in dirInfo)
