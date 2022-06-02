@@ -288,6 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4306346030409092889}
   - component: {fileID: 4306346030409092887}
+  - component: {fileID: 8009361222932033338}
   - component: {fileID: 4306346030409092888}
   m_Layer: 5
   m_Name: Text (TMP)
@@ -324,6 +325,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4306346030409092890}
   m_CullTransparentMesh: 1
+--- !u!114 &8009361222932033338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306346030409092890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80170764c1d42fe4b93eb76b2f5925b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
 --- !u!114 &4306346030409092888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,6 +637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4306346031025743732}
   - component: {fileID: 4306346031025743730}
+  - component: {fileID: 674716579046406324}
   - component: {fileID: 4306346031025743731}
   m_Layer: 5
   m_Name: txt_link
@@ -659,6 +674,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4306346031025743733}
   m_CullTransparentMesh: 1
+--- !u!114 &674716579046406324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306346031025743733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80170764c1d42fe4b93eb76b2f5925b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
 --- !u!114 &4306346031025743731
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -990,6 +1018,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4306346031766569341}
   - component: {fileID: 4306346031766569339}
+  - component: {fileID: 6866379886591115382}
   - component: {fileID: 4306346031766569340}
   m_Layer: 5
   m_Name: txt_Scenelink
@@ -1026,6 +1055,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4306346031766569342}
   m_CullTransparentMesh: 1
+--- !u!114 &6866379886591115382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306346031766569342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80170764c1d42fe4b93eb76b2f5925b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
 --- !u!114 &4306346031766569340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1165,13 +1207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4792d8bedcb3bb3408e05d0c7faf8180, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmplist:
-  - {fileID: 4306346031766569342}
-  - {fileID: 4306346031025743733}
-  - {fileID: 4306346030409092890}
-  - {fileID: 4306346032113268380}
-  A: {fileID: 11400000, guid: 6aba84d46ed7cfe48878a52e54b4280b, type: 2}
-  B: {fileID: 11400000, guid: cc368bed29b6f9a41b2baa319c3e837b, type: 2}
 --- !u!1 &4306346032113268380
 GameObject:
   m_ObjectHideFlags: 0
@@ -1182,6 +1217,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4306346032113268379}
   - component: {fileID: 4306346032113268377}
+  - component: {fileID: 3099348880689590702}
   - component: {fileID: 4306346032113268378}
   m_Layer: 5
   m_Name: txt_share
@@ -1218,6 +1254,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4306346032113268380}
   m_CullTransparentMesh: 1
+--- !u!114 &3099348880689590702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4306346032113268380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80170764c1d42fe4b93eb76b2f5925b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  font: {fileID: 11400000, guid: 24e7d90adfe3fc34f900242f91a61844, type: 2}
 --- !u!114 &4306346032113268378
 MonoBehaviour:
   m_ObjectHideFlags: 0

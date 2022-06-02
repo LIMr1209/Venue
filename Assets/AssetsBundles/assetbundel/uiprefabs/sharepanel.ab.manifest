@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 3726265455
+CRC: 1248399963
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: b23a7fdde95bf1bc7318417dd8ee7c9e
+    Hash: 5e57e1f761c57a990503662d3407d42c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 17561915bb0388f39c013556f901114f
+    Hash: ba0bf92625e7bf6918a527a2ca752f5c
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -25,6 +25,8 @@ ClassTypes:
   Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 80170764c1d42fe4b93eb76b2f5925b9, type: 3}
 - Class: 115
   Script: {instanceID: 0}
 - Class: 213
@@ -54,5 +56,3 @@ Assets:
 - Assets/AssetsPackages/prefabs/UIPrefabs/SharePanel.prefab
 Dependencies:
 - D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangsca.ab
-- D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscafont.ab
-- D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscbfont.ab

@@ -3,7 +3,7 @@ CRC: 1691694570
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: ddf917e53c7e41207f71f48f1ad2df32
+    Hash: 784e550ffe060ed8db6c38f83f06b6e7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6662752b61f9282c16ee08e8650e9f84
@@ -76,6 +76,4 @@ Assets:
 - Assets/AssetsPackages/prefabs/UIPrefabs/OtherPanel.prefab
 Dependencies:
 - D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangsca.ab
-- D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscafont.ab
 - D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscb.ab
-- D:/WorkPart/venue/Assets/AssetsBundles/assetbundel/pingfangscbfont.ab

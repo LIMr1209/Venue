@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class OtherPanel : UIbase
 {
-    public static OtherPanel aaa;
+    
 
     void Start()
     {

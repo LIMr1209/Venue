@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1693096923
+CRC: 3302832438
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -12,9 +12,7 @@ AssetBundleManifest:
       Name: assetbundel/uiprefabs/otherpanel.ab
       Dependencies:
         Dependency_0: assetbundel/pingfangsca.ab
-        Dependency_1: assetbundel/pingfangscafont.ab
-        Dependency_2: assetbundel/pingfangscb.ab
-        Dependency_3: assetbundel/pingfangscbfont.ab
+        Dependency_1: assetbundel/pingfangscb.ab
     Info_3:
       Name: assetbundel/uiprefabs/scenepanel.ab
       Dependencies:
@@ -23,8 +21,6 @@ AssetBundleManifest:
       Name: assetbundel/uiprefabs/sharepanel.ab
       Dependencies:
         Dependency_0: assetbundel/pingfangsca.ab
-        Dependency_1: assetbundel/pingfangscafont.ab
-        Dependency_2: assetbundel/pingfangscbfont.ab
     Info_5:
       Name: assetbundel/pingfangsca.ab
       Dependencies:
