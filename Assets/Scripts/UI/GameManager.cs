@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instances;
 
     public bool isClick = false;
+    Transform root;
 
     public Dictionary<string, UIbase> UIdic = new Dictionary<string, UIbase>();
 
@@ -29,16 +30,18 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        root = transform.Find("Root");
         AssetBundle.UnloadAllAssetBundles(true);
         StartCoroutine(OnLoadScenePanel());
     }
 
     public IEnumerator OnLoadScenePanel()
     {
-        yield return StartCoroutine(OnWebRequestAssetBundle("scenepanel", new Vector3(0, 0, 0), transform.Find("Root").transform));
-        //yield return transform.Find("Root/ScenePanel").transform != null;
-        StartCoroutine(OnWebRequestAssetBundle("sharepanel", new Vector3(209, -290, 0), ScenePanel.instance.transform));
-        yield return StartCoroutine(OnWebRequestAssetBundle("otherpanel", new Vector3(273, -148, 0), ScenePanel.instance.transform));
+        StartCoroutine(OnWebRequestAssetBundle("otherpanel", new Vector3(273, -148, 0), root));
+        yield return new WaitForSeconds(0.05f);
+        StartCoroutine(OnWebRequestAssetBundle("sharepanel", new Vector3(209, -290, 0), root));
+        yield return new WaitForSeconds(0.05f);
+        yield return StartCoroutine(OnWebRequestAssetBundle("scenepanel", new Vector3(0, 0, 0), root));
         Debug.Log("加载完成");
         transform.Find("Mask").gameObject.SetActive(false);
     }
@@ -89,7 +92,6 @@ public class GameManager : MonoBehaviour
     //外部加载AssetBundel
     public IEnumerator OnWebRequestAssetBundle(string name, Vector3 point, Transform parent)
     {
-        
         string path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
         path = path.Replace("\\", "/");
         Debug.Log(path);
