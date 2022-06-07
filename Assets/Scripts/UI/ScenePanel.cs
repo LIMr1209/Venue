@@ -68,7 +68,7 @@ public class ScenePanel : UIbase
         else
         {
             //OnButtonClick(name);
-            StartCoroutine(GameManager.instances.OnWebRequestAssetBundle(name, point, transform));
+            StartCoroutine(GameManager.instances.OnWebRequestAssetBundleUIPanel(name, point, transform));
             OnUIdicActionFalse();
         }
     }

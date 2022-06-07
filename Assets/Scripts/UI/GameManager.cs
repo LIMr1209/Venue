@@ -32,16 +32,18 @@ public class GameManager : MonoBehaviour
     {
         root = transform.Find("Root");
         AssetBundle.UnloadAllAssetBundles(true);
+
         StartCoroutine(OnLoadScenePanel());
     }
 
+
     public IEnumerator OnLoadScenePanel()
     {
-        StartCoroutine(OnWebRequestAssetBundle("otherpanel", new Vector3(273, -148, 0), root));
+        StartCoroutine(OnWebRequestAssetBundleUIPanel("otherpanel", new Vector3(273, -148, 0), root));
         yield return new WaitForSeconds(0.05f);
-        StartCoroutine(OnWebRequestAssetBundle("sharepanel", new Vector3(209, -290, 0), root));
+        StartCoroutine(OnWebRequestAssetBundleUIPanel("sharepanel", new Vector3(209, -290, 0), root));
         yield return new WaitForSeconds(0.05f);
-        yield return StartCoroutine(OnWebRequestAssetBundle("scenepanel", new Vector3(0, 0, 0), root));
+        yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root));
         Debug.Log("加载完成");
         transform.Find("Mask").gameObject.SetActive(false);
     }
@@ -85,12 +87,11 @@ public class GameManager : MonoBehaviour
             obj.SetActive(true);
             UIdic.Add(name, obj.GetComponent<UIbase>());
         }
-        
     }
 
 
     //外部加载AssetBundel
-    public IEnumerator OnWebRequestAssetBundle(string name, Vector3 point, Transform parent)
+    public IEnumerator OnWebRequestAssetBundleUIPanel(string name, Vector3 point, Transform parent)
     {
         string path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
         path = path.Replace("\\", "/");
@@ -146,6 +147,27 @@ public class GameManager : MonoBehaviour
                 UIdic.Add(name, obj.GetComponent<UIbase>());
                 obj.SetActive(false);
             }
+        }
+    }
+
+
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name,Vector3 point)
+    {
+        string path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
+        path = path.Replace("\\", "/");
+        Debug.Log(path);
+        UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(Path.Combine(path, name) + ".ab");
+        yield return requestAB.SendWebRequest();
+        if (!string.IsNullOrEmpty(requestAB.error))
+        {
+            Debug.LogError(requestAB.error);
+            yield break;
+        }
+        AssetBundle AB = DownloadHandlerAssetBundle.GetContent(requestAB);
+        if (AB != null)
+        {
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name));
+            obj.transform.localPosition = point;
         }
     }
 
