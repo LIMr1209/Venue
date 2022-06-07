@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 2647777667
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 713163e59ac973b670935893d5f8de8f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f267fd2d8bcb1179236b6179ac5313bc
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetsPackages/Image/icon18.png
+Dependencies: []

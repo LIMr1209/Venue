@@ -7,15 +7,12 @@ using System.IO;
 using UnityEngine.Networking;
 using TMPro;
 
-public class ScenePanel : MonoBehaviour
+public class ScenePanel : UIbase
 {
     public static ScenePanel instance;
 
     private Button btn_Other;
     private Button btn_Share;
-
-    public Dictionary<string, UIbase> UIdic = new Dictionary<string, UIbase>();
-
 
 
     private void Awake()
@@ -26,7 +23,11 @@ public class ScenePanel : MonoBehaviour
 
     void Start()
     {
-        
+        FindChild(this.gameObject);
+        for (int i = 0; i < aaa.Count; i++)
+        {
+            aaa[i].gameObject.AddComponent<TextTest>();
+        }
 
         btn_Other = transform.Find("img_bottonbg/btn_other").GetComponent<Button>();
         btn_Other.onClick.AddListener(OnActionOtherPanel);
@@ -34,7 +35,7 @@ public class ScenePanel : MonoBehaviour
         btn_Share.onClick.AddListener(OnActionSharePanel);
     }
 
-    
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -48,52 +49,51 @@ public class ScenePanel : MonoBehaviour
 
     private void OnActionSharePanel()
     {
-        OnButtonActionPanel("SharePanel", new Vector3(209, -290, 0));
+        //OnButtonActionPanel("uiprefabs/sharepanel.ab", "sharepanel", new Vector3(209, -290, 0));
+        GameManager.instances.UIdic["sharepanel"].OnExitAction();
     }
 
     private void OnActionOtherPanel()
     {
-        OnButtonActionPanel("OtherPanel", new Vector3(273, -148, 0));
+        //OnButtonActionPanel("uiprefabs/otherpanel.ab", "otherpanel", new Vector3(273, -148, 0));
+        GameManager.instances.UIdic["otherpanel"].OnExitAction();
     }
 
-    private void OnButtonActionPanel(string name,Vector3 point)
+    private void OnButtonActionPanel(string _path, string name, Vector3 point)
     {
-        if (UIdic.ContainsKey(name))
+        if (GameManager.instances.UIdic.ContainsKey(name))
         {
-            UIdic[name].OnExitAction();
+            GameManager.instances.UIdic[name].OnExitAction();
         }
         else
         {
-            OnSetPanel(name, point);
+            //OnButtonClick(name);
+            StartCoroutine(GameManager.instances.OnWebRequestAssetBundle(name, point, transform));
+            OnUIdicActionFalse();
         }
     }
 
     public void OnUIdicActionFalse()
     {
-        foreach (var item in UIdic)
+        foreach (var item in GameManager.instances.UIdic)
         {
             item.Value.gameObject.SetActive(false);
         }
     }
 
-    private void OnSetPanel(string _path,Vector3 point)
-    {
-        //string path = "prefabs/UIPrefabs/" + _path;
-        //GameObject obj = Instantiate(Resources.Load(path)) as GameObject;
-        //UIdic.Add(_path, obj.GetComponent<UIbase>());
-        //obj.transform.SetParent(transform);
-        //obj.transform.localPosition = point;
-        //OnUIdicActionFalse();
-        //obj.SetActive(true);
+    //public void OnButtonClick(string btnName)
+    //{
+        //switch (btnName)
+        //{
+        //    case "sharepanel":
+        //        btn_Share.enabled = !btn_Share.enabled;
+        //        break;
+        //    case "otherpanel":
+        //        btn_Other.enabled = !btn_Other.enabled;
+        //        break;
+        //}
 
-        string path = Application.dataPath + "/AssetsBundles/uiprefabs/" + _path;
-        GameObject obj = Instantiate( GameManager.instances.OnLoadUIPanel(path,_path));
-        UIdic.Add(_path, obj.GetComponent<UIbase>());
-        obj.transform.SetParent(transform);
-        obj.transform.localPosition = point;
-        OnUIdicActionFalse();
-        obj.SetActive(true);
-    }
+    //}
 
 
 }

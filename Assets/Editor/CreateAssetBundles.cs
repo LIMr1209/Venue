@@ -45,11 +45,11 @@ public class CreateAssetBundles
         {
             string a_path = AssetDatabase.GetAssetPath(item);
             AssetImporter asset = AssetImporter.GetAtPath(a_path);
-            int BeginIndex = a_path.IndexOf("UI");
+            int BeginIndex = a_path.IndexOf(item.name);
             int LastIndex = a_path.IndexOf(".");
             int len = LastIndex - BeginIndex;
             string bundleName = a_path.Substring(BeginIndex, len);
-            asset.assetBundleName = bundleName;
+            asset.assetBundleName = "uiprefabs/" + bundleName;
             asset.assetBundleVariant = "ab";
             asset.SaveAndReimport();
         }

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 245134175
+CRC: 3146056717
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -11,29 +11,99 @@ AssetBundleManifest:
     Info_2:
       Name: uiprefabs/otherpanel.ab
       Dependencies:
-        Dependency_0: pingfangsca.ab
-        Dependency_1: pingfangscb.ab
+        Dependency_0: uiprefabs/icon2.ab
+        Dependency_1: uiprefabs/icon6.ab
+        Dependency_2: uiprefabs/icon9.ab
+        Dependency_3: uiprefabs/icon11.ab
+        Dependency_4: uiprefabs/icon16.ab
+        Dependency_5: uiprefabs/icon17.ab
+        Dependency_6: uiprefabs/icon22.ab
+        Dependency_7: uiprefabs/icon23.ab
     Info_3:
       Name: uiprefabs/scenepanel.ab
       Dependencies:
-        Dependency_0: pingfangsca.ab
+        Dependency_0: uiprefabs/icon1.ab
+        Dependency_1: uiprefabs/icon3.ab
+        Dependency_2: uiprefabs/icon4.ab
+        Dependency_3: uiprefabs/icon7.ab
+        Dependency_4: uiprefabs/icon12.ab
+        Dependency_5: uiprefabs/icon13.ab
+        Dependency_6: uiprefabs/icon14.ab
+        Dependency_7: uiprefabs/icon15.ab
+        Dependency_8: uiprefabs/icon18.ab
+        Dependency_9: uiprefabs/icon21.ab
     Info_4:
       Name: uiprefabs/sharepanel.ab
       Dependencies:
-        Dependency_0: pingfangsca.ab
+        Dependency_0: uiprefabs/icon5.ab
+        Dependency_1: uiprefabs/icon8.ab
+        Dependency_2: uiprefabs/icon10.ab
     Info_5:
-      Name: pingfangsca.ab
-      Dependencies:
-        Dependency_0: pingfangscafont.ab
+      Name: uiprefabs/icon1.ab
+      Dependencies: {}
     Info_6:
-      Name: pingfangscafont.ab
-      Dependencies:
-        Dependency_0: pingfangscbfont.ab
+      Name: uiprefabs/icon2.ab
+      Dependencies: {}
     Info_7:
-      Name: pingfangscb.ab
-      Dependencies:
-        Dependency_0: pingfangscbfont.ab
+      Name: uiprefabs/icon3.ab
+      Dependencies: {}
     Info_8:
-      Name: pingfangscbfont.ab
-      Dependencies:
-        Dependency_0: pingfangscafont.ab
+      Name: uiprefabs/icon4.ab
+      Dependencies: {}
+    Info_9:
+      Name: uiprefabs/icon5.ab
+      Dependencies: {}
+    Info_10:
+      Name: uiprefabs/icon6.ab
+      Dependencies: {}
+    Info_11:
+      Name: uiprefabs/icon7.ab
+      Dependencies: {}
+    Info_12:
+      Name: uiprefabs/icon8.ab
+      Dependencies: {}
+    Info_13:
+      Name: uiprefabs/icon9.ab
+      Dependencies: {}
+    Info_14:
+      Name: uiprefabs/icon10.ab
+      Dependencies: {}
+    Info_15:
+      Name: uiprefabs/icon11.ab
+      Dependencies: {}
+    Info_16:
+      Name: uiprefabs/icon12.ab
+      Dependencies: {}
+    Info_17:
+      Name: uiprefabs/icon13.ab
+      Dependencies: {}
+    Info_18:
+      Name: uiprefabs/icon14.ab
+      Dependencies: {}
+    Info_19:
+      Name: uiprefabs/icon15.ab
+      Dependencies: {}
+    Info_20:
+      Name: uiprefabs/icon16.ab
+      Dependencies: {}
+    Info_21:
+      Name: uiprefabs/icon17.ab
+      Dependencies: {}
+    Info_22:
+      Name: uiprefabs/icon18.ab
+      Dependencies: {}
+    Info_23:
+      Name: uiprefabs/icon19.ab
+      Dependencies: {}
+    Info_24:
+      Name: uiprefabs/icon20.ab
+      Dependencies: {}
+    Info_25:
+      Name: uiprefabs/icon21.ab
+      Dependencies: {}
+    Info_26:
+      Name: uiprefabs/icon22.ab
+      Dependencies: {}
+    Info_27:
+      Name: uiprefabs/icon23.ab
+      Dependencies: {}

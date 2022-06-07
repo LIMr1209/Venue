@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 1037083639
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 05e9a93d8bf8927b08a8eb27d46a7abb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f267fd2d8bcb1179236b6179ac5313bc
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetsPackages/Image/icon15.png
+Dependencies: []
