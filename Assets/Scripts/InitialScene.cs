@@ -10,7 +10,7 @@ namespace DefaultNamespace
         // 将需要动态加载的文件放入其中，例如Texture，Sprite，prefab等等。
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
-        public string sceneModel = "Models/场馆";
+        private string sceneModel = "scene";
 
         [DllImport("__Internal")]
         private static extern int GetWindowWidth();
@@ -18,11 +18,14 @@ namespace DefaultNamespace
         private static extern int GetWindowHeight();
         [DllImport("__Internal")]
         private static extern void ResetCanvasSize(int width, int height);
-        private void Awake()
+
+        private void Start()
         {
-            GameObject model = Resources.Load<GameObject>(sceneModel);
+            StartCoroutine(
+                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel));
+            // GameObject model = Resources.Load<GameObject>(sceneModel);
             // Destroy(model); // 不允许销毁资产以避免数据丢失。如果确实要删除资产，请使用DestroyImmediate
-            GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);
+            // GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);
             // model = null;
             // Resources.UnloadUnusedAssets(); // 卸载无引用的所有资源  消耗性能
             // var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer )); 
@@ -32,18 +35,17 @@ namespace DefaultNamespace
             //     d.gameObject.AddComponent<MeshCollider>();
             //     
             // }
-            MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer t in meshRender)
-            {
-                t.gameObject.AddComponent<MeshCollider>();
-            }
-            
-            Camera[] cameras = newModel.gameObject.GetComponentsInChildren<Camera>();
-            foreach (Camera c in cameras)
-            {
-                c.enabled = false;
-            }
-            
+            // MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
+            // foreach (MeshRenderer t in meshRender)
+            // {
+            //     t.gameObject.AddComponent<MeshCollider>();
+            // }
+            //
+            // Camera[] cameras = newModel.gameObject.GetComponentsInChildren<Camera>();
+            // foreach (Camera c in cameras)
+            // {
+            //     c.enabled = false;
+            // }
         }
 
         private void Update()
