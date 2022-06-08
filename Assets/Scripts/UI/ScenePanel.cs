@@ -13,6 +13,8 @@ public class ScenePanel : UIbase
 
     private Button btn_Other;
     private Button btn_Share;
+    private Button btn_Interaction;
+    private List<Button> btnList = new List<Button>();
 
 
     private void Awake()
@@ -33,6 +35,11 @@ public class ScenePanel : UIbase
         btn_Other.onClick.AddListener(OnActionOtherPanel);
         btn_Share = transform.Find("img_bottonbg/btn_share").GetComponent<Button>();
         btn_Share.onClick.AddListener(OnActionSharePanel);
+        btn_Interaction = transform.Find("img_bottonbg/btn_interaction").GetComponent<Button>();
+        btn_Interaction.onClick.AddListener(OnActionInteractionPanel);
+        btnList.Add(btn_Other);
+        btnList.Add(btn_Share);
+        btnList.Add(btn_Interaction);
     }
 
 
@@ -51,26 +58,20 @@ public class ScenePanel : UIbase
     {
         //OnButtonActionPanel("uiprefabs/sharepanel.ab", "sharepanel", new Vector3(209, -290, 0));
         GameManager.instances.UIdic["sharepanel"].OnExitAction();
+        btn_Share.transform.Find("ima_click").gameObject.SetActive(true);
     }
 
     private void OnActionOtherPanel()
     {
         //OnButtonActionPanel("uiprefabs/otherpanel.ab", "otherpanel", new Vector3(273, -148, 0));
         GameManager.instances.UIdic["otherpanel"].OnExitAction();
+        btn_Other.transform.Find("ima_click").gameObject.SetActive(true);
     }
 
-    private void OnButtonActionPanel(string _path, string name, Vector3 point)
+    private void OnActionInteractionPanel()
     {
-        if (GameManager.instances.UIdic.ContainsKey(name))
-        {
-            GameManager.instances.UIdic[name].OnExitAction();
-        }
-        else
-        {
-            //OnButtonClick(name);
-            StartCoroutine(GameManager.instances.OnWebRequestAssetBundleUIPanel(name, point, transform,false));
-            OnUIdicActionFalse();
-        }
+        GameManager.instances.UIdic["expressionpanel"].OnExitAction();
+        btn_Interaction.transform.Find("ima_click").gameObject.SetActive(true);
     }
 
     public void OnUIdicActionFalse()
@@ -79,6 +80,7 @@ public class ScenePanel : UIbase
         {
             item.Value.gameObject.SetActive(false);
         }
+        OnSeleetedButton();
     }
 
     //public void OnButtonClick(string btnName)
@@ -94,6 +96,14 @@ public class ScenePanel : UIbase
         //}
 
     //}
+
+    public void OnSeleetedButton()
+    {
+        for (int i = 0; i < btnList.Count; i++)
+        {
+            btnList[i].transform.Find("ima_click").gameObject.SetActive(false);
+        }
+    }
 
 
 }
