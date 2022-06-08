@@ -25,13 +25,13 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player)
+            /*if (Input.GetKeyDown("v"))
             {
-                Vector3 location = player.transform.localPosition;
-                Vector3 rotation = player.transform.localRotation.eulerAngles;
-                if (Input.GetKeyDown("v"))
+                GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
+                if (player[0])
                 {
+                    Vector3 location = player[0].transform.localPosition;
+                    Vector3 rotation = player[0].transform.localRotation.eulerAngles;
                     SwithVisul(location, rotation);
                 }
                 // if (Input.GetKeyDown("n"))
@@ -44,7 +44,7 @@ namespace DefaultNamespace
                 //     if (player.TryGetComponent<ThirdPersonController>(out ThirdPersonController third))
                 //         third.enabled = disableController;
                 // }
-            }
+            }*/
         }
 
         private void SwithVisul(Vector3 location, Vector3 rotation)
@@ -85,17 +85,19 @@ namespace DefaultNamespace
             {
                 _firstPlayerFollowCamera.SetActive(true);
             }
+
             if (!_firstPlayer)
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(capsuleAb, controllerAb, location,
-                        rotation, false, gameObject));
+                        rotation, false, gameObject, "AddFollow"));
             }
             else
             {
                 _firstPlayer.SetActive(true);
+                _firstPlayer.transform.position = location;
+                _firstPlayer.transform.rotation = Quaternion.Euler(rotation);
             }
-
         }
 
         private void AddThird()
@@ -113,21 +115,23 @@ namespace DefaultNamespace
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb));
-               
             }
             else
             {
                 _thirdPlayerFollowCamera.SetActive(true);
             }
+
             if (!_thirdPlayer)
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
-                        rotation, false, gameObject));
+                        rotation, false, gameObject, "AddFollow"));
             }
             else
             {
                 _thirdPlayer.SetActive(true);
+                _thirdPlayer.transform.position = location;
+                _thirdPlayer.transform.rotation = Quaternion.Euler(rotation);
             }
         }
 
