@@ -81,7 +81,7 @@ namespace DefaultNamespace
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb, location,
-                        rotation, false, gameObject, "AddFollow"));
+                        rotation, gameObject, "AddFollow"));
             }
             else
             {
@@ -104,7 +104,7 @@ namespace DefaultNamespace
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
-                        rotation, false, gameObject, "AddFollow"));
+                        rotation, gameObject, "AddFollow"));
             }
             else
             {
@@ -154,7 +154,7 @@ namespace DefaultNamespace
             {
                 StartCoroutine(
                     GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
-                        rotation, false, gameObject, "AddFollow"));
+                        rotation, gameObject, "AddFollow"));
             }
             else
             {

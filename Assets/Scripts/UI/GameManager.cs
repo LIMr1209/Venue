@@ -160,14 +160,14 @@ public class GameManager : MonoBehaviour
     
     public Dictionary<string, AssetBundle> AssetBundelGameObjectDic = new Dictionary<string, AssetBundle>();
 
-    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "", bool isLoad=false)
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "")
     {
        Vector3 point = Vector3.zero;;
        Vector3 rotate = new Vector3(0, 0, 0);
-       yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, isLoad));
+       yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate));
     }
 
-    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, bool isLoad=false, GameObject sendObj = null, string messageFunc="")
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, GameObject sendObj = null, string messageFunc="")
     {
         AssetBundle AB = null;
         string path = null;
