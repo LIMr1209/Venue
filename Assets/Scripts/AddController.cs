@@ -13,6 +13,10 @@ namespace DefaultNamespace
         private string thirdFollowCameraAb = "thirdplayerfollowcamera";
         private string capsuleAb = "playercapsule";
         private string armatureAb = "playerarmature";
+        private GameObject _firstPlayerFollowCamera = null;
+        private GameObject _thirdPlayerFollowCamera = null;
+        private GameObject _firstPlayer = null;
+        private GameObject _thirdPlayer = null;
 
         private void Start()
         {
@@ -26,10 +30,10 @@ namespace DefaultNamespace
             {
                 Vector3 location = player.transform.localPosition;
                 Vector3 rotation = player.transform.localRotation.eulerAngles;
-                // if (Input.GetKeyDown("v"))
-                // {
-                //     SwithVisul(location, rotation);
-                // }
+                if (Input.GetKeyDown("v"))
+                {
+                    SwithVisul(location, rotation);
+                }
                 // if (Input.GetKeyDown("n"))
                 // {
                 //     disableController = !disableController;
@@ -45,26 +49,17 @@ namespace DefaultNamespace
 
         private void SwithVisul(Vector3 location, Vector3 rotation)
         {
-            Debug.Log(location);
-            Debug.Log(rotation);
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject p in players)
-            {
-                Destroy(p);
-            }
-
-            CinemachineVirtualCamera[] playerFollowCameras = FindObjectsOfType<CinemachineVirtualCamera>();
-            foreach (CinemachineVirtualCamera p in playerFollowCameras)
-            {
-                Destroy(p.gameObject);
-            }
             if (visual)
             {
+                _firstPlayerFollowCamera.SetActive(false);
+                _firstPlayer.SetActive(false);
                 AddThird(location, rotation);
                 visual = false;
             }
             else
             {
+                _thirdPlayerFollowCamera.SetActive(false);
+                _thirdPlayer.SetActive(false);
                 AddFirst(location, rotation);
                 visual = true;
             }
@@ -81,11 +76,26 @@ namespace DefaultNamespace
 
         private void AddFirst(Vector3 location, Vector3 rotation)
         {
-            StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb));
-            StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(capsuleAb, controllerAb, location,
-                    rotation, false, gameObject));
+            if (!_firstPlayerFollowCamera)
+            {
+                StartCoroutine(
+                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb));
+            }
+            else
+            {
+                _firstPlayerFollowCamera.SetActive(true);
+            }
+            if (!_firstPlayer)
+            {
+                StartCoroutine(
+                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(capsuleAb, controllerAb, location,
+                        rotation, false, gameObject));
+            }
+            else
+            {
+                _firstPlayer.SetActive(true);
+            }
+
         }
 
         private void AddThird()
@@ -99,20 +109,46 @@ namespace DefaultNamespace
 
         private void AddThird(Vector3 location, Vector3 rotation)
         {
-            StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb));
-            StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
-                    rotation, false, gameObject));
+            if (!_thirdPlayerFollowCamera)
+            {
+                StartCoroutine(
+                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb));
+               
+            }
+            else
+            {
+                _thirdPlayerFollowCamera.SetActive(true);
+            }
+            if (!_thirdPlayer)
+            {
+                StartCoroutine(
+                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
+                        rotation, false, gameObject));
+            }
+            else
+            {
+                _thirdPlayer.SetActive(true);
+            }
         }
 
         public void AddFollow()
         {
-            CinemachineVirtualCamera[] playerFollowCameras = FindObjectsOfType<CinemachineVirtualCamera>();
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-            Transform cinemachineTarget =
-                players[0].transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-            playerFollowCameras[0].Follow = cinemachineTarget;
+            if (!visual)
+            {
+                _thirdPlayerFollowCamera = GameObject.Find("ThirdPlayerFollowCamera(Clone)");
+                _thirdPlayer = GameObject.Find("PlayerArmature(Clone)");
+                Transform cinemachineTarget =
+                    _thirdPlayer.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
+            }
+            else
+            {
+                _firstPlayerFollowCamera = GameObject.Find("FirstPlayerFollowCamera(Clone)");
+                _firstPlayer = GameObject.Find("PlayerCapsule(Clone)");
+                Transform cinemachineTarget =
+                    _firstPlayer.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                _firstPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
+            }
         }
     }
 }
