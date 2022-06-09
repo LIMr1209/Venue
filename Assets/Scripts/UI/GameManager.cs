@@ -161,11 +161,19 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     
+    public Dictionary<string, AssetBundle> AssetBundelGameObjectDic = new Dictionary<string, AssetBundle>();
 
-    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name,Vector3 point,bool isLoad)
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "")
     {
+       Vector3 point = Vector3.zero;;
+       Vector3 rotate = new Vector3(0, 0, 0);
+       yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate));
+    }
+
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, GameObject sendObj = null, string messageFunc="")
+    {
+        AssetBundle AB = null;
         string path = null;
         if (isLoad)
         {
@@ -176,19 +184,34 @@ public class GameManager : MonoBehaviour
         {
             path = Path.Combine(Application.dataPath, "AssetsBundles");
         }
-        UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(Path.Combine(path, name) + ".ab");
-        yield return requestAB.SendWebRequest();
-        if (!string.IsNullOrEmpty(requestAB.error))
+        if(AssetBundelGameObjectDic.ContainsKey((name)))
         {
-            Debug.LogError(requestAB.error);
-            yield break;
+            AB = AssetBundelGameObjectDic[name];    
         }
-        AssetBundle AB = DownloadHandlerAssetBundle.GetContent(requestAB);
+        else
+        {
+            string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
+            UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+            yield return requestAB.SendWebRequest();
+            if (!string.IsNullOrEmpty(requestAB.error))
+            {
+                Debug.LogError(requestAB.error);
+                yield break;
+            }
+            AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
+            AssetBundelGameObjectDic.Add(name,AB);
+        }
         if (AB != null)
         {
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name));
-            obj.transform.localPosition = point;
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+            // obj.transform.localPosition = point;
+            // obj.transform.localRotation = Quaternion.Euler(rotate);
+            if (sendObj)
+            {
+                sendObj.SendMessage(messageFunc, SendMessageOptions.DontRequireReceiver);
+            }
         }
+        
     }
 
 
