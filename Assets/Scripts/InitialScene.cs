@@ -10,7 +10,7 @@ namespace DefaultNamespace
         // 将需要动态加载的文件放入其中，例如Texture，Sprite，prefab等等。
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
-        private string sceneModel = "scene";
+        private string sceneModel = "scene_01";
 
         [DllImport("__Internal")]
         private static extern int GetWindowWidth();
@@ -22,7 +22,7 @@ namespace DefaultNamespace
         private void Start()
         {
             StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel));
+                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel,"", gameObject, "AddThird" ));
             // GameObject model = Resources.Load<GameObject>(sceneModel);
             // Destroy(model); // 不允许销毁资产以避免数据丢失。如果确实要删除资产，请使用DestroyImmediate
             // GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);

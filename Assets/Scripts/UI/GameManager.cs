@@ -170,6 +170,13 @@ public class GameManager : MonoBehaviour
        Vector3 rotate = new Vector3(0, 0, 0);
        yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate));
     }
+    
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, GameObject sendObj = null, string messageFunc="")
+    {
+        Vector3 point = Vector3.zero;;
+        Vector3 rotate = new Vector3(0, 0, 0);
+        yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, sendObj, messageFunc));
+    }
 
     public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, GameObject sendObj = null, string messageFunc="")
     {

@@ -21,18 +21,18 @@ namespace DefaultNamespace
         
         private void Start()
         {
-            AddThird();
+            // AddThird();
         }
 
         private void Update()
         {
             if (Input.GetKeyDown("v"))
             {
-                GameObject[] player = GameObject.FindGameObjectsWithTag("Player");
-                if (player[0])
+                GameObject player = GameObject.FindGameObjectWithTag("Player");
+                if (player)
                 {
-                    Vector3 location = player[0].transform.localPosition;
-                    Vector3 rotation = player[0].transform.localRotation.eulerAngles;
+                    Vector3 location = player.transform.localPosition;
+                    Vector3 rotation = player.transform.localRotation.eulerAngles;
                     SwithVisul(location, rotation);
                 }
                 // if (Input.GetKeyDown("n"))
