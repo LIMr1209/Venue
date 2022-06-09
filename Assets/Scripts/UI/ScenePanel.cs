@@ -14,7 +14,11 @@ public class ScenePanel : UIbase
     private Button btn_Other;
     private Button btn_Share;
     private Button btn_Interaction;
-    private List<Button> btnList = new List<Button>();
+    private Button btn_num;
+    private Button btn_list;
+    private Button btn_speech;
+    private Button btn_chat;
+
 
 
     private void Awake()
@@ -25,21 +29,19 @@ public class ScenePanel : UIbase
 
     void Start()
     {
+        transform.SetAsFirstSibling();
         FindChild(this.gameObject);
         for (int i = 0; i < aaa.Count; i++)
         {
             aaa[i].gameObject.AddComponent<TextTest>();
         }
 
-        btn_Other = transform.Find("img_bottonbg/btn_other").GetComponent<Button>();
-        btn_Other.onClick.AddListener(OnActionOtherPanel);
-        btn_Share = transform.Find("img_bottonbg/btn_share").GetComponent<Button>();
-        btn_Share.onClick.AddListener(OnActionSharePanel);
-        btn_Interaction = transform.Find("img_bottonbg/btn_interaction").GetComponent<Button>();
-        btn_Interaction.onClick.AddListener(OnActionInteractionPanel);
-        btnList.Add(btn_Other);
-        btnList.Add(btn_Share);
-        btnList.Add(btn_Interaction);
+        OnButtonfindAdd();
+
+
+
+
+
     }
 
 
@@ -54,25 +56,98 @@ public class ScenePanel : UIbase
         }
     }
 
+    //查找添加按钮的点击事件
+    private void OnButtonfindAdd()
+    {
+        btn_Other = transform.Find("img_bottonbg/btn_other").GetComponent<Button>();
+        btn_Other.onClick.AddListener(OnActionOtherPanel);
+        btn_Share = transform.Find("img_bottonbg/btn_share").GetComponent<Button>();
+        btn_Share.onClick.AddListener(OnActionSharePanel);
+        btn_Interaction = transform.Find("img_bottonbg/btn_interaction").GetComponent<Button>();
+        btn_Interaction.onClick.AddListener(OnActionInteractionPanel);
+        btn_list = transform.Find("img_bottonbg/btn_list").GetComponent<Button>();
+        btn_list.onClick.AddListener(OnActionListPanel);
+        btn_speech = transform.Find("img_bottonbg/btn_speech").GetComponent<Button>();
+        btn_speech.onClick.AddListener(OnActionSpeechPanel);
+        btn_chat = transform.Find("img_bottonbg/btn_chat").GetComponent<Button>();
+        btn_chat.onClick.AddListener(OnActionChatPanel);
+        btn_num = transform.Find("btn_num").GetComponent<Button>();
+        btn_num.onClick.AddListener(OnActionUserPanel);
+    }
+
     private void OnActionSharePanel()
     {
-        //OnButtonActionPanel("uiprefabs/sharepanel.ab", "sharepanel", new Vector3(209, -290, 0));
-        GameManager.instances.UIdic["sharepanel"].OnExitAction();
-        btn_Share.transform.Find("ima_click").gameObject.SetActive(true);
+        if (GameManager.instances.UIdic["sharepanel"].gameObject.activeInHierarchy)
+        {
+            OnUIdicActionFalse();
+        }
+        else
+        {
+            GameManager.instances.UIdic["sharepanel"].OnExitAction();
+        }
     }
 
     private void OnActionOtherPanel()
     {
-        //OnButtonActionPanel("uiprefabs/otherpanel.ab", "otherpanel", new Vector3(273, -148, 0));
-        GameManager.instances.UIdic["otherpanel"].OnExitAction();
-        btn_Other.transform.Find("ima_click").gameObject.SetActive(true);
+        if (GameManager.instances.UIdic["otherpanel"].gameObject.activeInHierarchy)
+        {
+            OnUIdicActionFalse();
+        }
+        else
+        {
+            GameManager.instances.UIdic["otherpanel"].OnExitAction();
+        }
     }
 
     private void OnActionInteractionPanel()
     {
-        GameManager.instances.UIdic["expressionpanel"].OnExitAction();
-        btn_Interaction.transform.Find("ima_click").gameObject.SetActive(true);
+        if (GameManager.instances.UIdic["expressionpanel"].gameObject.activeInHierarchy)
+        {
+            OnUIdicActionFalse();
+        }
+        else
+        {
+            GameManager.instances.UIdic["expressionpanel"].OnExitAction();
+        }
     }
+
+    private void OnActionUserPanel()
+    {
+        if (GameManager.instances.UIdic["userpanel"].gameObject.activeInHierarchy)
+        {
+            OnUIdicActionFalse();
+        }
+        else
+        {
+            GameManager.instances.UIdic["userpanel"].OnExitAction();
+        }
+    }
+
+    private void OnActionListPanel()
+    {
+        if (GameManager.instances.UIdic["listpanel"].gameObject.activeInHierarchy)
+        {
+            OnUIdicActionFalse();
+        }
+        else
+        {
+            GameManager.instances.UIdic["listpanel"].OnExitAction();
+        }
+    }
+
+    private void OnActionSpeechPanel()
+    {
+        //GameManager.instances.UIdic["speechpanel"].OnExitAction();
+        OnUIdicActionFalse();
+    }
+
+    private void OnActionChatPanel()
+    {
+        //GameManager.instances.UIdic["chatpanel"].OnExitAction();
+        OnUIdicActionFalse();
+    }
+
+
 
     public void OnUIdicActionFalse()
     {
@@ -80,30 +155,8 @@ public class ScenePanel : UIbase
         {
             item.Value.gameObject.SetActive(false);
         }
-        OnSeleetedButton();
     }
 
-    //public void OnButtonClick(string btnName)
-    //{
-        //switch (btnName)
-        //{
-        //    case "sharepanel":
-        //        btn_Share.enabled = !btn_Share.enabled;
-        //        break;
-        //    case "otherpanel":
-        //        btn_Other.enabled = !btn_Other.enabled;
-        //        break;
-        //}
-
-    //}
-
-    public void OnSeleetedButton()
-    {
-        for (int i = 0; i < btnList.Count; i++)
-        {
-            btnList[i].transform.Find("ima_click").gameObject.SetActive(false);
-        }
-    }
 
 
 }
