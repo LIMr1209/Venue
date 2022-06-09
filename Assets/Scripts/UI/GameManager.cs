@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OnWebRequestAssetBundleUIPanel("otherpanel", new Vector3(273, -148, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("sharepanel", new Vector3(209, -290, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("expressionpanel", new Vector3(64, -284, 0), root, isLoad));
+        StartCoroutine(OnWebRequestAssetBundleUIPanel("userpanel", new Vector3(652, 0, 0), root, isLoad));
+        StartCoroutine(OnWebRequestAssetBundleUIPanel("listpanel", new Vector3(0, 40, 0), root, isLoad));
         StartCoroutine(OnLoadExpressionAssetBundel(isLoad));
         yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
         lodingindex = 1;
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
         transform.Find("Mask").gameObject.SetActive(false);
     }
 
-
+    //¼ÓÔØAssetBundleManifestÎÄ¼þ
     public IEnumerator OnWebRequestAssetBundleManifest()
     {
         string path = null;
@@ -120,6 +122,7 @@ public class GameManager : MonoBehaviour
         {
             path = Application.dataPath + "/AssetsBundles/";
         }
+        //StartCoroutine(OnWebRequestAssetBundleUIPaneldep(name, path));
         AssetBundle AssetBundleManifest = depUIDic["AssetBundleManifest"];
         AssetBundleManifest manifest = AssetBundleManifest.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         string[] depslist = manifest.GetAllDependencies("uiprefabs/" + name + ".ab");
@@ -149,6 +152,7 @@ public class GameManager : MonoBehaviour
         {
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name));
             obj.transform.SetParent(parent);
+            obj.transform.position = Vector3.zero;
             obj.transform.localPosition = point;
             if(name!= "scenepanel")
             {
