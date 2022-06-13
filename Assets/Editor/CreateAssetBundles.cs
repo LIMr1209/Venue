@@ -3,7 +3,6 @@ using UnityEngine.Windows;
 
 public class CreateAssetBundles
 {
-    [MenuItem("AB/BuildAssetBundles")]
     static void BuildAllAssetBundles()
     {
         //要创建的目录

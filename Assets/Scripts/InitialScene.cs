@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Runtime.InteropServices;
 
 namespace DefaultNamespace
 {
@@ -10,15 +9,25 @@ namespace DefaultNamespace
         // 将需要动态加载的文件放入其中，例如Texture，Sprite，prefab等等。
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
-        private string sceneModel = "scene_01";
+        public string sceneModel = "scene";
 
-        [DllImport("__Internal")]
-        private static extern int GetWindowWidth();
-        [DllImport("__Internal")]
-        private static extern int GetWindowHeight();
-        [DllImport("__Internal")]
-        private static extern void ResetCanvasSize(int width, int height);
+        private void Awake()
+        {
+            if (!Application.isEditor)
+            {
+                int sceneId = Tools.GetSceneId();
+                Debug.Log("场景id: "+sceneId);
+                string token = Tools.GetToken();
+                Debug.Log("用户token: "+token);
+                if (!string.IsNullOrEmpty(token))
+                {
+                    JsonData.UserResult userInfo = Request.GetUserInfo();
+                    Debug.Log(userInfo.ToString());
+                }
+            }
+        }
 
+        
         private void Start()
         {
             StartCoroutine(
@@ -50,9 +59,14 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            // int width = GetWindowWidth();
-            // int height = GetWindowHeight();
-            // ResetCanvasSize(width, height);
+            if (!Application.isEditor)
+            {
+                int width = Tools.GetWindowWidth();
+                int height = Tools.GetWindowHeight();
+                Tools.ResetCanvasSize(width, height);
+                Screen.SetResolution(width, height, false);
+            }
+
         }
     }
 }
