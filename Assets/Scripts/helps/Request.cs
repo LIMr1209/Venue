@@ -1,33 +1,110 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
 namespace DefaultNamespace
 {
-    public class Request
-    {
+    public class Request : MonoBehaviour
 
-        private static UnityWebRequest HttpGet(string url)
+    {
+        public static Request instances;
+        
+        private void Awake()
         {
-            UnityWebRequest request = UnityWebRequest.Get(url); // 获取文本或者二进制数据
-            request.SendWebRequest();
-            while (!request.isDone)
+            instances = this;
+        }
+        public delegate void ReqCallback(int statusCode, string error, string body);
+
+        public static IEnumerator GetRequest(string url, string paramsStr, ReqCallback callback)
+        {
+            if (!string.IsNullOrEmpty(paramsStr))
             {
-                
+                url = string.Format("{0}?{1}", url, paramsStr);
             }
-            return request;
+            UnityWebRequest request = UnityWebRequest.Get(url);
+            yield return request.SendWebRequest();
+            if (!string.IsNullOrEmpty(request.error))
+            {
+                Debug.LogError(request.error);
+                yield break;
+            }
+
+            callback(Convert.ToInt32(request.responseCode), request.error, request.downloadHandler.text);
+        }
+        
+        public static IEnumerator PostRequest(string url, WWWForm form, ReqCallback callback)
+        {
+            UnityWebRequest request = UnityWebRequest.Post(url, form);
+            yield return request.SendWebRequest();
+            if (!string.IsNullOrEmpty(request.error))
+            {
+                Debug.LogError(request.error);
+                yield break;
+            }
+
+            callback(Convert.ToInt32(request.responseCode), request.error, request.downloadHandler.text);
         }
 
-
-        public static JsonData.UserResult GetUserInfo()
+        public void HttpSend(int urlId, string method, Dictionary<string, string> requestData, ReqCallback callback)
         {
-            string url = Path.Combine(Globle.ServiceHost, Globle.userInfoRoute) +
-                         "?token=sHVfLmgZvKMz1gDJuBQnhEcHgj7GopxXlOFcvy41Fng4RNnTecsaMqVLfCMU";
-            UnityWebRequest request = HttpGet(url);
-            string text = request.downloadHandler.text;
-            JsonData.UserResult result = new JsonData.UserResult();
-            result = JsonUtility.FromJson<JsonData.UserResult>(text); // ToJson
-            return result;
+            WWWForm form = new WWWForm();
+            string paramsStr = null;
+            if (requestData == null || requestData.Count == 0)
+                requestData = null;
+            else
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                bool isFirst = true;
+                foreach (var item in requestData)
+                {
+                    if (isFirst)
+                        isFirst = false;
+                    else
+                        stringBuilder.Append('&');
+                    stringBuilder.Append(item.Key);
+                    stringBuilder.Append('=');
+                    stringBuilder.Append(item.Value);
+                    form.AddField(item.Key, item.Value);
+                }
+                paramsStr = stringBuilder.ToString();
+            }
+            string url = null;
+            switch (urlId)
+            {
+                case 1:
+                {
+                    url = Path.Combine(Globle.ServiceHost, Globle.userInfoRoute);
+                    break;
+                }
+                case 2:
+                {
+                    break;
+                }
+                default:
+                {
+                    url = "";
+                    break;
+                }
+            }
+
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
+            url = url.Replace("\\", "/");
+            if (method == "get")
+            {
+                StartCoroutine(GetRequest(url, paramsStr, callback));
+            }
+            else if(method == "post")
+            {
+                StartCoroutine(PostRequest(url, form, callback));
+            }
         }
     }
 }

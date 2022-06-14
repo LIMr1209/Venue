@@ -27,7 +27,15 @@ namespace Editor
             ForeachFile(Path.Combine(Application.dataPath,Globle.AssetBundleDir), ref files); 
             foreach (string i  in files)
             {
-                HttpResult result = UploadFile(i);
+                // 上传文件名
+                string replacePath = Application.dataPath.Replace("/", "\\") + "\\";
+                string keySuffix = i.Replace(replacePath, "");
+                string key = Path.Combine(Globle.QiNiuPrefix, Globle.AssetVision, keySuffix).Replace("\\", "/");
+                // 加密
+                byte[] fileBytes = Aes.FileToByte(i);
+                byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
+                // HttpResult result = Upload(i, key);
+                HttpResult result = Upload(encryptBytes, key);
                 if (result.Code != 200)
                 {
                     Debug.Log("上传错误 文件: " + i + " 错误消息: "+result.Text);
@@ -64,13 +72,21 @@ namespace Editor
             return false;
         }
 
-        public static HttpResult UploadFile(string LocalPath)
+        public static Config GetConfig()
+        {
+            Config config = new Config();
+            // 设置上传区域
+            config.Zone = Zone.ZONE_CN_East;
+            // 设置 http 或者 https 上传
+            config.UseHttps = true;
+            config.UseCdnDomains = true;
+            config.ChunkSize = ChunkUnit.U512K;
+            return config;
+        }
+
+        public static string GetToken()
         {
             Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
-            // 上传文件名
-            string replacePath = Application.dataPath.Replace("/", "\\") + "\\";
-            string keySuffix = LocalPath.Replace(replacePath, "");
-            string key = Path.Combine(Globle.QiNiuPrefix, Globle.AssetVision, keySuffix).Replace("\\", "/");
             // 存储空间名
             string Bucket = Globle.QiNiuBucket;
             // 设置上传策略
@@ -81,17 +97,26 @@ namespace Editor
             putPolicy.SetExpires(3600);
             // 生成上传token
             string token = Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
-            Config config = new Config();
-            // 设置上传区域
-            config.Zone = Zone.ZONE_CN_East;
-            // 设置 http 或者 https 上传
-            config.UseHttps = true;
-            config.UseCdnDomains = true;
-            config.ChunkSize = ChunkUnit.U512K;
-            // 表单上传
+            return token;
+        }
+
+        public static HttpResult Upload(byte[] fileBytes, string key)
+        {
+            string token = GetToken();
+            Config config = GetConfig();
             FormUploader target = new FormUploader(config);
-            HttpResult result = target.UploadFile(LocalPath, key, token, null);
+            HttpResult result = target.UploadData(fileBytes, key, token, null);
             return result;
         }
+        
+        public static HttpResult Upload(string localPath, string key)
+        {
+            string token = GetToken();
+            Config config = GetConfig();
+            FormUploader target = new FormUploader(config);
+            HttpResult result = target.UploadFile(localPath, key, token, null);
+            return result;
+        }
+        
     }
 }

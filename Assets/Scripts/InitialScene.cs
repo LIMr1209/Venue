@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -21,8 +22,15 @@ namespace DefaultNamespace
                 Debug.Log("用户token: "+token);
                 if (!string.IsNullOrEmpty(token))
                 {
-                    JsonData.UserResult userInfo = Request.GetUserInfo();
-                    Debug.Log(userInfo.ToString());
+                    Dictionary<string, string> requestData = new Dictionary<string, string>();
+                    requestData["token"] = token;
+                    Request.instances.HttpSend(1, "get", requestData, (statusCode, error, body) =>
+                    {
+                        Debug.Log("statusCode: " + statusCode);
+                        Debug.Log("error: " + error);
+                        JsonData.UserResult userResult = new JsonData.UserResult();
+                        userResult = JsonUtility.FromJson<JsonData.UserResult>(body);
+                    });
                 }
             }
         }
@@ -32,29 +40,6 @@ namespace DefaultNamespace
         {
             StartCoroutine(
                 GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel,"", gameObject, "AddThird" ));
-            // GameObject model = Resources.Load<GameObject>(sceneModel);
-            // Destroy(model); // 不允许销毁资产以避免数据丢失。如果确实要删除资产，请使用DestroyImmediate
-            // GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);
-            // model = null;
-            // Resources.UnloadUnusedAssets(); // 卸载无引用的所有资源  消耗性能
-            // var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer )); 
-            // foreach (Object t in tArray)
-            // {
-            //     MeshRenderer d = t as MeshRenderer;
-            //     d.gameObject.AddComponent<MeshCollider>();
-            //     
-            // }
-            // MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
-            // foreach (MeshRenderer t in meshRender)
-            // {
-            //     t.gameObject.AddComponent<MeshCollider>();
-            // }
-            //
-            // Camera[] cameras = newModel.gameObject.GetComponentsInChildren<Camera>();
-            // foreach (Camera c in cameras)
-            // {
-            //     c.enabled = false;
-            // }
         }
 
         private void Update()
