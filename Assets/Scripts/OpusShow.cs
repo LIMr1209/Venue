@@ -44,17 +44,19 @@ namespace DefaultNamespace
             {
                 if (Input.GetKeyDown("w") || Input.GetKeyDown("s") || Input.GetKeyDown("a") || Input.GetKeyDown("d"))
                 {
-                    transform.DOMove(startPoint, 1);
-                    transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                    if (startPoint != Vector3.zero)
                     {
-
-                    // 启用人物控制器
-                    ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                        if (controller) controller.enabled = true;
-                        CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                        if (virtualCamera) virtualCamera.enabled = true;
-
-                    });
+                        transform.DOMove(startPoint, 1);
+                        transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                        {
+                            // 启用人物控制器
+                            startPoint = Vector3.zero;
+                            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                            if (controller) controller.enabled = true;
+                            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                            if (virtualCamera) virtualCamera.enabled = true;
+                        });
+                    }
                 }
             }
         }

@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
         lodingindex = 1;
         slider.value = lodingindex;
-        Debug.Log("加载完成");
+        Debug.Log("加载完成时间： "+(Time.time-time));
         yield return new WaitForSeconds(0.5f);
         transform.Find("Mask").gameObject.SetActive(false);
     }
@@ -98,14 +98,20 @@ public class GameManager : MonoBehaviour
         {
             path = Application.dataPath + "/AssetsBundles/";
         }
-        UnityWebRequest deps = UnityWebRequestAssetBundle.GetAssetBundle(path + "/AssetsBundles");
+        // UnityWebRequest deps = UnityWebRequestAssetBundle.GetAssetBundle(path + "/AssetsBundles");
+        UnityWebRequest deps = UnityWebRequest.Get(path + "/AssetsBundles");
         yield return deps.SendWebRequest();
         if (!string.IsNullOrEmpty(deps.error))
         {
             Debug.LogError(deps.error);
             yield break;
         }
-        depUIDic.Add("AssetBundleManifest", DownloadHandlerAssetBundle.GetContent(deps));
+        byte[] abData = deps.downloadHandler.data;
+        if (isLoad)
+        {
+            abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+        }
+        depUIDic.Add("AssetBundleManifest", AssetBundle.LoadFromMemory(abData));
 
     }
 
@@ -135,19 +141,34 @@ public class GameManager : MonoBehaviour
             else
             {
                 string depPath = Path.Combine(path, _name);
-                UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+                // UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+                UnityWebRequest dep = UnityWebRequest.Get(depPath);
                 yield return dep.SendWebRequest();
-                AssetBundle andep = DownloadHandlerAssetBundle.GetContent(dep);
+                byte[] abData = dep.downloadHandler.data;
+                if (isLoad)
+                {
+                    abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+                }
+
+                AssetBundle andep = AssetBundle.LoadFromMemory(abData);
             }
         }
-        UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(path + "/uiprefabs/" + name + ".ab");
+        // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(path + "/uiprefabs/" + name + ".ab");
+        UnityWebRequest requestAB = UnityWebRequest.Get(path + "/uiprefabs/" + name + ".ab");
         yield return requestAB.SendWebRequest();
         if (!string.IsNullOrEmpty(requestAB.error))
         {
             Debug.LogError(requestAB.error);
             yield break;
         }
-        AssetBundle AB = DownloadHandlerAssetBundle.GetContent(requestAB);
+        // AssetBundle AB = DownloadHandlerAssetBundle.GetContent(requestAB);
+        byte[] requestABData = requestAB.downloadHandler.data;
+        if (isLoad)
+        {
+            requestABData = Aes.AESDecrypt(requestABData, Globle.AesKey, Globle.AesIv);
+        }
+
+        AssetBundle AB = AssetBundle.LoadFromMemory(requestABData);
         if (AB != null)
         {
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name));
@@ -198,15 +219,23 @@ public class GameManager : MonoBehaviour
         else
         {
             string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
-            UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+            // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+            UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
             yield return requestAB.SendWebRequest();
             if (!string.IsNullOrEmpty(requestAB.error))
             {
                 Debug.LogError(requestAB.error);
                 yield break;
             }
-            AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
-            AssetBundelGameObjectDic.Add(name,AB);
+            // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
+            byte[] abData = requestAB.downloadHandler.data;
+            if (isLoad)
+            {
+                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+            }
+
+            AB = AssetBundle.LoadFromMemory(abData);
+            AssetBundelGameObjectDic.Add(name, AB);
         }
         if (AB != null)
         {
@@ -244,14 +273,22 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            UnityWebRequest deps = UnityWebRequestAssetBundle.GetAssetBundle(path + "/AssetsBundles");
+            // UnityWebRequest deps = UnityWebRequestAssetBundle.GetAssetBundle(path + "/AssetsBundles");
+            UnityWebRequest deps = UnityWebRequest.Get(path + "/AssetsBundles");
             yield return deps.SendWebRequest();
             if (!string.IsNullOrEmpty(deps.error))
             {
                 Debug.LogError(deps.error);
                 yield break;
             }
-            AssetBundleManifest = DownloadHandlerAssetBundle.GetContent(deps);
+            byte[] abData = deps.downloadHandler.data;
+            if (isLoad)
+            {
+                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+            }
+
+            AssetBundleManifest= AssetBundle.LoadFromMemory(abData);
+            // AssetBundleManifest = DownloadHandlerAssetBundle.GetContent(deps);
             depUIDic.Add("AssetBundleManifest", AssetBundleManifest);
         }
         AssetBundleManifest manifest = AssetBundleManifest.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
@@ -261,14 +298,21 @@ public class GameManager : MonoBehaviour
             if (_name.Contains("expression") && _name != "uiprefabs/expressionpanel.ab" && _name != "uiprefabs/expression1.ab")
             {
                 string depPath = Path.Combine(path, _name);
-                UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+                // UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+                UnityWebRequest dep = UnityWebRequest.Get(depPath);
                 yield return dep.SendWebRequest();
                 if (!string.IsNullOrEmpty(dep.error))
                 {
                     Debug.LogError(dep.error);
                     yield break;
                 }
-                AssetBundle andep = DownloadHandlerAssetBundle.GetContent(dep);
+                byte[] abData = dep.downloadHandler.data;
+                if (isLoad)
+                {
+                    abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+                }
+
+                AssetBundle andep = AssetBundle.LoadFromMemory(abData);
                 ExpressionList.Add(andep);
                 ExpressionList.Add(andep);
             }
