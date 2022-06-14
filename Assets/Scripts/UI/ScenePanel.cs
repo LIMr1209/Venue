@@ -80,10 +80,12 @@ public class ScenePanel : UIbase
         if (GameManager.instances.UIdic["sharepanel"].gameObject.activeInHierarchy)
         {
             OnUIdicActionFalse();
+            btn_Share.image.color = Color.white;
         }
         else
         {
             GameManager.instances.UIdic["sharepanel"].OnExitAction();
+            btn_Share.image.color = Color.blue;
         }
     }
 
@@ -92,10 +94,12 @@ public class ScenePanel : UIbase
         if (GameManager.instances.UIdic["otherpanel"].gameObject.activeInHierarchy)
         {
             OnUIdicActionFalse();
+            btn_Other.image.color = Color.white;
         }
         else
         {
             GameManager.instances.UIdic["otherpanel"].OnExitAction();
+            btn_Other.image.color = Color.blue;
         }
     }
 
@@ -104,10 +108,12 @@ public class ScenePanel : UIbase
         if (GameManager.instances.UIdic["expressionpanel"].gameObject.activeInHierarchy)
         {
             OnUIdicActionFalse();
+            btn_Interaction.image.color = Color.white;
         }
         else
         {
             GameManager.instances.UIdic["expressionpanel"].OnExitAction();
+            btn_Interaction.image.color = Color.blue;
         }
     }
 
@@ -128,10 +134,12 @@ public class ScenePanel : UIbase
         if (GameManager.instances.UIdic["listpanel"].gameObject.activeInHierarchy)
         {
             OnUIdicActionFalse();
+            btn_list.image.color = Color.white;
         }
         else
         {
             GameManager.instances.UIdic["listpanel"].OnExitAction();
+            btn_list.image.color = Color.blue;
         }
     }
 
@@ -139,12 +147,14 @@ public class ScenePanel : UIbase
     {
         //GameManager.instances.UIdic["speechpanel"].OnExitAction();
         OnUIdicActionFalse();
+        btn_speech.image.color = Color.blue;
     }
 
     private void OnActionChatPanel()
     {
         //GameManager.instances.UIdic["chatpanel"].OnExitAction();
         OnUIdicActionFalse();
+        btn_chat.image.color = Color.blue;
     }
 
 
@@ -155,6 +165,12 @@ public class ScenePanel : UIbase
         {
             item.Value.gameObject.SetActive(false);
         }
+        btn_chat.image.color = Color.white;
+        btn_Interaction.image.color = Color.white;
+        btn_list.image.color = Color.white;
+        btn_Other.image.color = Color.white;
+        btn_Share.image.color = Color.white;
+        btn_speech.image.color = Color.white;
     }
 
 

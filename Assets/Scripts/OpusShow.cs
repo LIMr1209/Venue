@@ -2,6 +2,7 @@ using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.EventSystems;
 
 namespace DefaultNamespace
 {
@@ -14,10 +15,14 @@ namespace DefaultNamespace
         private Vector3 startPoint;
         private Quaternion startRotation;
         private bool isPlayerMove;
+        private bool isClick;
 
         private void Start()
         {
+            isClick = true;
             isPlayerMove = true;
+            startPoint = transform.position;
+            startRotation = transform.localRotation;
         }
 
         private void Update()
@@ -26,17 +31,23 @@ namespace DefaultNamespace
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
             {
-                // 发射射线
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, maxDistance,
-                    1 << 6))
+                if (isClick&& !EventSystem.current.IsPointerOverGameObject())
                 {
-                    GameObject art = _raycastHit.collider.gameObject;
-                    // 禁用人物控制器
-                    ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                    if (controller) controller.enabled = false;
-                    CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                    if (virtualCamera) virtualCamera.enabled = false;
-                    OnCameraMove(art.transform);
+                    // 发射射线
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, maxDistance,
+                        1 << 6))
+                    {
+                        isClick = false;
+                        GameObject art = _raycastHit.collider.gameObject;
+                        // 禁用人物控制器
+                        ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                        if (controller) controller.enabled = false;
+                        CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                        if (virtualCamera) virtualCamera.enabled = false;
+                        startPoint = transform.position;
+                        startRotation = transform.localRotation;
+                        OnCameraMove(art.transform);
+                    }
                 }
             }
 
@@ -48,12 +59,12 @@ namespace DefaultNamespace
                     transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
                     {
 
-                    // 启用人物控制器
-                    ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                        // 启用人物控制器
+                        ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
                         if (controller) controller.enabled = true;
                         CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
                         if (virtualCamera) virtualCamera.enabled = true;
-
+                        isClick = true;
                     });
                 }
             }
@@ -61,9 +72,8 @@ namespace DefaultNamespace
 
         private void OnCameraMove(Transform art)
         {
+            
             isPlayerMove = false;
-            startPoint = transform.position;
-            startRotation = transform.localRotation;
             Vector3 point = Vector3.zero;
             Quaternion qqq = art.rotation;
             if (Vector3.Dot(art.forward, art.position - transform.position) > 0)
