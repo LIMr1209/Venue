@@ -31,7 +31,7 @@ namespace DefaultNamespace
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
             {
-                if (isClick&& !EventSystem.current.IsPointerOverGameObject())
+                if (isClick && !EventSystem.current.IsPointerOverGameObject())
                 {
                     // 发射射线
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, maxDistance,
@@ -55,24 +55,26 @@ namespace DefaultNamespace
             {
                 if (Input.GetKeyDown("w") || Input.GetKeyDown("s") || Input.GetKeyDown("a") || Input.GetKeyDown("d"))
                 {
-                    transform.DOMove(startPoint, 1);
-                    transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                    if (startPoint != Vector3.zero)
                     {
-
+                        transform.DOMove(startPoint, 1);
+                        transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                        {
                         // 启用人物控制器
-                        ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                        if (controller) controller.enabled = true;
-                        CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                        if (virtualCamera) virtualCamera.enabled = true;
-                        isClick = true;
-                    });
+                            startPoint = Vector3.zero;
+                            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                            if (controller) controller.enabled = true;
+                            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                            if (virtualCamera) virtualCamera.enabled = true;
+                            isClick = true;
+                        });
+                    }
                 }
             }
         }
-
         private void OnCameraMove(Transform art)
         {
-            
+
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
             Quaternion qqq = art.rotation;
@@ -123,7 +125,10 @@ namespace DefaultNamespace
                 }
             }
             transform.DOMove(point, 1);
-            transform.DORotateQuaternion(qqq, 1).OnComplete(()=> { isPlayerMove = true; });
+            transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
         }
     }
 }
+
+
+

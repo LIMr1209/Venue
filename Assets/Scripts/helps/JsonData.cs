@@ -22,7 +22,7 @@ namespace DefaultNamespace
         public class UserResult
         {
             public Meta meta;
-            public UserData[] data;
+            public UserData data;
         }
     }
 }
