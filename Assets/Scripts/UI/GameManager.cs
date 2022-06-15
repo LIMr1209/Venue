@@ -174,6 +174,7 @@ public class GameManager : MonoBehaviour
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name));
             obj.transform.SetParent(parent);
             obj.transform.position = Vector3.zero;
+            obj.transform.localScale = Vector3.one;
             obj.transform.localPosition = point;
             if(name!= "scenepanel")
             {
