@@ -25,6 +25,7 @@ namespace DefaultNamespace
             {
                 url = string.Format("{0}?{1}", url, paramsStr);
             }
+            Debug.Log("get 请求: "+url);
             UnityWebRequest request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
             if (!string.IsNullOrEmpty(request.error))
@@ -51,6 +52,7 @@ namespace DefaultNamespace
 
         public void HttpSend(int urlId, string method, Dictionary<string, string> requestData, ReqCallback callback)
         {
+            Debug.Log("发送后端请求");
             WWWForm form = new WWWForm();
             string paramsStr = null;
             if (requestData == null || requestData.Count == 0)
@@ -99,6 +101,9 @@ namespace DefaultNamespace
             url = url.Replace("\\", "/");
             if (method == "get")
             {
+                Debug.Log(paramsStr);
+                Debug.Log(url);
+                Debug.Log(callback);
                 StartCoroutine(GetRequest(url, paramsStr, callback));
             }
             else if(method == "post")

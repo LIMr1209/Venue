@@ -16,22 +16,25 @@ namespace DefaultNamespace
         {
             if (!Application.isEditor)
             {
-                int sceneId = Tools.GetSceneId();
-                Debug.Log("场景id: "+sceneId);
-                string token = Tools.GetToken();
-                Debug.Log("用户token: "+token);
-                if (!string.IsNullOrEmpty(token))
-                {
-                    Dictionary<string, string> requestData = new Dictionary<string, string>();
-                    requestData["token"] = token;
-                    Request.instances.HttpSend(1, "get", requestData, (statusCode, error, body) =>
-                    {
-                        Debug.Log("statusCode: " + statusCode);
-                        Debug.Log("error: " + error);
-                        JsonData.UserResult userResult = new JsonData.UserResult();
-                        userResult = JsonUtility.FromJson<JsonData.UserResult>(body);
-                    });
-                }
+                // int sceneId = Tools.GetSceneId();
+                // Debug.Log("场景id: "+sceneId);
+                // string token = Tools.GetToken();
+                // Debug.Log("用户token: "+token);
+                // token = "ZsPJnMkqnBeDKImnawMdJK2o9xSNXpE6zMpE4XRtWes8lx7nB2bXypUSU2h7";
+                // if (!string.IsNullOrEmpty(token))
+                // {
+                //     Debug.Log(token);
+                //     Dictionary<string, string> requestData = new Dictionary<string, string>();
+                //     requestData["token"] = token;
+                //     Request.instances.HttpSend(1, "get", requestData, (statusCode, error, body) =>
+                //     {
+                //         Debug.Log("statusCode: " + statusCode);
+                //         Debug.Log("error: " + error);
+                //         Debug.Log(body);
+                //         JsonData.UserResult userResult = new JsonData.UserResult();
+                //         userResult = JsonUtility.FromJson<JsonData.UserResult>(body);
+                //     });
+                // }
             }
         }
 

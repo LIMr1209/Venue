@@ -13,6 +13,6 @@ mergeInto(LibraryManager.library, {
     },
     GoodView:function(id)
     {
-        
+        // display work view 
     },
 });
