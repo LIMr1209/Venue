@@ -5,6 +5,7 @@ using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using static DefaultNamespace.JsonData;
 
 namespace DefaultNamespace
 {
@@ -21,17 +22,17 @@ namespace DefaultNamespace
 
         public static IEnumerator GetRequest(string url, string paramsStr, ReqCallback callback)
         {
-            Debug.Log("get «Î«Û: "+url);
             if (!string.IsNullOrEmpty(paramsStr))
             {
                 url = string.Format("{0}?{1}", url, paramsStr);
             }
-            Debug.Log("get «Î«Û: "+url);
             UnityWebRequest request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
             if (!string.IsNullOrEmpty(request.error))
             {
-                Debug.LogError(request.error);
+                ErrorResult errorResult = JsonUtility.FromJson<ErrorResult>(request.downloadHandler.text);
+                Debug.Log(errorResult.meta.status_code+" "+errorResult.meta.message);
+                Debug.Log(url);
                 yield break;
             }
 
@@ -84,6 +85,22 @@ namespace DefaultNamespace
                 }
                 case 2:
                 {
+                    url = Path.Combine(Globle.ServiceHost, Globle.projectViewRoute);
+                    break;
+                }
+                case 3:
+                {
+                    url = Path.Combine(Globle.ServiceHost, Globle.worksListRoute);
+                    break;
+                }
+                case 4:
+                {
+                    url = Path.Combine(Globle.ServiceHost, Globle.roomViewRoute);
+                    break;
+                }
+                case 5:
+                {
+                    url = Path.Combine(Globle.ServiceHost, Globle.roomMemberListRoute);
                     break;
                 }
                 default:
@@ -97,7 +114,6 @@ namespace DefaultNamespace
             {
                 return;
             }
-
             url = url.Replace("\\", "/");
             if (method == "get")
             {

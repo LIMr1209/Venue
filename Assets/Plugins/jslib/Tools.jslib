@@ -4,7 +4,13 @@ mergeInto(LibraryManager.library, {
         var url = window.location.href;
         var index = url.lastIndexOf("\/");
         return url.substring(index + 1,url.length);
-    },  
+    }, 
+    GetProjectId:function()
+    {
+        var url = window.location.href;
+        var index = url.lastIndexOf("\/");
+        return url.substring(index + 1,url.length);
+    }, 
 
     GetUserToken:function(tokeName)
     {

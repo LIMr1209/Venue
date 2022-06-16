@@ -15,6 +15,8 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern int GetSceneId();
         [DllImport("__Internal")]
+        public static extern string GetProjectId();
+        [DllImport("__Internal")]
         private static extern string GetUserToken(string tokenName);
 
         public static string GetToken()

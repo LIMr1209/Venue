@@ -21,10 +21,10 @@ namespace DefaultNamespace
         
         // 后端url
         public static string userInfoRoute = "api/user/get_user";  // 用户详情 urlId  1
-        public static string projectViewRoute = "/api/user_project/view"; // 项目详情接口  urlId 2
-        public static string worksListRoute = "/api/room/works_list"; // 作品列表  urlId 3
-        public static string roomViewRoute = "/api/room/view"; // 房间详情  urlId 4
-        public static string roomMemberListRoute = "/api/room_member/list"; // 房间成员 urlId 5
+        public static string projectViewRoute = "api/user_project/view"; // 项目详情接口  urlId 2
+        public static string worksListRoute = "api/room/works_list"; // 作品列表  urlId 3
+        public static string roomViewRoute = "api/room/view"; // 房间详情  urlId 4
+        public static string roomMemberListRoute = "api/room_member/list"; // 房间成员 urlId 5
 
     }
 }
