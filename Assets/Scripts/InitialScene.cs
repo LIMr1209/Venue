@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using StarterAssets;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -14,47 +15,45 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            if (!Application.isEditor)
-            {
-                // int sceneId = Tools.GetSceneId();
-                // Debug.Log("场景id: "+sceneId);
-                // string token = Tools.GetToken();
-                // Debug.Log("用户token: "+token);
-                // token = "ZsPJnMkqnBeDKImnawMdJK2o9xSNXpE6zMpE4XRtWes8lx7nB2bXypUSU2h7";
-                // if (!string.IsNullOrEmpty(token))
-                // {
-                //     Debug.Log(token);
-                //     Dictionary<string, string> requestData = new Dictionary<string, string>();
-                //     requestData["token"] = token;
-                //     Request.instances.HttpSend(1, "get", requestData, (statusCode, error, body) =>
-                //     {
-                //         Debug.Log("statusCode: " + statusCode);
-                //         Debug.Log("error: " + error);
-                //         Debug.Log(body);
-                //         JsonData.UserResult userResult = new JsonData.UserResult();
-                //         userResult = JsonUtility.FromJson<JsonData.UserResult>(body);
-                //     });
-                // }
-            }
+            
         }
 
-        
         private void Start()
         {
+            if (!Application.isEditor)
+            {
+                // int width = Tools.GetWindowWidth();
+                // int height = Tools.GetWindowHeight();
+                // Screen.SetResolution(width, height, false);
+                
+                int sceneId = Tools.GetSceneId();
+                Debug.Log("场景id: "+sceneId);
+                string token = Tools.GetToken();
+                token = "wsDBAB2J6kwzqEnDZ1jNnAz94UjIEJbRAOBjYZen3PSGpixLAhqq7DwiuyRv";
+                if (!string.IsNullOrEmpty(token))
+                {
+                    Dictionary<string, string> requestData = new Dictionary<string, string>();
+                    requestData["token"] = token;
+                    Request.instances.HttpSend(1, "get", requestData, (statusCode, error, body) =>
+                    {
+                        Debug.Log(body);
+                        JsonData.UserResult userResult = new JsonData.UserResult();
+                        userResult = JsonUtility.FromJson<JsonData.UserResult>(body);
+                    });
+                }
+            }
             StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel,"", gameObject, "AddThird" ));
+                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel,"", (obj) =>
+                    {
+                        AddController controller = FindObjectOfType<AddController>();
+                        controller.AddThird();
+                    }
+                ));
         }
 
         private void Update()
         {
-            if (!Application.isEditor)
-            {
-                int width = Tools.GetWindowWidth();
-                int height = Tools.GetWindowHeight();
-                Tools.ResetCanvasSize(width, height);
-                Screen.SetResolution(width, height, false);
-            }
 
-        }
+        } 
     }
 }

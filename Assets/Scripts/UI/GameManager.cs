@@ -193,14 +193,15 @@ public class GameManager : MonoBehaviour
        yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate));
     }
     
-    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, GameObject sendObj = null, string messageFunc="")
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, GameObjectCallback callback)
     {
         Vector3 point = Vector3.zero;;
         Vector3 rotate = new Vector3(0, 0, 0);
-        yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, sendObj, messageFunc));
+        yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, callback));
     }
 
-    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, GameObject sendObj = null, string messageFunc="")
+    public delegate void GameObjectCallback(GameObject obj);
+    public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point, Vector3 rotate, GameObjectCallback callback=null)
     {
         AssetBundle AB = null;
         string path = null;
@@ -243,16 +244,13 @@ public class GameManager : MonoBehaviour
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
             // obj.transform.localPosition = point;
             // obj.transform.localRotation = Quaternion.Euler(rotate);
-            if (sendObj)
+            if (callback != null)
             {
-                sendObj.SendMessage(messageFunc, SendMessageOptions.DontRequireReceiver);
+                callback(obj);
             }
         }
         
     }
-
-
-
 
     public  List<AssetBundle> ExpressionList = new List<AssetBundle>();
     public IEnumerator OnLoadExpressionAssetBundel(bool isLoad)
