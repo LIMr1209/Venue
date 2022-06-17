@@ -64,6 +64,18 @@ namespace DefaultNamespace
             public UserData[] invited_user;
             public UserData[] stranger;
         }
+        
+        
+        [Serializable]
+        public class sceneData
+        {
+            public string name;
+            public string qiniu_path_url; // 七牛 根目录
+            public string fbx_file_url; // fbx url
+            public string fbx_name; // fbx 
+            public string ab_name; // 场景ab包
+        }
+
 
         [Serializable]
         public class ListResult<T>

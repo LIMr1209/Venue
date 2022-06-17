@@ -151,6 +151,11 @@ namespace DefaultNamespace
                     url = Path.Combine(Globle.ServiceHost, Globle.roomMemberListRoute);
                     break;
                 }
+                case 6:
+                {
+                    url = Path.Combine(Globle.ServiceHost, Globle.sceneViewRoute);
+                    break;
+                }
                 default:
                 {
                     url = "";

@@ -20,15 +20,15 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            Request.instances.TestRequest();
+            sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? "scene_" + Globle.sceneId : sceneModel;
             StartCoroutine(
                 GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
-                    {
-                        AddController controller = FindObjectOfType<AddController>();
-                        controller.AddThird();
-                    }
-                ));
+                {
+                    AddController controller = FindObjectOfType<AddController>();
+                    controller.AddThird();
+                }));
         }
+
 
         private void Update()
         {

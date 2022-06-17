@@ -25,6 +25,7 @@ namespace DefaultNamespace
         public static string worksListRoute = "api/room/works_list"; // 作品列表  urlId 3
         public static string roomViewRoute = "api/room/view"; // 房间详情  urlId 4
         public static string roomMemberListRoute = "api/room_member/list"; // 房间成员 urlId 5
+        public static string sceneViewRoute = "api/scene_model/info";  // 场景详情 urlId 6
 
         public static string token = Application.isEditor
             ? "wsDBAB2J6kwzqEnDZ1jNnAz94UjIEJbRAOBjYZen3PSGpixLAhqq7DwiuyRv"
