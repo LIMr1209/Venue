@@ -19,6 +19,8 @@ public class ScenePanel : UIbase
     private Button btn_speech;
     private Button btn_chat;
 
+    private TextMeshProUGUI txt_num;
+
 
 
     private void Awake()
@@ -38,7 +40,8 @@ public class ScenePanel : UIbase
 
         OnButtonfindAdd();
 
-
+        txt_num = transform.Find("btn_num/Text (TMP)").GetComponent<TextMeshProUGUI>();
+        txt_num.text = GameManager.instances.OnGetMemberRequestNum().ToString();
 
 
 

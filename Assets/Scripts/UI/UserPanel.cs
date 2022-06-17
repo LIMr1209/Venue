@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using DefaultNamespace;
+using static DefaultNamespace.JsonData;
+using TMPro;
 
 public class UserPanel : UIbase
 {
     ScrollRect teamscrollview;
     ScrollRect invitedscrollview;
     ScrollRect strangersscrollview;
+    TextMeshProUGUI text_num;
 
     Button btn_Close;
+
+    ViewResult<memberData> memberResult;
 
     void Start()
     {
@@ -19,13 +25,15 @@ public class UserPanel : UIbase
         {
             aaa[i].gameObject.AddComponent<TextTest>();
         }
-
+        text_num= transform.Find("img_topbg/txt_num").GetComponent<TextMeshProUGUI>();
         teamscrollview = transform.Find("img_contentbg/img_teambg/Scroll View").GetComponent<ScrollRect>();
         invitedscrollview = transform.Find("img_contentbg/img_invitedbg/Scroll View").GetComponent<ScrollRect>();
         strangersscrollview = transform.Find("img_contentbg/img_strangersbg/Scroll View").GetComponent<ScrollRect>();
-        OnSetContentView(teamscrollview.content, 1, 110, false);
-        OnSetContentView(invitedscrollview.content, 3, 102, true);
-        OnSetContentView(strangersscrollview.content, 4, 102, true);
+        memberResult = GameManager.instances.memberResult;
+        text_num.text = GameManager.instances.OnGetMemberRequestNum() + "人正在观看";
+        OnSetContentView(teamscrollview.content, 1, 110, false, "主办方");
+        OnSetContentView(invitedscrollview.content, 3, 102, true,"我邀请的");
+        OnSetContentView(strangersscrollview.content, 4, 102, true,"陌生人");
 
         btn_Close = transform.Find("img_topbg/btn_close").GetComponent<Button>();
         btn_Close.onClick.AddListener(() =>
@@ -40,14 +48,36 @@ public class UserPanel : UIbase
         
     }
 
+    
 
-    public void OnSetContentView(Transform content, int index, int cengheight, bool isheight)
+    public void OnSetContentView(Transform content, int index, int cengheight, bool isheight,string Pcalss)
     {
-        for (int i = 0; i < 20; i++)
+        Transform Item = content.transform.Find("Item");
+        switch (Pcalss) 
         {
-            Transform item = Instantiate(content.Find("Item"));
-            item.SetParent(content);
+            case "主办方":
+                OnGetUserItem(Item, memberResult.data.host_team);
+                break;
+            case "我邀请的":
+                OnGetUserItem(Item, memberResult.data.invited_user[0]);
+                for (int i = 1; i < memberResult.data.invited_user.Length; i++)
+                {
+                    Transform item = Instantiate(content.Find("Item"));
+                    item.SetParent(content);
+                    OnGetUserItem(item, memberResult.data.invited_user[i]);
+                }
+                break;
+            case "陌生人":
+                OnGetUserItem(Item, memberResult.data.stranger[0]);
+                for (int i = 1; i < memberResult.data.stranger.Length; i++)
+                {
+                    Transform item = Instantiate(content.Find("Item"));
+                    item.SetParent(content);
+                    OnGetUserItem(item, memberResult.data.stranger[i]);
+                }
+                break;
         }
+        
         
         if (isheight)
         {
@@ -61,6 +91,18 @@ public class UserPanel : UIbase
             int width = content.childCount / index * cengheight + 16;
             content.GetComponent<RectTransform>().sizeDelta = new Vector2(width, 0);
         }
+    }
+
+    public void OnGetUserItem(Transform Item, UserData date)
+    {
+        Item.Find("Text (TMP)").GetComponent<TextMeshProUGUI>().text = date.nickname;
+        OnGetSprite(Item.Find("Image").GetComponent<Image>(), date.logo_url);
+        Debug.Log(date.nickname + " :    " + Item.Find("Image").GetComponent<Image>().name);
+    }
+
+    public void OnGetSprite(Image image, string url)
+    {
+        StartCoroutine(GameManager.instances.DownTexture(image, url));
     }
 
 }
