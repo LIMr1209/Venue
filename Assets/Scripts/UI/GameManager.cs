@@ -78,12 +78,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OnWebRequestAssetBundleUIPanel("listpanel", new Vector3(0, 40, 0), root, isLoad));
         StartCoroutine(OnLoadExpressionAssetBundel(isLoad));
         yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
-        lodingindex = 1;
-        slider.value = lodingindex;
-        Debug.Log("加载完成时间： "+(Time.time-time));
-        yield return new WaitForSeconds(0.5f);
-        transform.Find("Mask").gameObject.SetActive(false);
+        
     }
+
 
     //加载AssetBundleManifest文件
     public IEnumerator OnWebRequestAssetBundleManifest()
@@ -246,7 +243,13 @@ public class GameManager : MonoBehaviour
             if (sendObj)
             {
                 sendObj.SendMessage(messageFunc, SendMessageOptions.DontRequireReceiver);
+                lodingindex = 1;
+                slider.value = lodingindex;
+                Debug.Log("加载完成时间： " + (Time.time - time));
+                yield return new WaitForSeconds(0.5f);
+                transform.Find("Mask").gameObject.SetActive(false);
             }
+            
         }
         
     }
