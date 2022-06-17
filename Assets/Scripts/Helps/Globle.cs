@@ -9,22 +9,36 @@ namespace DefaultNamespace
         public static string ServiceHost = "http://render-dev.d3ingo.com"; // 后端业务 域名
 
         public static string QiNiuPrefix = "unity/venue"; // 七牛资源前缀
-        public static string AssetVision = "2022061401";  // 资源版本
+        public static string AssetVision = "2022061401"; // 资源版本
         public static string QiNiuBucket = "frstatic"; // 七牛Bucket
-        public static string AssetPrefix = AssetHost+QiNiuPrefix+AssetVision;  // 资源请求前缀
-        public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy";  //七牛 AccessKey
+        public static string AssetPrefix = AssetHost + QiNiuPrefix + AssetVision; // 资源请求前缀
+        public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy"; //七牛 AccessKey
         public static string QiNiuSecretKey = "r-NUrKsnRBEwTQxbLONVrK9tPuncXyHmcq4BkSc7"; //七牛 QiNiuSecretKey
-        public static string AesIv = "1234567890123456";  // aes 解密 iv
+        public static string AesIv = "1234567890123456"; // aes 解密 iv
         public static string AesKey = "12345678901234561234567890123456"; // aes 解密 key
         public static string tokenName = "dev_token";
-        public static string AssetBundleDir = "AssetsBundles";  // assetBundle 一级目录
-        
+        public static string AssetBundleDir = "AssetsBundles"; // assetBundle 一级目录
+
         // 后端url
-        public static string userInfoRoute = "api/user/get_user";  // 用户详情 urlId  1
+        public static string userInfoRoute = "api/user/get_user"; // 用户详情 urlId  1
         public static string projectViewRoute = "api/user_project/view"; // 项目详情接口  urlId 2
         public static string worksListRoute = "api/room/works_list"; // 作品列表  urlId 3
         public static string roomViewRoute = "api/room/view"; // 房间详情  urlId 4
         public static string roomMemberListRoute = "api/room_member/list"; // 房间成员 urlId 5
 
+        public static string token = Application.isEditor
+            ? "wsDBAB2J6kwzqEnDZ1jNnAz94UjIEJbRAOBjYZen3PSGpixLAhqq7DwiuyRv"
+            : Tools.GetToken();
+
+        public static string projectId = Application.isEditor
+            ? "629f0cdc0ada86dc36e9c4cd"
+            : Tools.GetProjectId();
+        
+        public static string inviteCode = Application.isEditor
+            ? "M7RzMi"
+            : Tools.GetInviteCode();
+
+        public static string roomId;
+        public static string sceneId;
     }
 }

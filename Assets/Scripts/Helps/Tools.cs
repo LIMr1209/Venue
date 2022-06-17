@@ -13,11 +13,12 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern void ResetCanvasSize(int width, int height);
         [DllImport("__Internal")]
-        public static extern int GetSceneId();
-        [DllImport("__Internal")]
         public static extern string GetProjectId();
         [DllImport("__Internal")]
         private static extern string GetUserToken(string tokenName);
+        
+        [DllImport("__Internal")]
+        public static extern string GetInviteCode();
 
         public static string GetToken()
         {

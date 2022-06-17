@@ -1,5 +1,5 @@
 mergeInto(LibraryManager.library, {
-    GetSceneId:function()
+    GetInviteCode:function()
     {
         var url = window.location.href;
         var index = url.lastIndexOf("\/");
