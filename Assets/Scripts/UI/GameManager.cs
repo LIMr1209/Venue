@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using System.IO;
 using UnityEngine.UI;
 using DefaultNamespace;
+using static DefaultNamespace.JsonData;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class GameManager : MonoBehaviour
     public Dictionary<string, UIbase> UIdic = new Dictionary<string, UIbase>();
 
     public Dictionary<string, AssetBundle> depUIDic = new Dictionary<string, AssetBundle>();
+
+    public ViewResult<memberData> memberResult;
 
     private GameManager()
     {
@@ -38,10 +41,60 @@ public class GameManager : MonoBehaviour
         slider = transform.Find("Mask/Slider").GetComponent<Slider>();
         root = transform.Find("Root");
         AssetBundle.UnloadAllAssetBundles(true);
-
+        StartCoroutine(LoadAndSaveAsset());
         StartCoroutine(OnLoadScenePanel());
+        
     }
-    float a;
+    IEnumerator LoadAndSaveAsset()
+    {
+        string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
+        string progress = null;
+
+        Debug.Log(url);
+        Debug.Log("开始下载模型。");
+        WWW w = new WWW(url);
+        while (!w.isDone)
+        {
+            progress = (((int)(w.progress * 100)) % 100) + "%";
+
+            yield return null;
+        }
+        yield return w;
+        if (w.isDone)
+        {
+
+            byte[] model = w.bytes;
+            int length = model.Length;
+
+            //文件流信息  
+            Stream sw;
+
+            DirectoryInfo t = new DirectoryInfo(Application.dataPath + "/AssetsPackages/Textures");
+            if (!t.Exists)
+            {
+                //如果此文件夹不存在则创建  
+                t.Create();
+            }
+            FileInfo j = new FileInfo(Application.dataPath + "/AssetsPackages/Textures/scene.fbx");
+            Debug.Log(Application.persistentDataPath + "/AssetsPackages/Textures/scene.fbx");
+            if (!j.Exists)
+            {
+                //如果此文件不存在则创建  
+                sw = j.Create();
+            }
+            else
+            {
+                //如果此文件存在则打开  
+                sw = j.OpenWrite();
+            }
+            sw.Write(model, 0, length);
+            //关闭流  
+            sw.Close();
+            //销毁流  
+            sw.Dispose();
+        }
+    }
+
     private void Update()
     {
        
@@ -77,8 +130,58 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OnWebRequestAssetBundleUIPanel("userpanel", new Vector3(652, 0, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("listpanel", new Vector3(0, 40, 0), root, isLoad));
         StartCoroutine(OnLoadExpressionAssetBundel(isLoad));
+        memberResult = OnMemberRequest();
         yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
         
+    }
+
+
+    public ViewResult<memberData> OnMemberRequest()
+    {
+        ViewResult<memberData> memberResult = null;
+        // 获取房间成员
+        Dictionary<string, string> memberRequest = new Dictionary<string, string>();
+        memberRequest["id"] = Globle.roomId;
+        memberRequest["token"] = Globle.token; // token 
+        Request.instances.HttpSend(5, "get", memberRequest, (statusCode, error, body) =>
+        {
+            memberResult = JsonUtility.FromJson<ViewResult<memberData>>(body);
+        });
+        return memberResult;
+    }
+
+    public int OnGetMemberRequestNum()
+    {
+        return memberResult.data.invited_user.Length + memberResult.data.stranger.Length + 1;
+    }
+
+
+    public IEnumerator DownTexture(Image image, string url)
+    {
+        UnityWebRequest WebRequest = new UnityWebRequest(url);
+        DownloadHandlerTexture Download = new DownloadHandlerTexture(true);
+        WebRequest.downloadHandler = Download;
+        yield return WebRequest.SendWebRequest();
+        while (!WebRequest.isDone)
+        {
+            yield return null;
+        }
+        if (string.IsNullOrEmpty(WebRequest.error))
+        {
+            Texture2D rexture = Download.texture;
+            image.sprite = GetSpriteByTexture(rexture);
+        }
+        else
+        {
+            //文件下载失败
+            Debug.Log("文件下载失败");
+        }
+    }
+    //将texture转成image的Sprite
+    Sprite GetSpriteByTexture(Texture2D tex)
+    {
+        Sprite _sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
+        return _sprite;
     }
 
 

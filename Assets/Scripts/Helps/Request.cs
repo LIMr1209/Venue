@@ -215,12 +215,12 @@ namespace DefaultNamespace
                 // 获取房间成员
                 Dictionary<string, string> memberRequest = new Dictionary<string, string>();
                 memberRequest["id"] = Globle.roomId;
-                memberRequest["token"] =  Globle.token; // token 
+                memberRequest["token"] = Globle.token; // token 
                 HttpSend(5, "get", memberRequest, (statusCode, error, body) =>
                 {
                     ViewResult<memberData> memberResult = JsonUtility.FromJson<ViewResult<memberData>>(body);
                     string nickname = memberResult.data.host_team.nickname;
-                    Debug.Log("主办: "+nickname);
+                    Debug.Log("主办: " + nickname);
                 });
             });
         }
