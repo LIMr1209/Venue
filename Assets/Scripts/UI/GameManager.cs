@@ -41,65 +41,17 @@ public class GameManager : MonoBehaviour
         slider = transform.Find("Mask/Slider").GetComponent<Slider>();
         root = transform.Find("Root");
         AssetBundle.UnloadAllAssetBundles(true);
-        StartCoroutine(LoadAndSaveAsset());
+
         StartCoroutine(OnLoadScenePanel());
         
     }
-    IEnumerator LoadAndSaveAsset()
-    {
-        string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
-        string progress = null;
-
-        Debug.Log(url);
-        Debug.Log("开始下载模型。");
-        WWW w = new WWW(url);
-        while (!w.isDone)
-        {
-            progress = (((int)(w.progress * 100)) % 100) + "%";
-
-            yield return null;
-        }
-        yield return w;
-        if (w.isDone)
-        {
-
-            byte[] model = w.bytes;
-            int length = model.Length;
-
-            //文件流信息  
-            Stream sw;
-
-            DirectoryInfo t = new DirectoryInfo(Application.dataPath + "/AssetsPackages/Textures");
-            if (!t.Exists)
-            {
-                //如果此文件夹不存在则创建  
-                t.Create();
-            }
-            FileInfo j = new FileInfo(Application.dataPath + "/AssetsPackages/Textures/scene.fbx");
-            Debug.Log(Application.persistentDataPath + "/AssetsPackages/Textures/scene.fbx");
-            if (!j.Exists)
-            {
-                //如果此文件不存在则创建  
-                sw = j.Create();
-            }
-            else
-            {
-                //如果此文件存在则打开  
-                sw = j.OpenWrite();
-            }
-            sw.Write(model, 0, length);
-            //关闭流  
-            sw.Close();
-            //销毁流  
-            sw.Dispose();
-        }
-    }
+    
 
     private void Update()
     {
        
         OnLoadingIndex();
-        //Debug.Log(a);
+
     }
 
     float time = 0;

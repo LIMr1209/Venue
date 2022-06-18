@@ -104,24 +104,20 @@ namespace DefaultNamespace
                 {
                     point = art.position + new Vector3(0, 0, -5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y, art.rotation.z));
-                    Debug.Log(111);
                 }
                 else if (art.forward.x == 1)
                 {
                     point = art.position + new Vector3(5, 0, 0);
-                    Debug.Log(222);
                 }
                 else if (art.forward.z == 1)
                 {
                     point = art.position + new Vector3(0, 0, 5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 180, art.rotation.z));
-                    Debug.Log(333);
                 }
                 else
                 {
                     point = art.position + new Vector3(-5, 0, 0);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 90, art.rotation.z));
-                    Debug.Log(444);
                 }
             }
             transform.DOMove(point, 1);

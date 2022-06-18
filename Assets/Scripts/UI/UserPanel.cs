@@ -45,15 +45,21 @@ public class UserPanel : UIbase
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            OnSetContentItem();
-        }
+    }
+
+    public override void OnExitAction()
+    {
+        base.OnExitAction();
+        OnSetContentItem();
     }
 
     //Ë¢ÐÂ½çÃæ
     public void OnSetContentItem()
     {
+        if (!teamscrollview || !invitedscrollview || !invitedscrollview)
+        {
+            return;
+        }
         memberResult = GameManager.instances.OnMemberRequest();
         OnGetUserItem(teamscrollview.content.GetChild(0), memberResult.data.host_team);
         OnFush(memberResult.data.invited_user, invitedscrollview.content,3,120);
@@ -68,8 +74,8 @@ public class UserPanel : UIbase
         }
         for (int i = content.childCount; i < Data.Length; i++)
         {
-            Transform item = Instantiate(invitedscrollview.content.Find("Item"));
-            item.SetParent(invitedscrollview.content);
+            Transform item = Instantiate(content.Find("Item"));
+            item.SetParent(content);
             OnGetUserItem(item, Data[i]);
         }
         int ceng = content.childCount / index;
@@ -127,7 +133,6 @@ public class UserPanel : UIbase
     {
         Item.Find("Text (TMP)").GetComponent<TextMeshProUGUI>().text = date.nickname;
         OnGetSprite(Item.Find("Image").GetComponent<Image>(), date.logo_url);
-        Debug.Log(date.nickname + " :    " + Item.Find("Image").GetComponent<Image>().name);
     }
 
     public void OnGetSprite(Image image, string url)

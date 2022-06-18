@@ -26,17 +26,24 @@ public class ListPanel : UIbase
         OnSetContentView(scrollview.content, 5, 400);
     }
 
+    public override void OnExitAction()
+    {
+        base.OnExitAction();
+        OnSetContentItem();
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            OnSetContentItem();
-        }
+
     }
 
     //刷新界面
     public void OnSetContentItem()
     {
+        if (!scrollview)
+        {
+            return;
+        }
         // 获取作品列表
         Dictionary<string, string> workListRequest = new Dictionary<string, string>();
         workListRequest["id"] = Globle.roomId;

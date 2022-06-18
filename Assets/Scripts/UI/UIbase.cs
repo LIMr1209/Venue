@@ -22,7 +22,7 @@ public class UIbase : MonoBehaviour
 
     }
 
-    public void OnExitAction()
+    public virtual void OnExitAction()
     {
         ScenePanel.instance.OnUIdicActionFalse();
         gameObject.SetActive(true);
