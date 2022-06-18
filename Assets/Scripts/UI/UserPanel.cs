@@ -32,8 +32,8 @@ public class UserPanel : UIbase
         memberResult = GameManager.instances.memberResult;
         text_num.text = GameManager.instances.OnGetMemberRequestNum() + "人正在观看";
         OnSetContentView(teamscrollview.content, 1, 110, false, "主办方");
-        OnSetContentView(invitedscrollview.content, 3, 102, true,"我邀请的");
-        OnSetContentView(strangersscrollview.content, 4, 102, true,"陌生人");
+        OnSetContentView(invitedscrollview.content, 3, 102, true, "我邀请的");
+        OnSetContentView(strangersscrollview.content, 4, 102, true, "陌生人");
 
         btn_Close = transform.Find("img_topbg/btn_close").GetComponent<Button>();
         btn_Close.onClick.AddListener(() =>
@@ -45,10 +45,40 @@ public class UserPanel : UIbase
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            OnSetContentItem();
+        }
     }
 
-    
+    //刷新界面
+    public void OnSetContentItem()
+    {
+        memberResult = GameManager.instances.OnMemberRequest();
+        OnGetUserItem(teamscrollview.content.GetChild(0), memberResult.data.host_team);
+        OnFush(memberResult.data.invited_user, invitedscrollview.content,3,120);
+        OnFush(memberResult.data.stranger, strangersscrollview.content, 4, 120);
+    }
+
+    private void OnFush(UserData[] Data ,Transform content,int index,int cengheight)
+    {
+        for (int i = 0; i < content.childCount; i++)
+        {
+            OnGetUserItem(content.GetChild(i), Data[i]);
+        }
+        for (int i = content.childCount; i < Data.Length; i++)
+        {
+            Transform item = Instantiate(invitedscrollview.content.Find("Item"));
+            item.SetParent(invitedscrollview.content);
+            OnGetUserItem(item, Data[i]);
+        }
+        int ceng = content.childCount / index;
+        int cengnum = content.childCount % index != 0 ? ceng : ceng - 1;
+        int height = cengheight + (cengnum * cengheight);
+        content.GetComponent<RectTransform>().sizeDelta = new Vector2(17, height);
+    }
+
+
 
     public void OnSetContentView(Transform content, int index, int cengheight, bool isheight,string Pcalss)
     {

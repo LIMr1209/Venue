@@ -10,6 +10,7 @@ using static DefaultNamespace.JsonData;
 public class ListPanel : UIbase
 {
     ScrollRect scrollview;
+    ListResult<WorkData> workResult;
 
 
     void Start()
@@ -27,7 +28,44 @@ public class ListPanel : UIbase
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            OnSetContentItem();
+        }
+    }
+
+    //刷新界面
+    public void OnSetContentItem()
+    {
+        // 获取作品列表
+        Dictionary<string, string> workListRequest = new Dictionary<string, string>();
+        workListRequest["id"] = Globle.roomId;
+        workListRequest["token"] = Globle.token; // token 
+        Request.instances.HttpSend(3, "get", workListRequest, (statusCode, error, body) =>
+        {
+            workResult = JsonUtility.FromJson<ListResult<WorkData>>(body);
+
+            for(int i=0;i< scrollview.content.childCount; i++)
+            {
+                //Transform item = Instantiate(scrollview.content.Find("Item"));
+                //item.SetParent(scrollview.content);
+                scrollview.content.GetChild(i).transform.Find("txt_title").GetComponent<TextMeshProUGUI>().text = workResult.data[i].title;
+                scrollview.content.GetChild(i).transform.Find("txt_username").GetComponent<TextMeshProUGUI>().text = workResult.data[i].user.nickname;
+                OnGetUserItem(scrollview.content.GetChild(i), workResult, i);
+            }
+            for (int i = scrollview.content.childCount; i < workResult.data.Length; i++)
+            {
+                Transform item = Instantiate(scrollview.content.Find("Item"));
+                item.SetParent(scrollview.content);
+                item.transform.Find("txt_title").GetComponent<TextMeshProUGUI>().text = workResult.data[i].title;
+                item.transform.Find("txt_username").GetComponent<TextMeshProUGUI>().text = workResult.data[i].user.nickname;
+                OnGetUserItem(item, workResult, i);
+            }
+        });
+        int ceng = scrollview.content.childCount / 5;
+        int cengnum = scrollview.content.childCount % 5 != 0 ? ceng : ceng - 1;
+        int height = 400 + (cengnum * 400);
+        scrollview.content.GetComponent<RectTransform>().sizeDelta = new Vector2(17, height);
     }
 
 
@@ -40,11 +78,11 @@ public class ListPanel : UIbase
         workListRequest["token"] = Globle.token; // token 
         Request.instances.HttpSend(3, "get", workListRequest, (statusCode, error, body) =>
         {
-            ListResult<WorkData> workResult = JsonUtility.FromJson<ListResult<WorkData>>(body);
+            workResult = JsonUtility.FromJson<ListResult<WorkData>>(body);
             string workUrl = workResult.data[0].cover.thumb_path.avb;
             Debug.Log("作品 url: " + workUrl);
             OnGetUserItem(content.transform.Find("Item").transform, workResult, 0);
-            for (int i =1; i < workResult.data.Length; i++)
+            for (int i = content.transform.childCount; i < workResult.data.Length; i++)
             {
                 Transform item = Instantiate(content.Find("Item"));
                 item.SetParent(content);
