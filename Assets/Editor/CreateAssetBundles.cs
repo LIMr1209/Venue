@@ -33,6 +33,22 @@ public class CreateAssetBundles
         // WebGL 构建
         BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
     }
+    
+    public static void TaestBuildAllAssetBundlesLocal()
+    {
+        //要创建的目录
+        string assetBundleDirectory = "Assets/AssetsBundles";
+        if (!Directory.Exists(assetBundleDirectory))
+        {
+            Directory.CreateDirectory(assetBundleDirectory);
+        }
+        //三个参数：第一个是创建的目录位置，第二个是AssetBundle的压缩方式，第三个是创建的平台。
+        // 压缩方式 默认  LZMA
+        // UncompressedAssetBundle 不压缩
+        // ChunkBasedCompression lz4 压缩  折中
+        // WebGL 构建
+        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
+    }
 
 
 
