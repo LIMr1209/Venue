@@ -29,7 +29,7 @@ public class UserPanel : UIbase
         teamscrollview = transform.Find("img_contentbg/img_teambg/Scroll View").GetComponent<ScrollRect>();
         invitedscrollview = transform.Find("img_contentbg/img_invitedbg/Scroll View").GetComponent<ScrollRect>();
         strangersscrollview = transform.Find("img_contentbg/img_strangersbg/Scroll View").GetComponent<ScrollRect>();
-        memberResult = GameManager.instances.memberResult;
+        memberResult = GameManager.instances.OnMemberRequest();
         text_num.text = GameManager.instances.OnGetMemberRequestNum() + "人正在观看";
         OnSetContentView(teamscrollview.content, 1, 110, false, "主办方");
         OnSetContentView(invitedscrollview.content, 3, 102, true, "我邀请的");

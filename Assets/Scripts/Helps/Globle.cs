@@ -27,7 +27,7 @@ namespace DefaultNamespace
         public static string roomMemberListRoute = "api/room_member/list"; // 房间成员 urlId 5
 
         public static string token = Application.isEditor
-            ? "wsDBAB2J6kwzqEnDZ1jNnAz94UjIEJbRAOBjYZen3PSGpixLAhqq7DwiuyRv"
+            ? "nbqORyTpDmj8neplJXOYmfrWNP42tB4KNkQg8KhHDu59iXETZKjLObrsDdiQ"
             : Tools.GetToken();
 
         public static string projectId = Application.isEditor

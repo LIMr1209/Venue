@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     public Dictionary<string, AssetBundle> depUIDic = new Dictionary<string, AssetBundle>();
 
-    public ViewResult<memberData> memberResult;
+    //public ViewResult<memberData> memberResult;
 
     private GameManager()
     {
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         slider = transform.Find("Mask/Slider").GetComponent<Slider>();
         root = transform.Find("Root");
         AssetBundle.UnloadAllAssetBundles(true);
-
+        //memberResult = OnMemberRequest();
         StartCoroutine(OnLoadScenePanel());
         
     }
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OnWebRequestAssetBundleUIPanel("userpanel", new Vector3(652, 0, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("listpanel", new Vector3(0, 40, 0), root, isLoad));
         StartCoroutine(OnLoadExpressionAssetBundel(isLoad));
-        memberResult = OnMemberRequest();
+        
         yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
         
     }
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public int OnGetMemberRequestNum()
     {
-        return memberResult.data.invited_user.Length + memberResult.data.stranger.Length + 1;
+        return OnMemberRequest().data.invited_user.Length + OnMemberRequest().data.stranger.Length + 1;
     }
 
 
@@ -228,10 +228,12 @@ public class GameManager : MonoBehaviour
             obj.transform.position = Vector3.zero;
             obj.transform.localScale = Vector3.one;
             obj.transform.localPosition = point;
-            if(name!= "scenepanel")
+            Debug.Log(obj.name);
+            if (name!= "scenepanel")
             {
                 UIdic.Add(name, obj.GetComponent<UIbase>());
                 obj.SetActive(false);
+               
             }
         }
     }

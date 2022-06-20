@@ -41,7 +41,10 @@ public class ScenePanel : UIbase
         OnButtonfindAdd();
 
         txt_num = transform.Find("btn_num/Text (TMP)").GetComponent<TextMeshProUGUI>();
-        txt_num.text = GameManager.instances.OnGetMemberRequestNum().ToString();
+
+            txt_num.text = GameManager.instances.OnGetMemberRequestNum().ToString();
+
+        
 
 
 
