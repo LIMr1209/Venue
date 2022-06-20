@@ -66,7 +66,7 @@ public class ExpressionPanel : UIbase
             button.onClick.AddListener(() => 
             {
                 Sprite a = button.transform.Find("Image").GetComponent<Image>().sprite;
-                Debug.Log(a.name);
+
             });
         }
     }
