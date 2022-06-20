@@ -75,7 +75,9 @@ public class GameManager : MonoBehaviour
     public IEnumerator OnLoadScenePanel()
     {
         time = Time.time;
+
         yield return StartCoroutine(OnWebRequestAssetBundleManifest());
+        yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("otherpanel", new Vector3(273, -148, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("sharepanel", new Vector3(209, -290, 0), root, isLoad));
         StartCoroutine(OnWebRequestAssetBundleUIPanel("expressionpanel", new Vector3(64, -284, 0), root, isLoad));
@@ -83,7 +85,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(OnWebRequestAssetBundleUIPanel("listpanel", new Vector3(0, 40, 0), root, isLoad));
         StartCoroutine(OnLoadExpressionAssetBundel(isLoad));
         
-        yield return StartCoroutine(OnWebRequestAssetBundleUIPanel("scenepanel", new Vector3(0, 0, 0), root, isLoad));
+        
         
     }
 
@@ -233,7 +235,7 @@ public class GameManager : MonoBehaviour
             {
                 UIdic.Add(name, obj.GetComponent<UIbase>());
                 obj.SetActive(false);
-               
+                obj.transform.SetParent(transform.Find("Root/ScenePanel(Clone)"));
             }
         }
     }
