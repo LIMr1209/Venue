@@ -21,6 +21,8 @@ public class ScenePanel : UIbase
 
     private TextMeshProUGUI txt_num;
 
+    private RectTransform Rect;
+
 
 
     private void Awake()
@@ -44,7 +46,10 @@ public class ScenePanel : UIbase
 
             txt_num.text = GameManager.instances.OnGetMemberRequestNum().ToString();
 
-        
+        //Rect = GetComponent<RectTransform>();
+        //Debug.Log(Screen.width +"......"+ Screen.height);
+        //Rect.sizeDelta = new Vector2(Screen.width ,Screen.height);
+
 
 
 
