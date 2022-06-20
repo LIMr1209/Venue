@@ -9,7 +9,7 @@ namespace DefaultNamespace
         public static string ServiceHost = "http://render-dev.d3ingo.com"; // 后端业务 域名
 
         public static string QiNiuPrefix = "unity/venue"; // 七牛资源前缀
-        public static string AssetVision = "2022061801"; // 资源版本
+        public static string AssetVision = "2022062001"; // 资源版本
         public static string QiNiuBucket = "frstatic"; // 七牛Bucket
         public static string AssetPrefix = AssetHost + QiNiuPrefix + AssetVision; // 资源请求前缀
         public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy"; //七牛 AccessKey
@@ -28,7 +28,7 @@ namespace DefaultNamespace
         public static string sceneViewRoute = "api/scene_model/info";  // 场景详情 urlId 6
 
         public static string token = Application.isEditor
-            ? "wsDBAB2J6kwzqEnDZ1jNnAz94UjIEJbRAOBjYZen3PSGpixLAhqq7DwiuyRv"
+            ? "nbqORyTpDmj8neplJXOYmfrWNP42tB4KNkQg8KhHDu59iXETZKjLObrsDdiQ"
             : Tools.GetToken();
 
         public static string projectId = Application.isEditor

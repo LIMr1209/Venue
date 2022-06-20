@@ -13,6 +13,11 @@ namespace DefaultNamespace
             Globle.projectId = words[1];
             Globle.inviteCode = words[2];
             Globle.token = words[3];
+            Debug.Log("前端发送参数 sceneId: "+Globle.sceneId);
+            Debug.Log("前端发送参数 projectId: "+Globle.projectId);
+            Debug.Log("前端发送参数 inviteCode: "+Globle.inviteCode);
+            Debug.Log("前端发送参数 token: "+Globle.token);
+            
             if (string.IsNullOrEmpty(Globle.sceneId))
             {
                 // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件

@@ -20,7 +20,7 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
+            // sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
             StartCoroutine(
                 GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
