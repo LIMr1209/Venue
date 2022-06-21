@@ -10,28 +10,42 @@ namespace DefaultNamespace
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "scene";
+        private string sceneUrl;
 
         private void Awake()
         {
-            // int width = Tools.GetWindowWidth();
-            // int height = Tools.GetWindowHeight();
-            // Screen.SetResolution(width, height, false);
+            sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
         }
 
         private void Start()
         {
-            // sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
-                {
-                    AddController controller = FindObjectOfType<AddController>();
-                    controller.AddThird();
-                }));
+            if (!string.IsNullOrEmpty(sceneUrl))
+            {
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
+                    {
+                        AddController controller = FindObjectOfType<AddController>();
+                        controller.AddThird();
+                        AbInit.instances.FinishSlider();
+                    })); 
+            }
+            else
+            {
+                // sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                    {
+                        AddController controller = FindObjectOfType<AddController>();
+                        controller.AddThird();
+                        AbInit.instances.FinishSlider();
+                    })); 
+            }
         }
 
 
         private void Update()
         {
+            
         }
     }
 }

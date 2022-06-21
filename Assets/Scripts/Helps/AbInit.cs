@@ -12,7 +12,7 @@ namespace DefaultNamespace
         public static AbInit instances;
 
         public bool isLoad;
-        
+
         float time = 0;
         float lodingindex = 0;
         
@@ -31,7 +31,7 @@ namespace DefaultNamespace
         {
             slider = transform.Find("Mask/Slider").GetComponent<Slider>();
             root = transform.Find("Root");
-            AssetBundle.UnloadAllAssetBundles(true);
+            // AssetBundle.UnloadAllAssetBundles(true);
         }
 
 
@@ -39,14 +39,13 @@ namespace DefaultNamespace
         {
             OnLoadingIndex();
         }
-        
+
         private void OnLoadingIndex()
         {
-            if(Time.time - time > 0.1f)
+            if (Time.time - time > 0.1f)
             {
                 if (lodingindex <= 1)
                 {
-
                     slider.value = lodingindex;
                     lodingindex += 0.007f;
 
@@ -55,18 +54,19 @@ namespace DefaultNamespace
             }
         }
 
-        public Dictionary<string, AssetBundle> AssetBundelGameObjectDic = new Dictionary<string, AssetBundle>();
-
-        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "")
+        public void FinishSlider()
         {
-            Vector3 point = Vector3.zero;
-            ;
-            Vector3 rotate = new Vector3(0, 0, 0);
-            yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate));
+            lodingindex = 1;
+            slider.value = lodingindex;
+            transform.Find("Mask").gameObject.SetActive(false);
         }
 
-        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent,
-            GameObjectCallback callback)
+        public Dictionary<string, AssetBundle> AssetBundelGameObjectDic = new Dictionary<string, AssetBundle>();
+
+        public delegate void GameObjectCallback(GameObject obj);
+
+        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "",
+            GameObjectCallback callback = null)
         {
             Vector3 point = Vector3.zero;
             ;
@@ -74,7 +74,6 @@ namespace DefaultNamespace
             yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, callback));
         }
 
-        public delegate void GameObjectCallback(GameObject obj);
 
         public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
@@ -126,12 +125,47 @@ namespace DefaultNamespace
                 if (callback != null)
                 {
                     callback(obj);
-                    lodingindex = 1;
-                    slider.value = lodingindex;
-                    Debug.Log("加载完成时间： " + (Time.time - time));
-                    yield return new WaitForSeconds(0.5f);
-                    transform.Find("Mask").gameObject.SetActive(false);
                 }
+                AB.UnloadAsync(false);
+            }
+        }
+
+        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, GameObjectCallback callback = null)
+        {
+            Vector3 point = Vector3.zero;
+            ;
+            Vector3 rotate = new Vector3(0, 0, 0);
+            yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObjectUrl(name, url, point, rotate, callback));
+        }
+
+        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Vector3 point,
+            Vector3 rotate, GameObjectCallback callback = null)
+        {
+            AssetBundle AB = null;
+
+            // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+            UnityWebRequest requestAB = UnityWebRequest.Get(url);
+            yield return requestAB.SendWebRequest();
+            if (!string.IsNullOrEmpty(requestAB.error))
+            {
+                Debug.LogError(requestAB.error);
+                yield break;
+            }
+
+            // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
+            byte[] abData = requestAB.downloadHandler.data;
+            // abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+
+            AB = AssetBundle.LoadFromMemory(abData);
+
+            if (AB != null)
+            {
+                GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+                if (callback != null)
+                {
+                    callback(obj);
+                }
+                AB.UnloadAsync(false);
             }
         }
     }

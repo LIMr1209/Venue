@@ -17,14 +17,6 @@ namespace DefaultNamespace
         private void Awake()
         {
             instances = this;
-            Dictionary<string, string> requestData = new Dictionary<string, string>();
-            requestData["user_project_id"] = Globle.projectId;
-            HttpSend(2, "get", requestData, (statusCode, error, body) =>
-            {
-                ViewResult<ProjectData> projectResult = JsonUtility.FromJson<ViewResult<ProjectData>>(body);
-                Globle.sceneId = projectResult.data.scene_id.ToString();
-                Globle.roomId = projectResult.data.room_info.id.ToString();
-            });
         }
         public delegate void ReqCallback(int statusCode, string error, string body);
 
@@ -193,36 +185,5 @@ namespace DefaultNamespace
             }
         }
         
-        public void TestRequest()
-        {
-            // 进入房间
-            Dictionary<string, string> requestData = new Dictionary<string, string>();
-            requestData["id"] = Globle.roomId;
-            requestData["invite_code"] = Globle.inviteCode; // 邀请码 
-            requestData["token"] = Globle.token; // token 
-            HttpSend(4, "get", requestData, (statusCode, error, body) =>
-            {
-                // 获取作品列表
-                Dictionary<string, string> workListRequest = new Dictionary<string, string>();
-                workListRequest["id"] = Globle.roomId;
-                workListRequest["token"] =  Globle.token; // token 
-                HttpSend(3, "get", workListRequest, (statusCode, error, body) =>
-                {
-                    ListResult<WorkData> workResult = JsonUtility.FromJson<ListResult<WorkData>>(body);
-                    string workUrl = workResult.data[0].cover.thumb_path.avb;
-                    Debug.Log("作品 url: "+workUrl);
-                });
-                // 获取房间成员
-                Dictionary<string, string> memberRequest = new Dictionary<string, string>();
-                memberRequest["id"] = Globle.roomId;
-                memberRequest["token"] = Globle.token; // token 
-                HttpSend(5, "get", memberRequest, (statusCode, error, body) =>
-                {
-                    ViewResult<memberData> memberResult = JsonUtility.FromJson<ViewResult<memberData>>(body);
-                    string nickname = memberResult.data.host_team.nickname;
-                    Debug.Log("主办: " + nickname);
-                });
-            });
-        }
     }
 }

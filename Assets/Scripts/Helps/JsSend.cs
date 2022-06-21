@@ -10,13 +10,7 @@ namespace DefaultNamespace
         {
             string[] words = strParams.Split('#');
             Globle.sceneId = words[0];
-            Globle.projectId = words[1];
-            Globle.inviteCode = words[2];
-            Globle.token = words[3];
             Debug.Log("前端发送参数 sceneId: "+Globle.sceneId);
-            Debug.Log("前端发送参数 projectId: "+Globle.projectId);
-            Debug.Log("前端发送参数 inviteCode: "+Globle.inviteCode);
-            Debug.Log("前端发送参数 token: "+Globle.token);
             
             if (string.IsNullOrEmpty(Globle.sceneId))
             {

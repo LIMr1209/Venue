@@ -27,26 +27,6 @@ namespace DefaultNamespace
         public static string roomMemberListRoute = "api/room_member/list"; // 房间成员 urlId 5
         public static string sceneViewRoute = "api/scene_model/info";  // 场景详情 urlId 6
 
-        // public static string token = Application.isEditor
-        //     ? "nbqORyTpDmj8neplJXOYmfrWNP42tB4KNkQg8KhHDu59iXETZKjLObrsDdiQ"
-        //     : Tools.GetToken();
-        
-        
-        // public static string projectId = Application.isEditor
-        //     ? "629f0cdc0ada86dc36e9c4cd"
-        //     : Tools.GetProjectId();
-        //
-        // public static string inviteCode = Application.isEditor
-        //     ? "M7RzMi"
-        //     : Tools.GetInviteCode();
-
-        public static string token = "nbqORyTpDmj8neplJXOYmfrWNP42tB4KNkQg8KhHDu59iXETZKjLObrsDdiQ";
-
-        public static string projectId = "629f0cdc0ada86dc36e9c4cd";
-
-        public static string inviteCode = "M7RzMi";
-
-        public static string roomId;
         public static string sceneId;
     }
 }
