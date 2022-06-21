@@ -21,7 +21,7 @@ namespace DefaultNamespace
             if (string.IsNullOrEmpty(Globle.sceneId))
             {
                 // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件
-                FindObjectOfType<GameManager>().enabled = true;
+                FindObjectOfType<AbInit>().enabled = true;
                 FindObjectOfType<InitialScene>().enabled = true;
             }
         }

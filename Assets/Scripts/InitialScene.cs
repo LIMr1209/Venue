@@ -22,7 +22,7 @@ namespace DefaultNamespace
         {
             // sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
             StartCoroutine(
-                GameManager.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();

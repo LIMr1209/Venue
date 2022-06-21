@@ -7,11 +7,10 @@ namespace DefaultNamespace
     {
         private bool visual = false; // 第一人称 第三人称切换
         private GameObject playerFollowCameraClone;
-        private bool disableController = true; // 视角控制器禁用启用
         private string controllerAb = "controller";
         private string firstFollowCameraAb = "firstplayerfollowcamera";
         private string thirdFollowCameraAb = "thirdplayerfollowcamera";
-        private string capsuleAb = "playercapsule";
+        // private string capsuleAb = "playercapsule";
         private string armatureAb = "playerarmature";
         private GameObject _firstPlayerFollowCamera = null;
         private GameObject _thirdPlayerFollowCamera = null;
@@ -66,7 +65,7 @@ namespace DefaultNamespace
             if (!_firstPlayerFollowCamera)
             {
                 StartCoroutine(
-                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb, location,
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb, location,
                         rotation, (obj) =>
                             {
                                 AddFollow();
@@ -81,7 +80,7 @@ namespace DefaultNamespace
             if (!_player)
             {
                 StartCoroutine(
-                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
                         rotation, (obj) =>
                         {
                             AddFollow();
@@ -108,7 +107,7 @@ namespace DefaultNamespace
             if (!_thirdPlayerFollowCamera)
             {
                 StartCoroutine(
-                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb));
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb));
             }
             else
             {
@@ -118,7 +117,7 @@ namespace DefaultNamespace
             if (!_player)
             {
                 StartCoroutine(
-                    GameManager.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, location,
                         rotation, (obj) =>
                         {
                             AddFollow();

@@ -19,6 +19,10 @@ namespace DefaultNamespace
         
         [DllImport("__Internal")]
         public static extern string GetInviteCode();
+        
+        [DllImport("__Internal")]
+        public static extern void showDialog(string message);
+        
 
         public static string GetToken()
         {
