@@ -14,18 +14,18 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
-        [Header("Player")]
-        [Tooltip("Move speed of the character in m/s")]
+        [Header("玩家")]
+        [Tooltip("移动速度 m/s")]
         public float MoveSpeed = 2.0f;
 
-        [Tooltip("Sprint speed of the character in m/s")]
+        [Tooltip("跑步速度 m/s")]
         public float SprintSpeed = 5.335f;
 
-        [Tooltip("How fast the character turns to face movement direction")]
+        [Tooltip("角色转向面部运动方向的速度")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
 
-        [Tooltip("Acceleration and deceleration")]
+        [Tooltip("加速和减速")]
         public float SpeedChangeRate = 10.0f;
 
         // public AudioClip LandingAudioClip;
@@ -33,46 +33,46 @@ namespace StarterAssets
         // [Range(0, 1)] public float FootstepAudioVolume = 0.5f;
 
         [Space(10)]
-        [Tooltip("The height the player can jump")]
+        [Tooltip("跳跃高度")]
         public float JumpHeight = 1.2f;
 
-        [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
+        [Tooltip("重力")]
         public float Gravity = -15.0f;
 
         [Space(10)]
-        [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+        [Tooltip("再次跳跃所需的时间。设置为0f可立即再次跳转")]
         public float JumpTimeout = 0.50f;
 
-        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
+        [Tooltip("进入下降状态前所需的时间。用于下楼梯")]
         public float FallTimeout = 0.15f;
 
-        [Header("Player Grounded")]
-        [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+        [Header("玩家接地板")]
+        [Tooltip("检测是否接地")]
         public bool Grounded = true;
 
-        [Tooltip("Useful for rough ground")]
+        [Tooltip("适用于粗糙地面")]
         public float GroundedOffset = -0.14f;
 
-        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
+        [Tooltip("接地检查的半径。应匹配CharacterController的半径")]
         public float GroundedRadius = 0.28f;
 
-        [Tooltip("What layers the character uses as ground")]
+        [Tooltip("角色使用哪些层作为地面")]
         public LayerMask GroundLayers;
 
-        [Header("Cinemachine")]
-        [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
+        [Header("虚拟摄像机")]
+        [Tooltip("虚拟摄像机跟随的目标")]
         public GameObject CinemachineCameraTarget;
 
-        [Tooltip("How far in degrees can you move the camera up")]
+        [Tooltip("相机向上移动多远（以度为单位）")]
         public float TopClamp = 70.0f;
 
-        [Tooltip("How far in degrees can you move the camera down")]
+        [Tooltip("相机向下移动多远（以度为单位）")]
         public float BottomClamp = -30.0f;
 
-        [Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
+        [Tooltip("附加度数以覆盖摄像头。锁定时用于微调相机位置")]
         public float CameraAngleOverride = 0.0f;
 
-        [Tooltip("For locking the camera position on all axis")]
+        [Tooltip("用于锁定所有轴上的摄像头位置")]
         public bool LockCameraPosition = false;
 
         // cinemachine

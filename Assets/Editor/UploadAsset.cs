@@ -27,6 +27,13 @@ namespace Editor
             ForeachFile(Path.Combine(Application.dataPath,Globle.AssetBundleDir), ref files); 
             foreach (string i  in files)
             {
+                string[] splitName = i.Split('\\');
+                string filename = splitName[splitName.Length-1];
+                if (filename.StartsWith("scene"))
+                {
+                    continue;
+                }
+
                 // 上传文件名
                 string replacePath = Application.dataPath.Replace("/", "\\") + "\\";
                 string keySuffix = i.Replace(replacePath, "");

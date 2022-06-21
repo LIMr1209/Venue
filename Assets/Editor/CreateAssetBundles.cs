@@ -70,24 +70,24 @@ public class CreateAssetBundles
     }
 
 
-
-    [MenuItem("AB/标记名称(可多选)/UI")]
-    public static void OnSetAssetsBundleName()
-    {
-        UnityEngine.Object[] objItem = Selection.objects;
-        foreach (UnityEngine.Object item in objItem)
-        {
-            string a_path = AssetDatabase.GetAssetPath(item);
-            AssetImporter asset = AssetImporter.GetAtPath(a_path);
-            int BeginIndex = a_path.IndexOf(item.name);
-            int LastIndex = a_path.IndexOf(".");
-            int len = LastIndex - BeginIndex;
-            string bundleName = a_path.Substring(BeginIndex, len);
-            asset.assetBundleName = "uiprefabs/" + bundleName;
-            asset.assetBundleVariant = "ab";
-            asset.SaveAndReimport();
-        }
-    }
+    //
+    // [MenuItem("AB/标记名称(可多选)/UI")]
+    // public static void OnSetAssetsBundleName()
+    // {
+    //     UnityEngine.Object[] objItem = Selection.objects;
+    //     foreach (UnityEngine.Object item in objItem)
+    //     {
+    //         string a_path = AssetDatabase.GetAssetPath(item);
+    //         AssetImporter asset = AssetImporter.GetAtPath(a_path);
+    //         int BeginIndex = a_path.IndexOf(item.name);
+    //         int LastIndex = a_path.IndexOf(".");
+    //         int len = LastIndex - BeginIndex;
+    //         string bundleName = a_path.Substring(BeginIndex, len);
+    //         asset.assetBundleName = "uiprefabs/" + bundleName;
+    //         asset.assetBundleVariant = "ab";
+    //         asset.SaveAndReimport();
+    //     }
+    // }
     
     [MenuItem("AB/标记名称(可多选)/视角控制器")]
     public static void Test()

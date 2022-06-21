@@ -7,17 +7,21 @@ namespace StarterAssets
 {
 	public class StarterAssetsInputs : MonoBehaviour
 	{
-		[Header("Character Input Values")]
+		[Header("角色移动输入的值")]
 		public Vector2 move;
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
 
-		[Header("Movement Settings")]
+		[Header("移动设置")]
 		public bool analogMovement;
+		[Tooltip("是否能跳跃")]
+		public bool jumpAllow = true;
 
-		[Header("Mouse Cursor Settings")]
+		[Header("鼠标光标设置")]
+		[Tooltip("显示鼠标")]
 		public bool cursorLocked = false;
+		[Tooltip("不锁定视角")]
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -36,7 +40,10 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
-			JumpInput(value.isPressed);
+			if (jumpAllow)
+			{
+				JumpInput(value.isPressed);
+			}
 		}
 
 		public void OnSprint(InputValue value)
