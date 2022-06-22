@@ -47,11 +47,12 @@ public class ScenePanel : UIbase
             txt_num.text = GameManager.instances.OnGetMemberRequestNum().ToString();
 
         Rect = GetComponent<RectTransform>();
-        Rect.sizeDelta = new Vector2(0,0);
-
-
-
-
+        //Rect.sizeDelta = new Vector2(0,0);
+        //Rect.rect.size = new Vector2(0, 0);
+        //Rect.rect.position = new Vector2(0, 0);
+        Rect.anchoredPosition = new Vector2(0, 0);
+        //Rect.sizeDelta = new Vector2(0, 0);
+        Rect.sizeDelta = new Vector2(Screen.width, Screen.height);
     }
 
 

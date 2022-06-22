@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.Windows;
 
 public class CreateAssetBundles
@@ -106,6 +107,7 @@ public class CreateAssetBundles
             asset.assetBundleName = bundleName;
             asset.assetBundleVariant = "ab";
             asset.SaveAndReimport();
+            Debug.Log(a_path);
         }
     }
 
