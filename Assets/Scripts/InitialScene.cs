@@ -11,41 +11,38 @@ namespace DefaultNamespace
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "scene";
-        private string sceneUrl;
+        public string sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
 
         private void Awake()
         {
-            // sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
+           
         }
 
         private void Start()
         {
-            if (!string.IsNullOrEmpty(sceneUrl))
-            {
-                StartCoroutine(
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
-                    {
-                        AddController controller = FindObjectOfType<AddController>();
-                        controller.AddThird();
-                        AbInit.instances.FinishSlider();
-                    })); 
-            }
-            else
-            {
-                // sceneModel = string.IsNullOrEmpty(Globle.sceneId) ? sceneModel : "scene_" + Globle.sceneId;
-                StartCoroutine(
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
-                    {
-                        AddController controller = FindObjectOfType<AddController>();
-                        controller.AddThird();
-                        AbInit.instances.FinishSlider();
-                    })); 
-            }
+            #if !UNITY_EDITOR && UNITY_WEBGL
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
+                {
+                    AddController controller = FindObjectOfType<AddController>();
+                    controller.AddThird();
+                    AbInit.instances.FinishSlider();
+                })); 
+            #else
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                {
+                    AddController controller = FindObjectOfType<AddController>();
+                    controller.AddThird();
+                    AbInit.instances.FinishSlider();
+                })); 
+            #endif 
         }
 
         private void OnApplicationFocus(bool hasFocus)
         {
             #if !UNITY_EDITOR && UNITY_WEBGL
+            Debug.Log("游戏焦点: "+hasFocus);
             WebGLInput.captureAllKeyboardInput = hasFocus;
             #endif
         }
@@ -53,7 +50,6 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            Debug.Log(Input.GetAxis("Mouse X"));
             // Debug.Log(Input.mousePosition.normalized);
             // if (Input.GetKeyDown(KeyCode.N))
             // {

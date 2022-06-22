@@ -62,7 +62,7 @@ namespace Editor
                 }
             }
 
-            QiNiuHelp.RefreshDirs("unity/VenueBuild");
+            QiNiuHelp.RefreshDirs("unity/VenueBuild/");
 
         }
 
