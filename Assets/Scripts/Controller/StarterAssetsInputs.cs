@@ -34,7 +34,6 @@ namespace StarterAssets
 		{
 			if(cursorInputForLook)
 			{
-				Debug.Log(value.Get<Vector2>());
 				LookInput(value.Get<Vector2>());
 			}
 		}

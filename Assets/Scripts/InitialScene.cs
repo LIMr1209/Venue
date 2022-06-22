@@ -15,7 +15,7 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
+            // sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
         }
 
         private void Start()
@@ -53,6 +53,8 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            Debug.Log(Input.GetAxis("Mouse X"));
+            // Debug.Log(Input.mousePosition.normalized);
             // if (Input.GetKeyDown(KeyCode.N))
             // {
             //     Light light = FindObjectOfType<Light>();
