@@ -1,12 +1,12 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine.Networking;
 
-namespace DefaultNamespace
+namespace Editor
 {
-    class Aes
+    public class Aes
     {
         /// <summary>
         /// AES加密，任意文件

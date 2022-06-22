@@ -11,8 +11,6 @@ namespace DefaultNamespace
     {
         public static AbInit instances;
 
-        public bool isLoad;
-
         float time = 0;
         float lodingindex = 0;
         
@@ -80,16 +78,12 @@ namespace DefaultNamespace
         {
             AssetBundle AB = null;
             string path = null;
-            if (isLoad)
-            {
-                path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-                path = path.Replace("\\", "/");
-            }
-            else
-            {
-                path = Path.Combine(Application.dataPath, "AssetsBundles");
-            }
-
+            #if !UNITY_EDITOR && UNITY_WEBGL
+            path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
+            path = path.Replace("\\", "/");
+            #else
+            path = Path.Combine(Application.dataPath, "AssetsBundles");
+            #endif
             if (AssetBundelGameObjectDic.ContainsKey((name)))
             {
                 AB = AssetBundelGameObjectDic[name];
@@ -108,11 +102,9 @@ namespace DefaultNamespace
 
                 // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
                 byte[] abData = requestAB.downloadHandler.data;
-                if (isLoad)
-                {
-                    abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-                }
-
+                #if !UNITY_EDITOR && UNITY_WEBGL
+                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+                #endif
                 AB = AssetBundle.LoadFromMemory(abData);
                 AssetBundelGameObjectDic.Add(name, AB);
             }

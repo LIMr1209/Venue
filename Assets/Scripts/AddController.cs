@@ -7,6 +7,7 @@ namespace DefaultNamespace
     {
         private bool visual = false; // 第一人称 第三人称切换
         private GameObject playerFollowCameraClone;
+        private bool hasController = false;
         private string controllerAb = "controller";
         private string firstFollowCameraAb = "firstplayerfollowcamera";
         private string thirdFollowCameraAb = "thirdplayerfollowcamera";
@@ -48,6 +49,11 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            if (!hasController)
+            {
+                AddThird();
+            }
+
             if (Input.GetKeyDown("v"))
             {
                 if (_player)
@@ -124,6 +130,7 @@ namespace DefaultNamespace
                     _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                 _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+                hasController = true;
             }
         }
     }

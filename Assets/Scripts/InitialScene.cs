@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -42,10 +43,26 @@ namespace DefaultNamespace
             }
         }
 
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            #if !UNITY_EDITOR && UNITY_WEBGL
+            WebGLInput.captureAllKeyboardInput = hasFocus;
+            #endif
+        }
+
 
         private void Update()
         {
-            
+            // if (Input.GetKeyDown(KeyCode.N))
+            // {
+            //     Light light = FindObjectOfType<Light>();
+            //     light.intensity++;
+            // }
+            // if (Input.GetKeyDown(KeyCode.M))
+            // {
+            //     Light light = FindObjectOfType<Light>();
+            //     light.intensity--;
+            // }
         }
     }
 }

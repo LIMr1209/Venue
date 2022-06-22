@@ -34,19 +34,23 @@ namespace DefaultNamespace
                 if (isClick && !EventSystem.current.IsPointerOverGameObject())
                 {
                     // 发射射线
-                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, maxDistance,
-                        1 << 6))
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, maxDistance))
                     {
-                        isClick = false;
+                        // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
-                        // 禁用人物控制器
-                        ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                        if (controller) controller.enabled = false;
-                        CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                        if (virtualCamera) virtualCamera.enabled = false;
-                        startPoint = transform.position;
-                        startRotation = transform.localRotation;
-                        OnCameraMove(art.transform);
+                        if (art.layer == 6)
+                        {
+                            isClick = false;
+                            // 禁用人物控制器
+                            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                            if (controller) controller.enabled = false;
+                            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                            if (virtualCamera) virtualCamera.enabled = false;
+                            startPoint = transform.position;
+                            startRotation = transform.localRotation;
+                            OnCameraMove(art.transform);
+                        }
+                        
                     }
                 }
             }
