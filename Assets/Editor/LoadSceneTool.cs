@@ -7,6 +7,7 @@ using System;
 using UnityEditor;
 using UnityEngine.Networking;
 using System.Net;
+using Editor;
 
 public class LoadSceneTool : MonoBehaviour
 {
@@ -49,13 +50,13 @@ public class LoadSceneTool : MonoBehaviour
             int length = model.Length;
             //文件流信息  
             Stream sw;
-            DirectoryInfo t = new DirectoryInfo(Application.dataPath + "/AssetsPackages/Textures");
+            DirectoryInfo t = new DirectoryInfo(Application.dataPath + "/Resources");
             if (!t.Exists)
             {
                 //如果此文件夹不存在则创建  
                 t.Create();
             }
-            FileInfo j = new FileInfo(Application.dataPath + "/AssetsPackages/Textures/scene.fbx");
+            FileInfo j = new FileInfo(Application.dataPath + "/Resources/scene.fbx");
             if (!j.Exists)
             {
                 //如果此文件不存在则创建  
@@ -73,9 +74,62 @@ public class LoadSceneTool : MonoBehaviour
             sw.Dispose();
             Debug.Log("下载完成");
             UnityEditor.AssetDatabase.Refresh();
+            OnAddSceneModel();
         }
     }
 
+
+    [MenuItem("Tools/添加场景")]
+    public static void OnAddSceneModel()
+    {
+        GameObject obj = Resources.Load("scene") as GameObject;
+        Instantiate(obj);
+        AddMeshCollider.Add();
+        OnLayerH();
+        string targetPath = Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/" + obj.name;
+        GameObject modelGame = PrefabUtility.InstantiatePrefab(obj) as GameObject;
+        PrefabUtility.SaveAsPrefabAsset(modelGame, targetPath+".prefab");
+        OnDestoryObj();
+        OnSetAssetBundelName();
+    }
+
+    private static void OnSetAssetBundelName()
+    {
+        Debug.Log(Directory.Exists(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/"));
+        if (Directory.Exists(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/"))
+        {
+            DirectoryInfo direction = new DirectoryInfo(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/");
+            FileInfo[] files = direction.GetFiles("*");
+            for (int i = 0; i < files.Length; i++)
+            {
+                //去除Unity内部.meta文件
+                if (files[i].Name.EndsWith(".meta"))
+                    continue;
+                string path = "Assets/AssetsPackages/prefabs/OtherPrefabs/" + files[i].Name;
+                GameObject prefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
+                string a_path = AssetDatabase.GetAssetPath(prefab);
+                Debug.Log(a_path);
+                AssetImporter asset = AssetImporter.GetAtPath(a_path);
+                asset.assetBundleName = "scene";
+                asset.assetBundleVariant = "ab";
+                asset.SaveAndReimport();
+            }
+        }
+        CreateAssetBundles.BuildAllAssetBundlesLocal();
+        UploadAsset.UploadAb();
+    }
+
+    public static void OnDestoryObj()
+    {
+        GameObject[] tArray = (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject));
+        for (int i = 0; i < tArray.Length; i++)
+        {
+            if (tArray[i].name.Contains("scene"))
+            {
+                DestroyImmediate(tArray[i]);
+            }
+        }
+    }
   
 
 }
