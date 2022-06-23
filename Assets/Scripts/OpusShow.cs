@@ -104,20 +104,24 @@ namespace DefaultNamespace
             {
                 if (art.forward.z == -1)
                 {
+                    Debug.Log(1);
                     point = art.position + new Vector3(0, 0, -5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y, art.rotation.z));
                 }
                 else if (art.forward.x == 1)
                 {
+                    Debug.Log(2);
                     point = art.position + new Vector3(5, 0, 0);
                 }
                 else if (art.forward.z == 1)
                 {
+                    Debug.Log(3);
                     point = art.position + new Vector3(0, 0, 5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 180, art.rotation.z));
                 }
                 else
                 {
+                    Debug.Log(4);
                     point = art.position + new Vector3(-5, 0, 0);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 90, art.rotation.z));
                 }

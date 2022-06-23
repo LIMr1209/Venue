@@ -31,6 +31,5 @@ public class AddMeshCollider : EditorWindow
             //相当于让他刷新下 不然unity显示界面还不知道自己的东西被换掉了  还会呆呆的显示之前的东西
             EditorUtility.SetDirty(t);
         }
-        Debug.Log("Succed");
     }
 }
