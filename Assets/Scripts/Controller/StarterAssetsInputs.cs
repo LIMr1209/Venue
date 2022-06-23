@@ -34,13 +34,14 @@ namespace StarterAssets
 		{
 			if(cursorInputForLook)
 			{
-				if (Input.GetMouseButton(0))
-				{
-					LookInput(value.Get<Vector2>());
-				}
-				
+				LookInput(value.Get<Vector2>());
 			}
 		}
+
+		// private void Update()
+		// {
+		// 	Debug.Log(look);
+		// }
 
 		public void OnJump(InputValue value)
 		{
@@ -84,7 +85,7 @@ namespace StarterAssets
 
 		private void SetCursorState(bool newState)
 		{
-			// Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
 		}
 	}
 	

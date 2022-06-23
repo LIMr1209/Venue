@@ -1,23 +1,28 @@
 ﻿using Cinemachine;
-using StarterAssets;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DefaultNamespace
 {
     public class AddController : MonoBehaviour
     {
         private bool visual = false; // 第一人称 第三人称切换
+
         private GameObject playerFollowCameraClone;
+
         // private bool hasController = false;
         private string controllerAb = "controller";
         private string firstFollowCameraAb = "firstplayerfollowcamera";
+
         private string thirdFollowCameraAb = "thirdplayerfollowcamera";
+
         // private string capsuleAb = "playercapsule";
         private string armatureAb = "playerarmature";
         private GameObject _firstPlayerFollowCamera = null;
         private GameObject _thirdPlayerFollowCamera = null;
         private GameObject _player = null;
-        
+        public float zoomSpeed = 10.0f;
+
         private void Start()
         {
             // AddThird();
@@ -54,7 +59,6 @@ namespace DefaultNamespace
             // {
             //     AddThird();
             // }
-
             if (Input.GetKeyDown("v"))
             {
                 if (_player)
@@ -64,6 +68,13 @@ namespace DefaultNamespace
                     SwithVisul(location, rotation);
                 }
             }
+
+            // float scroll = Input.GetAxis("Mouse ScrollWheel");
+            // Debug.Log(_thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+            //     .GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset);
+            // _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+            //         .GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset +=
+            //     _player.transform.forward * scroll * zoomSpeed;
         }
 
         private void SwithVisul(Vector3 location, Vector3 rotation)
@@ -97,6 +108,7 @@ namespace DefaultNamespace
             {
                 _firstPlayerFollowCamera.SetActive(true);
             }
+
             if (_player)
             {
                 _player.SetActive(true);
@@ -123,6 +135,7 @@ namespace DefaultNamespace
             {
                 _thirdPlayerFollowCamera.SetActive(true);
             }
+
             if (_player)
             {
                 _player.SetActive(true);

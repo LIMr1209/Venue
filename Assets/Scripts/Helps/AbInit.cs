@@ -13,9 +13,7 @@ namespace DefaultNamespace
 
         float time = 0;
         float lodingindex = 0;
-        
-        Transform root;
-        
+
         Slider slider;
 
 
@@ -28,7 +26,6 @@ namespace DefaultNamespace
         private void Start()
         {
             slider = transform.Find("Mask/Slider").GetComponent<Slider>();
-            root = transform.Find("Root");
             // AssetBundle.UnloadAllAssetBundles(true);
         }
 
@@ -78,12 +75,12 @@ namespace DefaultNamespace
         {
             AssetBundle AB = null;
             string path = null;
-            #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
             path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
             path = path.Replace("\\", "/");
-            #else
+#else
             path = Path.Combine(Application.dataPath, "AssetsBundles");
-            #endif
+#endif
             if (AssetBundelGameObjectDic.ContainsKey((name)))
             {
                 AB = AssetBundelGameObjectDic[name];
@@ -102,9 +99,9 @@ namespace DefaultNamespace
 
                 // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
                 byte[] abData = requestAB.downloadHandler.data;
-                #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
                 abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-                #endif
+#endif
                 AB = AssetBundle.LoadFromMemory(abData);
                 AssetBundelGameObjectDic.Add(name, AB);
             }
@@ -118,11 +115,13 @@ namespace DefaultNamespace
                 {
                     callback(obj);
                 }
+
                 AB.UnloadAsync(false);
             }
         }
 
-        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, GameObjectCallback callback = null)
+        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url,
+            GameObjectCallback callback = null)
         {
             Vector3 point = Vector3.zero;
             ;
@@ -157,8 +156,38 @@ namespace DefaultNamespace
                 {
                     callback(obj);
                 }
+
                 AB.UnloadAsync(false);
             }
+        }
+
+        public delegate void TextureCallback(Texture obj);
+
+        public IEnumerator DownloadTexture(string url, TextureCallback callback = null)
+        {
+            UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
+            yield return www.SendWebRequest();
+            if (!string.IsNullOrEmpty(www.error))
+            {
+                Debug.LogError(www.error);
+                yield break;
+            }
+
+            Texture texture = DownloadHandlerTexture.GetContent(www);
+            if (callback != null)
+            {
+                callback(texture);
+            }
+        }
+
+        public void ReplaceMaterialImage(GameObject obj, string url)
+        {
+            Material material = obj.GetComponent<MeshRenderer>().material;
+            StartCoroutine(DownloadTexture(url, (texture) =>
+                {
+                    material.mainTexture = texture;
+                }
+            ));
         }
     }
 }

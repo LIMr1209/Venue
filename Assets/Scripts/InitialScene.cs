@@ -14,14 +14,14 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
-            #endif
+#endif
         }
 
         private void Start()
         {
-            #if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
@@ -29,7 +29,7 @@ namespace DefaultNamespace
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
                 })); 
-            #else
+#else
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
@@ -37,7 +37,7 @@ namespace DefaultNamespace
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
                 })); 
-            #endif 
+#endif 
         }
 
         private void OnApplicationFocus(bool hasFocus)
@@ -51,16 +51,16 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            // if (Input.GetKeyDown(KeyCode.N))
-            // {
-            //     Light light = FindObjectOfType<Light>();
-            //     light.intensity++;
-            // }
-            // if (Input.GetKeyDown(KeyCode.M))
-            // {
-            //     Light light = FindObjectOfType<Light>();
-            //     light.intensity--;
-            // }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                string text =
+                    "[{\"name\": \"art_1 (1)\", \"imageUrl\": \"https://p4.taihuoniao.com/art/220611/62a43b2e48d6d7e7e10b09e8-3.png\"}]";
+                FindObjectOfType<JsSend>().JsReplaceArtImage(text);
+            }
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                FindObjectOfType<JsSend>().JsFocusArt("art_1 (1)");
+            }
         }
     }
 }

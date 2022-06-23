@@ -75,7 +75,14 @@ namespace DefaultNamespace
             public string fbx_name; // fbx 
             public string ab_name; // 场景ab包
         }
-
+        
+        [Serializable]
+        public class ArtData
+        {
+            public string name; // 画框名字
+            public string imageUrl; // 画框图片名
+            public float[] scale; // 画框缩放值
+        }
 
         [Serializable]
         public class ListResult<T>
