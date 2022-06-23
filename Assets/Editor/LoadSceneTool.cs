@@ -11,9 +11,6 @@ using Editor;
 
 public class LoadSceneTool : MonoBehaviour
 {
-   
-
-    [MenuItem("Tools/添加画板层级")]
     public static void OnLayerH()
     {
         //寻找Hierarchy面板下所有的MeshRenderer
@@ -28,7 +25,6 @@ public class LoadSceneTool : MonoBehaviour
             Undo.RecordObject(t, t.gameObject.name);
             EditorUtility.SetDirty(t);
         }
-        Debug.Log("Succed");
     }
 
 
@@ -79,34 +75,40 @@ public class LoadSceneTool : MonoBehaviour
     }
 
 
-    [MenuItem("Tools/添加场景")]
     public static void OnAddSceneModel()
     {
+        GameObject scene = new GameObject("scene");
         GameObject obj = Resources.Load("scene") as GameObject;
-        Instantiate(obj);
-        AddMeshCollider.Add();
+        obj=Instantiate(obj);
+        obj.transform.parent = scene.transform;
+        obj.transform.localEulerAngles = new Vector3(-90, 180, 0);
         OnLayerH();
-        string targetPath = Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/" + obj.name;
-        GameObject modelGame = PrefabUtility.InstantiatePrefab(obj) as GameObject;
-        PrefabUtility.SaveAsPrefabAsset(modelGame, targetPath+".prefab");
+        AddMeshCollider.Add();
+        string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
+        PrefabUtility.SaveAsPrefabAsset(scene, targetPath);
+
+
+
         OnDestoryObj();
         OnSetAssetBundelName();
+        
+
     }
 
     private static void OnSetAssetBundelName()
     {
-        Debug.Log(Directory.Exists(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/"));
-        if (Directory.Exists(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/"))
+        if (Directory.Exists(Application.dataPath + "/AssetsPackages/OtherPrefabs/"))
         {
-            DirectoryInfo direction = new DirectoryInfo(Application.dataPath + "/AssetsPackages/prefabs/OtherPrefabs/");
+            DirectoryInfo direction = new DirectoryInfo(Application.dataPath + "/AssetsPackages/OtherPrefabs/");
             FileInfo[] files = direction.GetFiles("*");
             for (int i = 0; i < files.Length; i++)
             {
                 //去除Unity内部.meta文件
                 if (files[i].Name.EndsWith(".meta"))
                     continue;
-                string path = "Assets/AssetsPackages/prefabs/OtherPrefabs/" + files[i].Name;
+                string path = "Assets/AssetsPackages/OtherPrefabs/" + files[i].Name;
                 GameObject prefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
+                prefab.transform.rotation = Quaternion.Lerp(prefab.transform.rotation, Quaternion.Euler(-90, 180, 0), 0.01f);
                 string a_path = AssetDatabase.GetAssetPath(prefab);
                 Debug.Log(a_path);
                 AssetImporter asset = AssetImporter.GetAtPath(a_path);
@@ -117,6 +119,33 @@ public class LoadSceneTool : MonoBehaviour
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
         UploadAsset.UploadAb();
+        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
+        DeleteAllFile(Application.dataPath + "/Resources");
+        UnityEditor.AssetDatabase.Refresh();
+    }
+
+    public static void DeleteAllFile(string deletePath)
+    {
+        //获取指定路径下面的所有资源文件  然后进行删除
+        if (Directory.Exists(deletePath))
+        {
+            DirectoryInfo direction = new DirectoryInfo(deletePath);
+            FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
+
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.EndsWith(".meta"))
+                {
+                    continue;
+                }
+                if (files[i].Name.Contains("scene"))
+                {
+                    string FilePath = deletePath + "/" + files[i].Name;
+                    File.Delete(FilePath);
+                }
+                
+            }
+        }
     }
 
     public static void OnDestoryObj()

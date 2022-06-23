@@ -96,6 +96,7 @@ namespace DefaultNamespace
             if (_firstPlayerFollowCamera)
             {
                 _firstPlayerFollowCamera.SetActive(true);
+                
             }
             if (_player)
             {

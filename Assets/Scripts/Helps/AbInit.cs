@@ -67,7 +67,6 @@ namespace DefaultNamespace
             GameObjectCallback callback = null)
         {
             Vector3 point = Vector3.zero;
-            ;
             Vector3 rotate = new Vector3(0, 0, 0);
             yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, callback));
         }

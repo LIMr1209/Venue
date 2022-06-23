@@ -16,6 +16,7 @@ namespace DefaultNamespace
         private Quaternion startRotation;
         private bool isPlayerMove;
         private bool isClick;
+        public bool IsXInScene;
 
         private void Start()
         {
@@ -48,7 +49,14 @@ namespace DefaultNamespace
                             if (virtualCamera) virtualCamera.enabled = false;
                             startPoint = transform.position;
                             startRotation = transform.localRotation;
-                            OnCameraMove(art.transform);
+                            if (IsXInScene)
+                            {
+                                OnCameraMove(art.transform);
+                            }
+                            else
+                            {
+                                OnCameraMoveB(art.transform);
+                            }
                         }
                         
                     }
@@ -87,7 +95,6 @@ namespace DefaultNamespace
                 if (art.forward.z == -1)
                 {
                     point = art.position + new Vector3(0, 0, 5);
-
                 }
                 else if (art.forward.x == 1)
                 {
@@ -106,26 +113,44 @@ namespace DefaultNamespace
             {
                 if (art.forward.z == -1)
                 {
+                    Debug.Log(1);
                     point = art.position + new Vector3(0, 0, -5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y, art.rotation.z));
                 }
                 else if (art.forward.x == 1)
                 {
+                    Debug.Log(2);
                     point = art.position + new Vector3(5, 0, 0);
                 }
                 else if (art.forward.z == 1)
                 {
+                    Debug.Log(3);
                     point = art.position + new Vector3(0, 0, 5);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 180, art.rotation.z));
                 }
                 else
                 {
+                    Debug.Log(4);
                     point = art.position + new Vector3(-5, 0, 0);
                     qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 90, art.rotation.z));
                 }
             }
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
+        }
+
+        private void OnCameraMoveB(Transform art)
+        {
+            isPlayerMove = false;
+            Vector3 point = Vector3.zero;
+            int indexDot = Vector3.Dot(art.up, transform.position - art.position) <= 0 ? 1 : -1;
+            art.Translate(art.up * -5 * indexDot, Space.World);
+            point = art.position;
+            art.Translate(art.up * 5 * indexDot, Space.World);
+            Vector3 forwordDir = point - art.position;
+            Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
+            transform.DOMove(point, 1);
+            transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() => { isPlayerMove = true; });
         }
     }
 }

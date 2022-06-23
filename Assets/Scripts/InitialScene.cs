@@ -53,7 +53,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            Debug.Log(Input.GetAxis("Mouse X"));
+            //Debug.Log(Input.GetAxis("Mouse X"));
             // Debug.Log(Input.mousePosition.normalized);
             // if (Input.GetKeyDown(KeyCode.N))
             // {
