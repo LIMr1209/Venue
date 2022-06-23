@@ -98,7 +98,7 @@ namespace Editor
 
             string[] dirs = new[]
             {
-                Path.Combine(Globle.AssetHost, dir)
+                Path.Combine(Globle.AssetHost, dir).Replace("\\","/")
             };
             RefreshResult ret = manager.RefreshDirs(dirs);
         }

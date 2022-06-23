@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -15,7 +14,9 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-           
+            #if !UNITY_EDITOR && UNITY_WEBGL
+            WebGLInput.captureAllKeyboardInput = false;
+            #endif
         }
 
         private void Start()
@@ -41,16 +42,15 @@ namespace DefaultNamespace
 
         private void OnApplicationFocus(bool hasFocus)
         {
-            #if !UNITY_EDITOR && UNITY_WEBGL
+            /*#if !UNITY_EDITOR && UNITY_WEBGL
             Debug.Log("游戏焦点: "+hasFocus);
             WebGLInput.captureAllKeyboardInput = hasFocus;
-            #endif
+            #endif*/
         }
 
 
         private void Update()
         {
-            // Debug.Log(Input.mousePosition.normalized);
             // if (Input.GetKeyDown(KeyCode.N))
             // {
             //     Light light = FindObjectOfType<Light>();
