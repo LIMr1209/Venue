@@ -34,6 +34,25 @@ namespace Editor
             }
         }
 
+        public static void OnForeachFile(string filePathByForeach, ref string files)
+        {
+            DirectoryInfo theFolder = new DirectoryInfo(filePathByForeach);
+            DirectoryInfo[] dirInfo = theFolder.GetDirectories(); //获取所在目录的文件夹
+            FileInfo[] file = theFolder.GetFiles(); //获取所在目录的文件
+
+            foreach (FileInfo fileItem in file) //遍历文件
+            {
+                if (fileItem.Name.Contains("scene"))
+                {
+                    string result = Path.Combine(fileItem.DirectoryName, fileItem.Name);
+                    files = result;
+                }
+               
+            }
+        }
+
+
+
         // 获取七牛 config
         public static Config GetConfig(string bucket)
         {

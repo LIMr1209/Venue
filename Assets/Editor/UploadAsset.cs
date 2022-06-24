@@ -40,7 +40,26 @@ namespace Editor
             }
 
         }
-        
+
+
+        public static void OnUpLoadAB(string scenePrefix)
+        {
+            string path = Application.dataPath + "/AssetsBundles/scene.ab";
+            string key = Path.Combine(scenePrefix, "scene.ab").Replace("\\", "/");
+            // 加密
+            byte[] fileBytes = Aes.FileToByte(path);
+            byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
+            HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.SceneBucket, true);
+            if (result.Code != 200)
+            {
+                Debug.Log("上传错误 文件: " + path + " 错误消息: " + result.Text);
+                return;
+            }
+
+        }
+
+
+
         [MenuItem("Tools/上传构建")]
         public static void UploadBuild()
         {
