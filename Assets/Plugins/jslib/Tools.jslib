@@ -9,4 +9,7 @@ mergeInto(LibraryManager.library, {
     showFocusWindow: function () {
         __UnityLib__.showFocusWindow();
     },
+    showFocusTipsWindow: function () {
+        __UnityLib__.showFocusTipsWindow();
+    },
 });
