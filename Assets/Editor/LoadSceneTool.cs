@@ -172,12 +172,13 @@ public class LoadSceneTool : MonoBehaviour
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
         UploadAsset.OnUpLoadAB(buildurl);
-        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
-        //DeleteAllFile(Application.dataPath + "/Resources");
+        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
+        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
+        DeleteAllFile(Application.dataPath + "/Resources",true);
         UnityEditor.AssetDatabase.Refresh();
     }
 
-    public static void DeleteAllFile(string deletePath)
+    public static void DeleteAllFile(string deletePath,bool isscene)
     {
         //获取指定路径下面的所有资源文件  然后进行删除
         if (Directory.Exists(deletePath))
@@ -191,11 +192,20 @@ public class LoadSceneTool : MonoBehaviour
                 {
                     continue;
                 }
-                if (files[i].Name.Contains("scene"))
+                if (isscene)
+                {
+                    if (files[i].Name.Contains("scene"))
+                    {
+                        string FilePath = deletePath + "/" + files[i].Name;
+                        File.Delete(FilePath);
+                    }
+                }
+                else
                 {
                     string FilePath = deletePath + "/" + files[i].Name;
                     File.Delete(FilePath);
                 }
+                
                 
             }
         }
