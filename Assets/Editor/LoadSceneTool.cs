@@ -38,7 +38,9 @@ public class LoadSceneTool : MonoBehaviour
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
+            OnDownLoadSceneTesture(memberResult.data.qiniu_path_url);
             OnDownLoadScene(memberResult.data.fbx_file_url);
+            
         });
     }
 
@@ -48,8 +50,6 @@ public class LoadSceneTool : MonoBehaviour
     {
         //string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
         string progress = null;
-        Debug.Log(url);
-        Debug.Log("开始下载模型。");
         WWW w = new WWW(url);
         while (!w.isDone)
         {
@@ -85,12 +85,52 @@ public class LoadSceneTool : MonoBehaviour
             sw.Dispose();
             Debug.Log("下载完成");
             UnityEditor.AssetDatabase.Refresh();
-            OnAddSceneModel();
+            OnAddSceneModel(url);
         }
+    }
+    public static void OnDownLoadSceneTesture(string url)
+    {
+        List<string> files = QiNiuHelp.ListFiles("model_scene/220624/62b55312b0f8057ce3911d51/textures");
+        foreach (string i in files)
+        {
+            string path = Path.Combine(Globle.FrfileHost, i).Replace("\\", "/");
+            WWW w = new WWW(path);
+            while (!w.isDone)
+            {
+
+            }
+
+            if (w.isDone)
+            {
+                byte[] model = w.bytes;
+                int length = model.Length;
+                Stream sw;
+                DirectoryInfo t = new DirectoryInfo(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures");
+                if (!t.Exists)
+                {
+                    t.Create();
+                }
+                string[] aa = i.Split("/");
+                FileInfo j = new FileInfo(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures/" + aa[aa.Length-1]);
+                if (!j.Exists)
+                {
+                    sw = j.Create();
+                }
+                else
+                {
+                    sw = j.OpenWrite();
+                }
+                sw.Write(model, 0, length);
+                sw.Close();
+                sw.Dispose();
+                UnityEditor.AssetDatabase.Refresh();
+            }
+        }
+       
     }
 
 
-    public static void OnAddSceneModel()
+    public static void OnAddSceneModel(string url)
     {
         GameObject scene = new GameObject("scene");
         GameObject obj = Resources.Load("scene") as GameObject;
@@ -105,12 +145,12 @@ public class LoadSceneTool : MonoBehaviour
 
 
         //OnDestoryObj();
-        OnSetAssetBundelName();
+        OnSetAssetBundelName(url);
         
 
     }
 
-    private static void OnSetAssetBundelName()
+    private static void OnSetAssetBundelName(string url)
     {
         if (Directory.Exists(Application.dataPath + "/AssetsPackages/OtherPrefabs/"))
         {
@@ -125,7 +165,6 @@ public class LoadSceneTool : MonoBehaviour
                 GameObject prefab = AssetDatabase.LoadAssetAtPath(path, typeof(GameObject)) as GameObject;
                 prefab.transform.rotation = Quaternion.Lerp(prefab.transform.rotation, Quaternion.Euler(-90, 180, 0), 0.01f);
                 string a_path = AssetDatabase.GetAssetPath(prefab);
-                Debug.Log(a_path);
                 AssetImporter asset = AssetImporter.GetAtPath(a_path);
                 asset.assetBundleName = "scene";
                 asset.assetBundleVariant = "ab";
@@ -133,7 +172,7 @@ public class LoadSceneTool : MonoBehaviour
             }
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
-        //UploadAsset.OnUpLoadAB();
+        UploadAsset.OnUpLoadAB(url);
         //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
         //DeleteAllFile(Application.dataPath + "/Resources");
         UnityEditor.AssetDatabase.Refresh();
