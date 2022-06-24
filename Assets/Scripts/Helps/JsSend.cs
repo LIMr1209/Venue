@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using static DefaultNamespace.JsonData;
 
@@ -9,13 +10,11 @@ namespace DefaultNamespace
         // 获取初始化参数 场景url 实例化场景对象
         public void GetInitParam(string strParams)
         {
-            if (string.IsNullOrEmpty(Globle.sceneId))
-            {
-                FindObjectOfType<InitialScene>().sceneUrl = strParams;
-                // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件
-                FindObjectOfType<AbInit>().enabled = true;
-                FindObjectOfType<InitialScene>().enabled = true;
-            }
+            Debug.Log("接收到的场景url: "+strParams);
+            FindObjectOfType<InitialScene>().sceneUrl = Path.Combine(strParams, "scene.ab").Replace("\\","/");
+            // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件
+            FindObjectOfType<AbInit>().enabled = true;
+            FindObjectOfType<InitialScene>().enabled = true;
         }
         
         // 接收画框名字 作品id 作品url  替换场景中画框的材质贴图

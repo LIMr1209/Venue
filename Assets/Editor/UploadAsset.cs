@@ -31,7 +31,7 @@ namespace Editor
                 byte[] fileBytes = Aes.FileToByte(i);
                 byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
                 // HttpResult result = Upload(i, key);
-                HttpResult result = QiNiuHelp.Upload(encryptBytes, key);
+                HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.AbBucket);
                 if (result.Code != 200)
                 {
                     Debug.Log("上传错误 文件: " + i + " 错误消息: "+result.Text);
@@ -44,18 +44,17 @@ namespace Editor
 
         public static void OnUpLoadAB(string scenePrefix)
         {
-            string path = Application.dataPath+ "/AssetsBundles/scene.ab";
-            string key = Path.Combine(scenePrefix, Globle.AssetVision).Replace("\\", "/");
-            Debug.Log(key);
-            //// 加密
-            //byte[] fileBytes = Aes.FileToByte(path);
-            //byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
-            //HttpResult result = QiNiuHelp.Upload(encryptBytes, key);
-            //if (result.Code != 200)
-            //{
-            //    Debug.Log("上传错误 文件: " + path + " 错误消息: " + result.Text);
-            //    return;
-            //}
+            string path = Application.dataPath + "/AssetsBundles/scene.ab";
+            string key = Path.Combine(scenePrefix, "scene.ab").Replace("\\", "/");
+            // 加密
+            byte[] fileBytes = Aes.FileToByte(path);
+            byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
+            HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.SceneBucket);
+            if (result.Code != 200)
+            {
+                Debug.Log("上传错误 文件: " + path + " 错误消息: " + result.Text);
+                return;
+            }
 
         }
 
@@ -74,7 +73,7 @@ namespace Editor
                 string keySuffix = i.Replace(suffixPath, "").Replace("\\", "/");
                 string key = Path.Combine("unity", keySuffix).Replace("\\", "/");
                 // 加密
-                HttpResult result = QiNiuHelp.Upload(i, key, true);
+                HttpResult result = QiNiuHelp.Upload(i, key, Globle.AbBucket, true);
                 if (result.Code != 200)
                 {
                     Debug.Log("上传错误 文件: " + i + " 错误消息: "+result.Text);

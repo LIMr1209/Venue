@@ -26,9 +26,12 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
+                    Debug.Log("添加控制器");
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
+                    Debug.Log("场景加载完成通知ui");
+                    Tools.loaded();
                 })); 
 #else
             StartCoroutine(
@@ -56,16 +59,16 @@ namespace DefaultNamespace
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                string text =
-                    "[{\"name\": \"art_1 (1)\", \"imageUrl\": \"https://p4.taihuoniao.com/art/220611/62a43b2e48d6d7e7e10b09e8-3.png\"}]";
-                FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            }
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                FindObjectOfType<JsSend>().JsFocusArt("art_1 (1)");
-            }
+            // if (Input.GetKeyDown(KeyCode.N))
+            // {
+            //     string text =
+            //         "[{\"name\": \"art_1 (1)\", \"imageUrl\": \"https://p4.taihuoniao.com/art/220611/62a43b2e48d6d7e7e10b09e8-3.png\"}]";
+            //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
+            // }
+            // if (Input.GetKeyDown(KeyCode.M))
+            // {
+            //     FindObjectOfType<JsSend>().JsFocusArt("art_1 (1)");
+            // }
         }
     }
 }

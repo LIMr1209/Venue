@@ -74,6 +74,7 @@ namespace DefaultNamespace
             public string fbx_file_url; // fbx url
             public string fbx_name; // fbx 
             public string ab_name; // 场景ab包
+            public string qiniu_path; //不带域名的根目录
         }
         
         [Serializable]

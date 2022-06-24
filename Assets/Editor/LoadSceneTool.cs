@@ -38,15 +38,15 @@ public class LoadSceneTool : MonoBehaviour
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
-            OnDownLoadSceneTesture(memberResult.data.qiniu_path_url);
-            OnDownLoadScene(memberResult.data.fbx_file_url);
+            OnDownLoadSceneTesture(memberResult.data.qiniu_path);
+            OnDownLoadScene(memberResult.data.fbx_file_url,memberResult.data.qiniu_path);
             
         });
     }
 
 
     //[MenuItem("Tools/下载场景资源")]
-    public static void OnDownLoadScene(string url)
+    public static void OnDownLoadScene(string url,string buildurl)
     {
         //string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
         string progress = null;
@@ -85,12 +85,12 @@ public class LoadSceneTool : MonoBehaviour
             sw.Dispose();
             Debug.Log("下载完成");
             UnityEditor.AssetDatabase.Refresh();
-            OnAddSceneModel(url);
+            OnAddSceneModel(buildurl);
         }
     }
     public static void OnDownLoadSceneTesture(string url)
     {
-        List<string> files = QiNiuHelp.ListFiles("model_scene/220624/62b55312b0f8057ce3911d51/textures");
+        List<string> files = QiNiuHelp.ListFiles(Path.Combine(url, "textures").Replace("\\", "/"));
         foreach (string i in files)
         {
             string path = Path.Combine(Globle.FrfileHost, i).Replace("\\", "/");
@@ -99,7 +99,6 @@ public class LoadSceneTool : MonoBehaviour
             {
 
             }
-
             if (w.isDone)
             {
                 byte[] model = w.bytes;
@@ -130,7 +129,7 @@ public class LoadSceneTool : MonoBehaviour
     }
 
 
-    public static void OnAddSceneModel(string url)
+    public static void OnAddSceneModel(string buildurl)
     {
         GameObject scene = new GameObject("scene");
         GameObject obj = Resources.Load("scene") as GameObject;
@@ -145,12 +144,12 @@ public class LoadSceneTool : MonoBehaviour
 
 
         //OnDestoryObj();
-        OnSetAssetBundelName(url);
+        OnSetAssetBundelName(buildurl);
         
 
     }
 
-    private static void OnSetAssetBundelName(string url)
+    private static void OnSetAssetBundelName(string buildurl)
     {
         if (Directory.Exists(Application.dataPath + "/AssetsPackages/OtherPrefabs/"))
         {
@@ -172,7 +171,7 @@ public class LoadSceneTool : MonoBehaviour
             }
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
-        UploadAsset.OnUpLoadAB(url);
+        //UploadAsset.OnUpLoadAB(buildurl);
         //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
         //DeleteAllFile(Application.dataPath + "/Resources");
         UnityEditor.AssetDatabase.Refresh();
