@@ -4,10 +4,13 @@ using UnityEngine.Windows;
 
 public class CreateAssetBundles
 {
-    static void BuildAllAssetBundles()
+    public static void BuildAllAssetBundles()
     {
         //要创建的目录
+        string[] arguments = System.Environment.GetCommandLineArgs();
+        Debug.Log(arguments);
         string assetBundleDirectory = "Assets/AssetsBundles";
+        Debug.Log(11111);
         if(!Directory.Exists(assetBundleDirectory))
         {
             Directory.CreateDirectory(assetBundleDirectory);

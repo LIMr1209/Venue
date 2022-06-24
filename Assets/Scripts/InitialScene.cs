@@ -16,6 +16,7 @@ namespace DefaultNamespace
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
+            enabled = false;  // 默认不启动 前端发送场景url 后启动
 #endif
         }
 
@@ -51,6 +52,10 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
+            // int qualityLevel = QualitySettings.GetQualityLevel();
+            // QualitySettings.SetQualityLevel (5, true);
+            // string[] names = QualitySettings.names;
             if (Input.GetKeyDown(KeyCode.N))
             {
                 string text =

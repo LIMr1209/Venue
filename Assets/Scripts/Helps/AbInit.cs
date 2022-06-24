@@ -20,6 +20,9 @@ namespace DefaultNamespace
         private void Awake()
         {
             instances = this;
+#if !UNITY_EDITOR && UNITY_WEBGL
+            enabled = false; // 默认不启动 前端发送场景url 后启动
+#endif
         }
 
 

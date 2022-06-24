@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using DefaultNamespace;
+using NUnit.Framework;
 using Qiniu.CDN;
 using Qiniu.Http;
 using Qiniu.Storage;
@@ -12,6 +13,7 @@ namespace Editor
 {
     public class QiNiuHelp
     {
+        // 递归获取本地文件夹下 所有文件
         public static void ForeachFile(string filePathByForeach, ref List<string> files)
 
         {
@@ -51,6 +53,7 @@ namespace Editor
 
 
 
+        // 获取七牛 config
         public static Config GetConfig()
         {
             Config config = new Config();
@@ -63,6 +66,7 @@ namespace Editor
             return config;
         }
 
+        // 获取七牛token
         public static string GetToken(bool overwrite = false, string key = "")
         {
             Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
@@ -87,6 +91,7 @@ namespace Editor
             return token;
         }
 
+        // 上传字节数组 到七牛
         public static HttpResult Upload(byte[] fileBytes, string key, bool overwrite = false)
         {
             string token = GetToken(overwrite, key);
@@ -96,6 +101,7 @@ namespace Editor
             return result;
         }
 
+        // 上传本地文件 到七牛
         public static HttpResult Upload(string localPath, string key, bool overwrite = false)
         {
             string token = GetToken(overwrite, key);
@@ -120,6 +126,27 @@ namespace Editor
                 Path.Combine(Globle.AssetHost, dir).Replace("\\","/")
             };
             RefreshResult ret = manager.RefreshDirs(dirs);
+        }
+        
+        // 获取七牛指定文件夹下的所有文件
+        public static List<string> ListFiles(string dir)
+        {
+            Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
+            Config config = GetConfig();
+            BucketManager bucketManager = new BucketManager(mac, config);
+            ListResult listRet = bucketManager.ListFiles("frfile", dir, "", 0, "#");
+            if (listRet.Code != (int)HttpCode.OK)
+            {
+                Debug.Log(listRet.ToString());
+            }
+
+            List<string> files = new List<string>();
+            foreach (ListItem i in listRet.Result.Items)
+            {
+                files.Add(i.Key);
+            }
+
+            return files;
         }
     }
 }
