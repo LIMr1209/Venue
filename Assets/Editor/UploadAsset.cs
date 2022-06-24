@@ -31,7 +31,7 @@ namespace Editor
                 byte[] fileBytes = Aes.FileToByte(i);
                 byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
                 // HttpResult result = Upload(i, key);
-                HttpResult result = QiNiuHelp.Upload(encryptBytes, key);
+                HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.AbBucket);
                 if (result.Code != 200)
                 {
                     Debug.Log("上传错误 文件: " + i + " 错误消息: "+result.Text);
@@ -54,7 +54,7 @@ namespace Editor
                 string keySuffix = i.Replace(suffixPath, "").Replace("\\", "/");
                 string key = Path.Combine("unity", keySuffix).Replace("\\", "/");
                 // 加密
-                HttpResult result = QiNiuHelp.Upload(i, key, true);
+                HttpResult result = QiNiuHelp.Upload(i, key, Globle.AbBucket, true);
                 if (result.Code != 200)
                 {
                     Debug.Log("上传错误 文件: " + i + " 错误消息: "+result.Text);

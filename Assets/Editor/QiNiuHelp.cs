@@ -48,11 +48,11 @@ namespace Editor
         }
 
         // 获取七牛token
-        public static string GetToken(bool overwrite = false, string key = "")
+        public static string GetToken(bool overwrite = false, string key = "", string bucket = "")
         {
             Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
             // 存储空间名
-            string Bucket = Globle.QiNiuBucket;
+            string Bucket = bucket;
             // 设置上传策略
             PutPolicy putPolicy = new PutPolicy();
             // 设置要上传的目标空间
@@ -73,9 +73,9 @@ namespace Editor
         }
 
         // 上传字节数组 到七牛
-        public static HttpResult Upload(byte[] fileBytes, string key, bool overwrite = false)
+        public static HttpResult Upload(byte[] fileBytes, string key, string bucket, bool overwrite = false)
         {
-            string token = GetToken(overwrite, key);
+            string token = GetToken(overwrite, key, bucket);
             Config config = GetConfig();
             FormUploader target = new FormUploader(config);
             HttpResult result = target.UploadData(fileBytes, key, token, null);
@@ -83,9 +83,9 @@ namespace Editor
         }
 
         // 上传本地文件 到七牛
-        public static HttpResult Upload(string localPath, string key, bool overwrite = false)
+        public static HttpResult Upload(string localPath, string key, string bucket, bool overwrite = false)
         {
-            string token = GetToken(overwrite, key);
+            string token = GetToken(overwrite, key, bucket);
             Config config = GetConfig();
             FormUploader target = new FormUploader(config);
             HttpResult result = target.UploadFile(localPath, key, token, null);
