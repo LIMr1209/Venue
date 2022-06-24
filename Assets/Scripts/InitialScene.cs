@@ -16,6 +16,7 @@ namespace DefaultNamespace
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
+            enabled = false;  // 默认不启动 前端发送场景url 后启动
 #endif
         }
 

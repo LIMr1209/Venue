@@ -163,15 +163,16 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
-            if (Mouse.current.leftButton.isPressed)
-            {
-                CameraRotation();
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
+            CameraRotation();
+            // if (Mouse.current.leftButton.isPressed)
+            // {
+            //     CameraRotation();
+            //     Cursor.lockState = CursorLockMode.Locked;
+            // }
+            // else
+            // {
+            //     Cursor.lockState = CursorLockMode.None;
+            // }
         }
 
         private void AssignAnimationIDs()
@@ -185,9 +186,10 @@ namespace StarterAssets
 
         private void GroundedCheck()
         {
-            // set sphere position, with offset
+            // 使用偏移设置球体位置
             Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
                 transform.position.z);
+            // 检测球体 检测是否被碰撞
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
@@ -200,8 +202,8 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+            // 如果有输入且摄像头位置不固定 并且鼠标左键按下
+            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition && Mouse.current.leftButton.isPressed)
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -210,24 +212,24 @@ namespace StarterAssets
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
 
-            // clamp our rotations so our values are limited 360 degrees
+            // 夹紧旋转，使我们的值限制为360度
             _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-            // Cinemachine will follow this target
+            // 修正虚拟摄像机旋转
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
         {
-            // set target speed based on move speed, sprint speed and if sprint is pressed
+            // 根据移动速度、冲刺速度和是否按下冲刺设置目标速度
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
-            // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
+            // 一种简单的加速和减速设计，易于拆卸、更换或重复
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is no input, set the target speed to 0
+            // 如果没有输入，将目标速度设置为0
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
@@ -236,7 +238,7 @@ namespace StarterAssets
             float speedOffset = 0.1f;
             float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
 
-            // accelerate or decelerate to target speed
+            // 加速或减速至目标速度
             if (currentHorizontalSpeed < targetSpeed - speedOffset ||
                 currentHorizontalSpeed > targetSpeed + speedOffset)
             {
@@ -245,7 +247,7 @@ namespace StarterAssets
                 _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
                     Time.deltaTime * SpeedChangeRate);
 
-                // round speed to 3 decimal places
+                // 将速度四舍五入到小数点后3位
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
             }
             else
@@ -256,11 +258,11 @@ namespace StarterAssets
             _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
-            // normalise input direction
+            // 归一化输入方向
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
-            // if there is a move input rotate player when the player is moving
+            // 如果有移动输入，则在播放器移动时旋转播放器
             if (_input.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg +
@@ -268,18 +270,18 @@ namespace StarterAssets
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity,
                     RotationSmoothTime);
 
-                // rotate to face input direction relative to camera position
+                // 相对于相机位置旋转到面输入方向
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
             }
 
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-            // move the player
+            // 移动玩家
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            // update animator if using character
+            // 如果使用角色，则更新animator
             if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
@@ -289,19 +291,19 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
-            if (Grounded)
+            if (Grounded) // 接地
             {
-                // reset the fall timeout timer
+                // 重置下降超时计时器
                 _fallTimeoutDelta = FallTimeout;
 
-                // update animator if using character
+                // 如果使用角色，则更新animator
                 if (_hasAnimator)
                 {
                     _animator.SetBool(_animIDJump, false);
                     _animator.SetBool(_animIDFreeFall, false);
                 }
 
-                // stop our velocity dropping infinitely when grounded
+                // 阻止我们的速度在着陆时无限下降
                 if (_verticalVelocity < 0.0f)
                 {
                     _verticalVelocity = -2f;
@@ -363,6 +365,7 @@ namespace StarterAssets
             return Mathf.Clamp(lfAngle, lfMin, lfMax);
         }
 
+        // 辅助线
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);

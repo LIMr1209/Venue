@@ -65,6 +65,7 @@ namespace Editor
             putPolicy.SetExpires(3600);
             // 生成上传token
             string token = Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
+            Debug.Log(token);
             return token;
         }
 
