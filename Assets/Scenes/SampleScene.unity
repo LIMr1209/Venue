@@ -1086,7 +1086,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smoothTime: 1
   maxDistance: 15
-  IsXInScene: 0
 --- !u!114 &4895661117118384630
 MonoBehaviour:
   m_ObjectHideFlags: 0

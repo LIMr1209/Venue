@@ -40,7 +40,57 @@ namespace Editor
             }
 
         }
-        
+
+
+        public static void OnUpLoadAB(string scenePrefix)
+        {
+            string path = "";
+            QiNiuHelp.OnForeachFile(Path.Combine(Application.dataPath, Globle.AssetBundleDir), ref path);
+
+            string[] splitName = path.Split('\\');
+            string filename = splitName[splitName.Length - 1];
+
+            // 上传文件名
+            string replacePath = Application.dataPath.Replace("/", "\\") + "\\";
+
+            string keySuffix = path.Replace(replacePath, "");
+            string key = Path.Combine(scenePrefix, Globle.AssetVision, keySuffix).Replace("\\", "/");
+            // 加密
+            byte[] fileBytes = Aes.FileToByte(path);
+            byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
+            // HttpResult result = Upload(i, key);
+            HttpResult result = QiNiuHelp.Upload(encryptBytes, key);
+            if (result.Code != 200)
+            {
+                Debug.Log("上传错误 文件: " + path + " 错误消息: " + result.Text);
+                return;
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [MenuItem("Tools/上传构建")]
         public static void UploadBuild()
         {

@@ -10,7 +10,6 @@ using static DefaultNamespace.JsonData;
 namespace DefaultNamespace
 {
     public class Request : MonoBehaviour
-
     {
         public static Request instances;
         

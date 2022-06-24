@@ -8,6 +8,8 @@ using UnityEditor;
 using UnityEngine.Networking;
 using System.Net;
 using Editor;
+using static DefaultNamespace.JsonData;
+using DefaultNamespace;
 
 public class LoadSceneTool : MonoBehaviour
 {
@@ -27,11 +29,24 @@ public class LoadSceneTool : MonoBehaviour
         }
     }
 
-
     [MenuItem("Tools/下载场景资源")]
-    public static void OnDownLoadScene()
+    public static void OnGetSceneUrl()
     {
-        string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
+        ViewResult<sceneData> memberResult = null;
+        Dictionary<string, string> memberRequest = new Dictionary<string, string>();
+        memberRequest["id"] = "98";
+        RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
+        {
+            memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
+            OnDownLoadScene(memberResult.data.fbx_file_url);
+        });
+    }
+
+
+    //[MenuItem("Tools/下载场景资源")]
+    public static void OnDownLoadScene(string url)
+    {
+        //string url = @"https://s3.taihuoniao.com/unity/scene.fbx";
         string progress = null;
         Debug.Log(url);
         Debug.Log("开始下载模型。");
@@ -81,7 +96,7 @@ public class LoadSceneTool : MonoBehaviour
         GameObject obj = Resources.Load("scene") as GameObject;
         obj=Instantiate(obj);
         obj.transform.parent = scene.transform;
-        obj.transform.localEulerAngles = new Vector3(-90, 180, 0);
+        obj.transform.localEulerAngles = new Vector3(0, 0, 0);
         OnLayerH();
         AddMeshCollider.Add();
         string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
@@ -89,7 +104,7 @@ public class LoadSceneTool : MonoBehaviour
 
 
 
-        OnDestoryObj();
+        //OnDestoryObj();
         OnSetAssetBundelName();
         
 
@@ -118,9 +133,9 @@ public class LoadSceneTool : MonoBehaviour
             }
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
-        UploadAsset.UploadAb();
-        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
-        DeleteAllFile(Application.dataPath + "/Resources");
+        //UploadAsset.OnUpLoadAB();
+        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
+        //DeleteAllFile(Application.dataPath + "/Resources");
         UnityEditor.AssetDatabase.Refresh();
     }
 
