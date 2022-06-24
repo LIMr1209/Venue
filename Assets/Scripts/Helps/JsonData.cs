@@ -82,6 +82,8 @@ namespace DefaultNamespace
             public string name; // 画框名字
             public string imageUrl; // 画框图片名
             public float[] scale; // 画框缩放值
+            public float[] rotate; // 画框旋转值
+            public float[] position; // 画框坐标值
         }
 
         [Serializable]

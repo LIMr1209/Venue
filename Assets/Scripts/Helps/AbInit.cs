@@ -147,7 +147,7 @@ namespace DefaultNamespace
 
             // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
             byte[] abData = requestAB.downloadHandler.data;
-            // abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+            abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
 
             AB = AssetBundle.LoadFromMemory(abData);
 

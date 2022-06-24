@@ -50,24 +50,12 @@ namespace DefaultNamespace
             {
                 if (Input.GetKeyDown("w") || Input.GetKeyDown("s") || Input.GetKeyDown("a") || Input.GetKeyDown("d"))
                 {
-                    if (startPoint != Vector3.zero)
-                    {
-                        transform.DOMove(startPoint, 1);
-                        transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
-                        {
-                            // 启用人物控制器
-                            startPoint = Vector3.zero;
-                            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                            if (controller) controller.enabled = true;
-                            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                            if (virtualCamera) virtualCamera.enabled = true;
-                            isClick = true;
-                        });
-                    }
+                    CancelFocusArt();  // 取消聚焦
                 }
             }
         }
-
+        
+        // 聚焦
         private void FocusArt(Transform art)
         {
             isClick = false;
@@ -130,7 +118,9 @@ namespace DefaultNamespace
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
         }
-
+        
+        
+        // 前端发送消息聚焦
         public void FocusArt(string name)
         {
             GameObject art = GameObject.Find(name);
@@ -139,6 +129,25 @@ namespace DefaultNamespace
             }
 
             FocusArt(art.GetComponent<Transform>());
+        }
+        
+        // 取消聚焦
+        public void CancelFocusArt()
+        {
+            if (startPoint != Vector3.zero)
+            {
+                transform.DOMove(startPoint, 1);
+                transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                {
+                    // 启用人物控制器
+                    startPoint = Vector3.zero;
+                    ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                    if (controller) controller.enabled = true;
+                    CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                    if (virtualCamera) virtualCamera.enabled = true;
+                    isClick = true;
+                });
+            }
         }
 
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)

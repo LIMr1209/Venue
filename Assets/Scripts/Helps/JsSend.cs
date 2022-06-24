@@ -28,6 +28,12 @@ namespace DefaultNamespace
         {
             FindObjectOfType<OpusShow>().FocusArt(strParams);
         }
+        
+        // È¡Ïû¾Û½¹»­¿ò
+        public void JsCancelFocusArt()
+        {
+            FindObjectOfType<OpusShow>().CancelFocusArt();
+        }
 
 
     }
