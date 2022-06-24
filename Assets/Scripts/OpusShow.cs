@@ -117,6 +117,10 @@ namespace DefaultNamespace
 
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
+#if !UNITY_EDITOR && UNITY_WEBGL
+            // 通知前端显示聚焦后ui
+            Tools.showFocusWindow();
+#endif
         }
         
         

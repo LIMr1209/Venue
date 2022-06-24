@@ -11,5 +11,8 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern void loadScene(); // 场景加载完通知显示 ui
         
+        [DllImport("__Internal")]
+        public static extern void showFocusWindow(); // 聚焦后显示聚焦窗口
+        
     }
 }
