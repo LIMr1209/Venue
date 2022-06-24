@@ -35,11 +35,19 @@ namespace Editor
         }
 
         // 获取七牛 config
-        public static Config GetConfig()
+        public static Config GetConfig(string bucket)
         {
             Config config = new Config();
             // 设置上传区域
-            config.Zone = Zone.ZONE_CN_East;
+            if (bucket == Globle.AbBucket)
+            {
+                config.Zone = Zone.ZONE_CN_East;
+            }
+            else
+            {
+                config.Zone = Zone.ZONE_CN_South;
+            }
+
             // 设置 http 或者 https 上传
             config.UseHttps = true;
             config.UseCdnDomains = true;
@@ -76,7 +84,7 @@ namespace Editor
         public static HttpResult Upload(byte[] fileBytes, string key, string bucket, bool overwrite = false)
         {
             string token = GetToken(overwrite, key, bucket);
-            Config config = GetConfig();
+            Config config = GetConfig(bucket);
             FormUploader target = new FormUploader(config);
             HttpResult result = target.UploadData(fileBytes, key, token, null);
             return result;
@@ -86,7 +94,7 @@ namespace Editor
         public static HttpResult Upload(string localPath, string key, string bucket, bool overwrite = false)
         {
             string token = GetToken(overwrite, key, bucket);
-            Config config = GetConfig();
+            Config config = GetConfig(bucket);
             FormUploader target = new FormUploader(config);
             HttpResult result = target.UploadFile(localPath, key, token, null);
             return result;
@@ -110,10 +118,10 @@ namespace Editor
         }
         
         // 获取七牛指定文件夹下的所有文件
-        public static List<string> ListFiles(string dir)
+        public static List<string> ListFiles(string dir, string bucket)
         {
             Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
-            Config config = GetConfig();
+            Config config = GetConfig(bucket);
             BucketManager bucketManager = new BucketManager(mac, config);
             ListResult listRet = bucketManager.ListFiles("frfile", dir, "", 0, "#");
             if (listRet.Code != (int)HttpCode.OK)

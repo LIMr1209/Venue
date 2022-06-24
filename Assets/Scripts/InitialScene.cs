@@ -17,6 +17,8 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
             enabled = false;  // 默认不启动 前端发送场景url 后启动
+            Debug.Log("通知发送场景url");
+            Tools.loadScene(); // 通知发送场景url
 #endif
         }
 
@@ -31,7 +33,7 @@ namespace DefaultNamespace
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
                     Debug.Log("场景加载完成通知ui");
-                    Tools.loaded();
+                    Tools.loadScene();
                 })); 
 #else
             StartCoroutine(
