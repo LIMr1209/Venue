@@ -3,7 +3,7 @@ mergeInto(LibraryManager.library, {
         var data = Pointer_stringify(str);
         __UnityLib__.showDialog(data);
       },
-    loaded: function () {
-        __UnityLib__.loaded();
+    loadScene: function () {
+        __UnityLib__.loadScene();
       },
 });

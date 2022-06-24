@@ -84,16 +84,5 @@ namespace Editor
             QiNiuHelp.RefreshDirs("unity/VenueBuild/");
 
         }
-
-        [MenuItem("Tools/test")]
-        public static void test()
-        {
-            List<string> files = QiNiuHelp.ListFiles("model_scene/220624/62b55312b0f8057ce3911d51/textures");
-            foreach (string i in files)
-            {
-                Debug.Log(i);
-            }
-        }
-
     }
 }
