@@ -49,7 +49,7 @@ namespace Editor
             // 加密
             byte[] fileBytes = Aes.FileToByte(path);
             byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
-            HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.SceneBucket);
+            HttpResult result = QiNiuHelp.Upload(encryptBytes, key, Globle.SceneBucket, true);
             if (result.Code != 200)
             {
                 Debug.Log("上传错误 文件: " + path + " 错误消息: " + result.Text);
