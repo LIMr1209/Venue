@@ -20,7 +20,7 @@ public class LoadSceneTool : MonoBehaviour
         for (int i = 0; i < tArray.Length; i++)
         {
             MeshRenderer t = tArray[i] as MeshRenderer;
-            if (t.gameObject.name.Contains("art"))
+            if (t.gameObject.name.Contains("paintings"))
             {
                 t.gameObject.layer = 6;
             }
@@ -90,7 +90,7 @@ public class LoadSceneTool : MonoBehaviour
     }
     public static void OnDownLoadSceneTesture(string url)
     {
-        List<string> files = QiNiuHelp.ListFiles(Path.Combine(url, "textures").Replace("\\", "/"));
+        List<string> files = QiNiuHelp.ListFiles(Path.Combine(url, "textures").Replace("\\", "/"),Globle.SceneBucket);
         foreach (string i in files)
         {
             string path = Path.Combine(Globle.FrfileHost, i).Replace("\\", "/");
@@ -171,7 +171,7 @@ public class LoadSceneTool : MonoBehaviour
             }
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
-        //UploadAsset.OnUpLoadAB(buildurl);
+        UploadAsset.OnUpLoadAB(buildurl);
         //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs");
         //DeleteAllFile(Application.dataPath + "/Resources");
         UnityEditor.AssetDatabase.Refresh();
