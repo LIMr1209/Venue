@@ -3,6 +3,8 @@ using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
+using UnityEditor;
+using System.Collections.Generic;
 
 namespace DefaultNamespace
 {
@@ -27,6 +29,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            OnFocusArtDic();
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
             {
@@ -36,11 +39,14 @@ namespace DefaultNamespace
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit,
                         maxDistance))
                     {
+                        Debug.Log(_raycastHit.collider.name);
                         // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
                         if (art.layer == 6)
                         {
-                            FocusArt(art.transform);
+                            Debug.Log(art.name);
+                            //FocusArt(art.transform);
+                            OnFocusArt(art.transform);
                         }
                     }
                 }
@@ -140,6 +146,7 @@ namespace DefaultNamespace
         {
             if (startPoint != Vector3.zero)
             {
+                //AddshowcaseList = false;
                 transform.DOMove(startPoint, 1);
                 transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
                 {
@@ -150,6 +157,7 @@ namespace DefaultNamespace
                     CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
                     if (virtualCamera) virtualCamera.enabled = true;
                     isClick = true;
+                    IsActionTi = true;
                 });
             }
         }
@@ -166,5 +174,95 @@ namespace DefaultNamespace
                 AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
             }
         }
+
+        public void OnFocusArt(Transform art)
+        {
+            IsActionTi = false;
+            OnActionTi(false);
+            isClick = false;
+            // 禁用人物控制器
+            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+            if (controller) controller.enabled = false;
+            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            if (virtualCamera) virtualCamera.enabled = false;
+            startPoint = transform.position;
+            startRotation = transform.localRotation;
+            isPlayerMove = false;
+            Vector3 point = Vector3.zero;
+            int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
+            Debug.Log(indexDot);
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (0.025f * indexDot), art.localPosition.z);
+            point = art.position;
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (0.025f * indexDot), art.localPosition.z);
+            Vector3 forwordDir = point - art.position;
+            Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
+            transform.DOMove(point, 1);
+            transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() => { isPlayerMove = true; });
+        }
+
+        private List<Showcase> showcaseList = new List<Showcase>();
+        private bool AddshowcaseList = true;
+        private bool IsActionTi = false;
+        Transform Player;
+        GameObject Ti;
+
+        public void OnActionTi(bool isAction)
+        {
+            Ti.SetActive(isAction);
+        }
+
+        public void OnFocusArtDic()
+        {
+            //if (GameObject.Find("scene(Clone)") && AddshowcaseList)
+            //{
+            //    Transform scene = GameObject.Find("scene(Clone)").transform;
+            //    for (int i = 0; i < scene.childCount; i++)
+            //    {
+            //        if (scene.GetChild(i).name.Contains("showcase"))
+            //        {
+            //            scene.GetChild(i).gameObject.AddComponent<Showcase>();
+            //            showcaseList.Add(scene.GetChild(i).GetComponent<Showcase>());
+            //        }
+            //    }
+            //    AddshowcaseList = false;
+            //}
+
+            if (AddshowcaseList&&GameObject.Find("PlayerArmature(Clone)"))
+            {
+                Player = GameObject.Find("PlayerArmature(Clone)").transform;
+                
+                Ti = Instantiate(Resources.Load("Ti") as GameObject);
+                Ti.transform.SetParent(GameObject.Find("TiRoot").transform);
+                Ti.transform.localPosition = Vector3.zero;
+                OnActionTi(false);
+                IsActionTi = true;
+                AddshowcaseList = false;
+            }
+            if (IsActionTi)
+            {
+                Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward*3 );
+                Debug.DrawRay(Player.position + new Vector3(0, 2, 0), Player.forward*3, Color.blue);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit, 3))
+                {
+                    if (hit.collider.name.Contains("paintings"))
+                    {
+                        OnActionTi(true);
+                        if (Input.GetKeyDown(KeyCode.T))
+                        {
+                            OnFocusArt(hit.transform);
+                        }
+                    }
+                    else
+                    {
+                        OnActionTi(false);
+                    }
+                }
+            }
+
+
+        }
+
+
     }
 }

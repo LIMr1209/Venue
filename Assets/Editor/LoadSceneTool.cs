@@ -13,6 +13,7 @@ using DefaultNamespace;
 
 public class LoadSceneTool : MonoBehaviour
 {
+    [MenuItem("Tools/添加画框")]
     public static void OnLayerH()
     {
         //寻找Hierarchy面板下所有的MeshRenderer
@@ -136,6 +137,7 @@ public class LoadSceneTool : MonoBehaviour
         obj=Instantiate(obj);
         obj.transform.parent = scene.transform;
         obj.transform.localEulerAngles = new Vector3(0, 0, 0);
+        obj.transform.Find("default_camera").gameObject.SetActive(false);
         OnLayerH();
         AddMeshCollider.Add();
         string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
@@ -143,7 +145,7 @@ public class LoadSceneTool : MonoBehaviour
 
 
 
-        //OnDestoryObj();
+        OnDestoryObj();
         OnSetAssetBundelName(buildurl);
         
 
