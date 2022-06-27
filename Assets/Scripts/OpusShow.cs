@@ -206,6 +206,7 @@ namespace DefaultNamespace
         private bool IsActionTi = false;
         Transform Player;
         GameObject Ti;
+        public Transform trans;
 
         public void OnActionTi(bool isAction)
         {
@@ -251,6 +252,7 @@ namespace DefaultNamespace
                         OnActionTi(true);
                         if (Input.GetKeyDown(KeyCode.T))
                         {
+                            trans = hit.transform;
                             OnFocusArt(hit.transform);
                         }
                     }
@@ -260,10 +262,6 @@ namespace DefaultNamespace
                     }
                 }
             }
-
-
         }
-
-
     }
 }
