@@ -15,7 +15,7 @@ namespace DefaultNamespace
         public static extern void showFocusWindow(string id); // 聚焦后显示聚焦窗口 ui
         
         [DllImport("__Internal")]
-        public static extern void showFocusTipsWindow(); // 靠近画框显示聚焦提示 ui
+        public static extern void showFocusTipsWindow(bool show); // 靠近画框显示聚焦提示 ui
         
         [DllImport("__Internal")]
         public static extern void sendProcess(float p); // 发送进度条给前端

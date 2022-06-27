@@ -240,14 +240,12 @@ namespace DefaultNamespace
         private bool AddshowcaseList = true;
         private bool IsActionTi = false;
         Transform Player;
-        GameObject Ti;
 
         public void OnActionTi(bool isAction)
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-            Tools.showFocusTipsWindow();
+            Tools.showFocusTipsWindow(isAction);
 #endif
-            Ti.SetActive(isAction);
         }
 
         public void OnFocusArtDic()
@@ -265,15 +263,10 @@ namespace DefaultNamespace
             //    }
             //    AddshowcaseList = false;
             //}
-
+        
             if (AddshowcaseList && GameObject.Find("PlayerArmature(Clone)"))
             {
                 Player = GameObject.Find("PlayerArmature(Clone)").transform;
-
-                Ti = Instantiate(Resources.Load("Ti") as GameObject);
-                Ti.transform.SetParent(GameObject.Find("TiRoot").transform);
-                Ti.transform.localPosition = Vector3.zero;
-                OnActionTi(false);
                 IsActionTi = true;
                 AddshowcaseList = false;
             }
