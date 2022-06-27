@@ -9,7 +9,10 @@ namespace DefaultNamespace
         // 将需要动态加载的文件放入其中，例如Texture，Sprite，prefab等等。
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
+        [HideInInspector]
         public string sceneModel = "scene";
+        
+        [HideInInspector]
         public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab";
 
         private void Awake()
