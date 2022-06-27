@@ -11,11 +11,9 @@ namespace DefaultNamespace
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "scene";
         public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab";
-        public string scenePath ;
 
         private void Awake()
         {
-            scenePath = Application.dataPath + "/AssetsBundles/scene.ab";
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
             enabled = false;  // 默认不启动 前端发送场景url 后启动
@@ -36,14 +34,6 @@ namespace DefaultNamespace
                     AbInit.instances.FinishSlider();
                     Debug.Log("场景加载完成通知ui");
                     Tools.loadScene();
-                })); 
-#else
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, scenePath, (obj) =>
-                {
-                    AddController controller = FindObjectOfType<AddController>();
-                    controller.AddThird();
-                    AbInit.instances.FinishSlider();
                     Light[] lights = FindObjectsOfType<Light>();
                     foreach (Light i in lights)
                     {
@@ -52,6 +42,14 @@ namespace DefaultNamespace
                             i.gameObject.SetActive(false);
                         }
                     }
+                })); 
+#else
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                {
+                    AddController controller = FindObjectOfType<AddController>();
+                    controller.AddThird();
+                    AbInit.instances.FinishSlider();
                 })); 
 #endif             
             // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
