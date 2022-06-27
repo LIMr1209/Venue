@@ -20,6 +20,7 @@ namespace DefaultNamespace
         private GameObject _firstPlayerFollowCamera = null;
         private GameObject _thirdPlayerFollowCamera = null;
         private GameObject _player = null;
+        private Transform cinemachineTarget;
         public float zoomSpeed = 10.0f;
 
         private void Start()
@@ -48,6 +49,8 @@ namespace DefaultNamespace
                     {
                         _player = obj;
                         _player.SetActive(false);
+                        cinemachineTarget =
+                            _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                     }
                 ));
         }
@@ -112,9 +115,6 @@ namespace DefaultNamespace
             if (_player)
             {
                 _player.SetActive(true);
-                Transform cinemachineTarget;
-                cinemachineTarget =
-                    _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                 _firstPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
             }
@@ -139,9 +139,6 @@ namespace DefaultNamespace
             if (_player)
             {
                 _player.SetActive(true);
-                Transform cinemachineTarget;
-                cinemachineTarget =
-                    _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                 _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
                 // hasController = true;

@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
@@ -130,6 +131,7 @@ namespace DefaultNamespace
             GameObject art = GameObject.Find(name);
             if (art == null)
             {
+                throw (new Exception("画框不存在"));
             }
 
             FocusArt(art.GetComponent<Transform>());
@@ -161,6 +163,7 @@ namespace DefaultNamespace
                 GameObject art = GameObject.Find(i.name);
                 if (art == null)
                 {
+                    throw (new Exception("画框不存在"));
                 }
 
                 AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);

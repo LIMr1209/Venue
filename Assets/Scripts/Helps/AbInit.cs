@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -36,6 +37,9 @@ namespace DefaultNamespace
         private void Update()
         {
             OnLoadingIndex();
+#if !UNITY_EDITOR && UNITY_WEBGL
+            Tools.sendProcess(lodingindex);
+#endif
         }
 
         private void OnLoadingIndex()
@@ -108,18 +112,20 @@ namespace DefaultNamespace
                 AssetBundelGameObjectDic.Add(name, AB);
             }
 
-            if (AB != null)
+            if (AB == null)
             {
-                GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-                // obj.transform.localPosition = point;
-                // obj.transform.localRotation = Quaternion.Euler(rotate);
-                if (callback != null)
-                {
-                    callback(obj);
-                }
-
-                AB.UnloadAsync(false);
+                throw (new Exception("unity AB包资源加载错误"));
             }
+
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+            // obj.transform.localPosition = point;
+            // obj.transform.localRotation = Quaternion.Euler(rotate);
+            if (callback != null)
+            {
+                callback(obj);
+            }
+
+            AB.UnloadAsync(false);
         }
 
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url,
@@ -141,7 +147,7 @@ namespace DefaultNamespace
             yield return requestAB.SendWebRequest();
             if (!string.IsNullOrEmpty(requestAB.error))
             {
-                    Debug.LogError(requestAB.error);
+                Debug.LogError(requestAB.error);
                 yield break;
             }
 
@@ -151,16 +157,18 @@ namespace DefaultNamespace
 
             AB = AssetBundle.LoadFromMemory(abData);
 
-            if (AB != null)
+            if (AB == null)
             {
-                GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-                if (callback != null)
-                {
-                    callback(obj);
-                }
-
-                AB.UnloadAsync(false);
+                throw (new Exception("场景AB包加载错误"));
             }
+
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+            if (callback != null)
+            {
+                callback(obj);
+            }
+
+            AB.UnloadAsync(false);
         }
 
         public delegate void TextureCallback(Texture obj);
@@ -185,10 +193,7 @@ namespace DefaultNamespace
         public void ReplaceMaterialImage(GameObject obj, string url)
         {
             Material material = obj.GetComponent<MeshRenderer>().material;
-            StartCoroutine(DownloadTexture(url, (texture) =>
-                {
-                    material.mainTexture = texture;
-                }
+            StartCoroutine(DownloadTexture(url, (texture) => { material.mainTexture = texture; }
             ));
         }
     }
