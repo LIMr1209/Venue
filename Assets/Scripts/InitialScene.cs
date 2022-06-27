@@ -44,6 +44,14 @@ namespace DefaultNamespace
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
+                    Light[] lights = FindObjectsOfType<Light>();
+                    foreach (Light i in lights)
+                    {
+                        if (i.gameObject.name != "Directional Light")
+                        {
+                            i.gameObject.SetActive(false);
+                        }
+                    }
                 })); 
 #endif             
             // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
@@ -87,7 +95,7 @@ namespace DefaultNamespace
             // if (Input.GetKeyDown(KeyCode.N))
             // {
             //     string text =
-            //         "[{\"name\": \"art_1 (1)\", \"imageUrl\": \"https://p4.taihuoniao.com/art/220611/62a43b2e48d6d7e7e10b09e8-3.png\"}]";
+            //         "[{\"name\": \"art_1 (1)\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
             //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
             // }
             // if (Input.GetKeyDown(KeyCode.M))
