@@ -18,6 +18,12 @@ namespace DefaultNamespace
         private Quaternion startRotation;
         private bool isPlayerMove;
         private bool isClick;
+        //private List<Showcase> showcaseList = new List<Showcase>();
+        private bool AddshowcaseList = true;
+        private bool IsActionTi = false;
+        private bool IsActionTifalse = true;
+        Transform Player;
+        Transform TiTrans;
 
         private void Start()
         {
@@ -40,7 +46,6 @@ namespace DefaultNamespace
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit,
                         maxDistance))
                     {
-                        Debug.Log(_raycastHit.collider.name);
                         // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
                         if (art.layer == 6)
@@ -54,7 +59,6 @@ namespace DefaultNamespace
                                 }
                             }
 #else
-                            Debug.Log(art.name);
                             //FocusArt(art.transform);
                             OnFocusArt(art.transform);
 #endif
@@ -215,7 +219,6 @@ namespace DefaultNamespace
             Vector3 point = Vector3.zero;
             float index = 2f; //-0.09148948 - 0.5599864 - 0.09148948
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
-            Debug.Log(indexDot);
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
             point = art.position;
@@ -236,16 +239,15 @@ namespace DefaultNamespace
             });
         }
 
-        private List<Showcase> showcaseList = new List<Showcase>();
-        private bool AddshowcaseList = true;
-        private bool IsActionTi = false;
-        Transform Player;
+
+
 
         public void OnActionTi(bool isAction)
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             Tools.showFocusTipsWindow(isAction);
 #endif
+            Debug.Log(1111);
         }
 
         public void OnFocusArtDic()
@@ -278,9 +280,15 @@ namespace DefaultNamespace
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {
-                    if (hit.collider.name.Contains("paintings"))
+                    //name.Contains("paintings")
+                    if (hit.collider.gameObject.layer==6)
                     {
-                        OnActionTi(true);
+                        if(TiTrans==null|| TiTrans != hit.transform)
+                        {
+                            TiTrans = hit.transform;
+                            OnActionTi(true);
+                            IsActionTifalse = true;
+                        }
                         if (Input.GetKeyDown(KeyCode.T))
                         {
                             OnFocusArt(hit.transform);
@@ -288,7 +296,11 @@ namespace DefaultNamespace
                     }
                     else
                     {
-                        OnActionTi(false);
+                        if (IsActionTifalse)
+                        {
+                            OnActionTi(false);
+                            IsActionTifalse = false;
+                        }
                     }
                 }
             }
