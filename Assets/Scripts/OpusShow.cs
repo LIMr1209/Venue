@@ -217,7 +217,7 @@ namespace DefaultNamespace
             startRotation = transform.localRotation;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
-            float index = 2f; //-0.09148948 - 0.5599864 - 0.09148948
+            float index = 0.025f; //-0.09148948 - 0.5599864 - 0.09148948
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
