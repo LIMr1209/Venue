@@ -35,7 +35,7 @@ public class LoadSceneTool : MonoBehaviour
     {
         ViewResult<sceneData> memberResult = null;
         Dictionary<string, string> memberRequest = new Dictionary<string, string>();
-        memberRequest["id"] = "98";
+        memberRequest["id"] = "99";
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
@@ -137,18 +137,12 @@ public class LoadSceneTool : MonoBehaviour
         obj=Instantiate(obj);
         obj.transform.parent = scene.transform;
         obj.transform.localEulerAngles = new Vector3(0, 0, 0);
-        obj.transform.Find("default_camera").gameObject.SetActive(false);
         OnLayerH();
         AddMeshCollider.Add();
         string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
         PrefabUtility.SaveAsPrefabAsset(scene, targetPath);
-
-
-
         OnDestoryObj();
         OnSetAssetBundelName(buildurl);
-        
-
     }
 
     private static void OnSetAssetBundelName(string buildurl)

@@ -189,11 +189,12 @@ namespace DefaultNamespace
             startRotation = transform.localRotation;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
+            float index = 2f;          //-0.09148948 - 0.5599864 - 0.09148948
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             Debug.Log(indexDot);
-            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (0.025f * indexDot), art.localPosition.z);
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot), art.localPosition.z);
             point = art.position;
-            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (0.025f * indexDot), art.localPosition.z);
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (index * indexDot), art.localPosition.z);
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
             transform.DOMove(point, 1);
