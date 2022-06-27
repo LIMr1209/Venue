@@ -12,7 +12,7 @@ namespace DefaultNamespace
         public static extern void loadScene(); // 场景加载完通知显示 ui
         
         [DllImport("__Internal")]
-        public static extern void showFocusWindow(); // 聚焦后显示聚焦窗口 ui
+        public static extern void showFocusWindow(string id); // 聚焦后显示聚焦窗口 ui
         
         [DllImport("__Internal")]
         public static extern void showFocusTipsWindow(); // 靠近画框显示聚焦提示 ui

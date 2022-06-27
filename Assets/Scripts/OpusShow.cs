@@ -3,7 +3,7 @@ using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.EventSystems;
+// using UnityEngine.EventSystems;
 
 namespace DefaultNamespace
 {
@@ -31,7 +31,8 @@ namespace DefaultNamespace
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
             {
-                if (isClick && !EventSystem.current.IsPointerOverGameObject())
+                // if (isClick && !EventSystem.current.IsPointerOverGameObject())
+                if (isClick)    
                 {
                     // 发射射线
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit,
@@ -39,7 +40,7 @@ namespace DefaultNamespace
                     {
                         // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
-                        if (art.layer == 6)
+                        if (art.layer == 6 )
                         {
                             FocusArt(art.transform);
                         }
@@ -118,9 +119,12 @@ namespace DefaultNamespace
 
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
-#if !UNITY_EDITOR && UNITY_WEBGL
+#if !UNITY_EDITOR && UNITY_WEBGL            
             // 通知前端显示聚焦后ui
-            Tools.showFocusWindow();
+            if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+            { 
+                Tools.showFocusWindow(customAttr.id);
+            }
 #endif
         }
         
@@ -165,8 +169,16 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
+                
+                // 设置自定义id
+                CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                customAttr.id = i.id;
 
                 AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                // 轴方向不一样 可能会有问题
+                // art.transform.localPosition = new Vector3(i.position[0], i.position[1], i.position[2]);
+                // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+                // art.transform.localRotation = Quaternion.Euler(i.position[0], i.position[1], i.position[2]);
             }
         }
     }
