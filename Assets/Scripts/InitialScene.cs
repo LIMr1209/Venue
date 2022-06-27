@@ -39,7 +39,7 @@ namespace DefaultNamespace
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, scenePath, (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
