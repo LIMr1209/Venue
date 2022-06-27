@@ -34,7 +34,7 @@ namespace DefaultNamespace
             if (Input.GetMouseButtonDown(0))
             {
                 // if (isClick && !EventSystem.current.IsPointerOverGameObject())
-                if (isClick)    
+                if (isClick)
                 {
                     // 发射射线
                     if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit,
@@ -45,7 +45,7 @@ namespace DefaultNamespace
                         GameObject art = _raycastHit.collider.gameObject;
                         if (art.layer == 6)
                         {
-#if !UNITY_EDITOR && UNITY_WEBGL 
+#if !UNITY_EDITOR && UNITY_WEBGL
                             if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                             {
                                 if (customAttr.id != null)
@@ -67,11 +67,11 @@ namespace DefaultNamespace
             {
                 if (Input.GetKeyDown("w") || Input.GetKeyDown("s") || Input.GetKeyDown("a") || Input.GetKeyDown("d"))
                 {
-                    CancelFocusArt();  // 取消聚焦
+                    CancelFocusArt(); // 取消聚焦
                 }
             }
         }
-        
+
         // 聚焦
         private void FocusArt(Transform art)
         {
@@ -134,7 +134,7 @@ namespace DefaultNamespace
 
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
-#if !UNITY_EDITOR && UNITY_WEBGL            
+#if !UNITY_EDITOR && UNITY_WEBGL
             // 通知前端显示聚焦后ui
             if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
             { 
@@ -142,8 +142,8 @@ namespace DefaultNamespace
             }
 #endif
         }
-        
-        
+
+
         // 前端发送消息聚焦
         public void OnFocusArt(string name)
         {
@@ -155,7 +155,7 @@ namespace DefaultNamespace
 
             OnFocusArt(art.GetComponent<Transform>());
         }
-        
+
         // 取消聚焦
         public void CancelFocusArt()
         {
@@ -186,7 +186,7 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
-                
+
                 // 设置自定义id
                 CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
                 customAttr.id = i.id;
@@ -213,20 +213,25 @@ namespace DefaultNamespace
             startRotation = transform.localRotation;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
-            float index = 2f;          //-0.09148948 - 0.5599864 - 0.09148948
+            float index = 2f; //-0.09148948 - 0.5599864 - 0.09148948
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             Debug.Log(indexDot);
-            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot), art.localPosition.z);
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
+                art.localPosition.z);
             point = art.position;
-            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (index * indexDot), art.localPosition.z);
+            art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (index * indexDot),
+                art.localPosition.z);
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
-                isPlayerMove = true; 
+                isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
-                Tools.showFocusWindow();
+                if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                {
+                    Tools.showFocusWindow(customAttr.id);
+                }
 #endif
             });
         }
@@ -261,10 +266,10 @@ namespace DefaultNamespace
             //    AddshowcaseList = false;
             //}
 
-            if (AddshowcaseList&&GameObject.Find("PlayerArmature(Clone)"))
+            if (AddshowcaseList && GameObject.Find("PlayerArmature(Clone)"))
             {
                 Player = GameObject.Find("PlayerArmature(Clone)").transform;
-                
+
                 Ti = Instantiate(Resources.Load("Ti") as GameObject);
                 Ti.transform.SetParent(GameObject.Find("TiRoot").transform);
                 Ti.transform.localPosition = Vector3.zero;
@@ -272,10 +277,11 @@ namespace DefaultNamespace
                 IsActionTi = true;
                 AddshowcaseList = false;
             }
+
             if (IsActionTi)
             {
-                Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward*3 );
-                Debug.DrawRay(Player.position + new Vector3(0, 2, 0), Player.forward*3, Color.blue);
+                Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward * 3);
+                Debug.DrawRay(Player.position + new Vector3(0, 2, 0), Player.forward * 3, Color.blue);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {
@@ -293,10 +299,6 @@ namespace DefaultNamespace
                     }
                 }
             }
-
-
         }
-
-
     }
 }
