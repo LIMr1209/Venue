@@ -39,13 +39,34 @@ namespace DefaultNamespace
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
                 })); 
-#endif 
+#endif             
+            // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
+            //     {
+            //         Material material = new Material("hdri");
+            //         Shader shader1 = Shader.Find("Skybox/Panoramic");
+            //         material.shader = shader1;
+            //         material.mainTexture = texture;
+            //         RenderSettings.skybox = material;
+            //         DynamicGI.UpdateEnvironment();
+            //     }
+            // ));
+            
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleMaterial("hdri", "", (material) =>
+            //     {
+            //         
+            //         RenderSettings.skybox = material;
+            //         Shader shader1 = Shader.Find("Skybox/Panoramic");
+            //         material.shader = shader1;
+            //         materia
+            //         DynamicGI.UpdateEnvironment();
+            //     })); 
         }
 
         private void OnApplicationFocus(bool hasFocus)

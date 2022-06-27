@@ -7,19 +7,22 @@ namespace DefaultNamespace
     {
         private bool visual = false; // 第一人称 第三人称切换
 
-        private GameObject playerFollowCameraClone;
-
         // private bool hasController = false;
         private string controllerAb = "controller";
-        private string firstFollowCameraAb = "firstplayerfollowcamera";
+        // private string firstFollowCameraAb = "firstplayerfollowcamera";
 
-        private string thirdFollowCameraAb = "thirdplayerfollowcamera";
+        private string thirdFollowCameraAb = "playerfollowcamera";
 
         // private string capsuleAb = "playercapsule";
         private string armatureAb = "playerarmature";
-        private GameObject _firstPlayerFollowCamera = null;
-        private GameObject _thirdPlayerFollowCamera = null;
-        private GameObject _player = null;
+
+        // private GameObject _firstPlayerFollowCamera;
+        // private GameObject _thirdPlayerFollowCamera;
+        private GameObject _playerFollowCamera;
+        private CinemachineVirtualCamera _cinemachineVirtualCamera;
+        private Cinemachine3rdPersonFollow _playerFollowCamera3rdBody;
+        private GameObject _player;
+        private Transform cinemachineTarget;
         public float zoomSpeed = 10.0f;
 
         private void Start()
@@ -29,25 +32,37 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb, (obj) =>
-                    {
-                        _firstPlayerFollowCamera = obj;
-                        _firstPlayerFollowCamera.SetActive(false);
-                    }
-                ));
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(firstFollowCameraAb, controllerAb, (obj) =>
+            //         {
+            //             _firstPlayerFollowCamera = obj;
+            //             _firstPlayerFollowCamera.SetActive(false);
+            //         }
+            //     ));
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
+            //         {
+            //             _thirdPlayerFollowCamera = obj;
+            //             _thirdPlayerFollowCamera.SetActive(false);
+            //         }
+            //     ));
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
                     {
-                        _thirdPlayerFollowCamera = obj;
-                        _thirdPlayerFollowCamera.SetActive(false);
+                        _playerFollowCamera = obj;
+                        // _playerFollowCamera.SetActive(false);
+                        _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
+                        _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+                            .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
                     }
                 ));
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, new Vector3(0,0,0) ,new Vector3(0,-90,0),(obj) =>
                     {
                         _player = obj;
                         _player.SetActive(false);
+                        cinemachineTarget =
+                            _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                     }
                 ));
         }
@@ -69,26 +84,31 @@ namespace DefaultNamespace
             }
 
             // float scroll = Input.GetAxis("Mouse ScrollWheel");
-            // Debug.Log(_thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>()
-            //     .GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset);
-            // _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>()
-            //         .GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset +=
-            //     _player.transform.forward * scroll * zoomSpeed;
+            // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
+            // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
         }
 
         private void SwithVisul(Vector3 location, Vector3 rotation)
         {
+            // if (visual)
+            // {
+            //     _firstPlayerFollowCamera.SetActive(false);
+            //     AddThird(location, rotation);
+            //     visual = false;
+            // }
+            // else
+            // {
+            //     _thirdPlayerFollowCamera.SetActive(false);
+            //     AddFirst(location, rotation);
+            //     visual = true;
+            // }
             if (visual)
             {
-                _firstPlayerFollowCamera.SetActive(false);
                 AddThird(location, rotation);
-                visual = false;
             }
             else
             {
-                _thirdPlayerFollowCamera.SetActive(false);
                 AddFirst(location, rotation);
-                visual = true;
             }
         }
 
@@ -103,20 +123,20 @@ namespace DefaultNamespace
 
         private void AddFirst(Vector3 location, Vector3 rotation)
         {
-            if (_firstPlayerFollowCamera)
-            {
-                _firstPlayerFollowCamera.SetActive(true);
-                
-            }
+            // if (_firstPlayerFollowCamera)
+            // {
+            //     _firstPlayerFollowCamera.SetActive(true);
+            //     
+            // }
 
             if (_player)
             {
                 _player.SetActive(true);
-                Transform cinemachineTarget;
-                cinemachineTarget =
-                    _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-                _firstPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
+                _cinemachineVirtualCamera.Follow = cinemachineTarget;
+                // _firstPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+                visual = true;
+                SetFollowCameraBody();
             }
         }
 
@@ -131,20 +151,36 @@ namespace DefaultNamespace
 
         public void AddThird(Vector3 location, Vector3 rotation)
         {
-            if (_thirdPlayerFollowCamera)
-            {
-                _thirdPlayerFollowCamera.SetActive(true);
-            }
+            // if (_thirdPlayerFollowCamera)
+            // {
+            //     _thirdPlayerFollowCamera.SetActive(true);
+            // }
 
             if (_player)
             {
                 _player.SetActive(true);
-                Transform cinemachineTarget;
-                cinemachineTarget =
-                    _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-                _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
+                _cinemachineVirtualCamera.Follow = cinemachineTarget;
+                // _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
                 // hasController = true;
+                visual = false;
+                SetFollowCameraBody();
+            }
+        }
+
+        public void SetFollowCameraBody()
+        {
+            if (visual)
+            {
+                _playerFollowCamera3rdBody.Damping = new Vector3(0.0f, 0.0f, 0.0f);
+                _playerFollowCamera3rdBody.ShoulderOffset = new Vector3(0.0f, 0.0f, 0.0f);
+                _playerFollowCamera3rdBody.CameraDistance = 0.0f;
+            }
+            else
+            {
+                _playerFollowCamera3rdBody.Damping = new Vector3(0.1f, 0.25f, 0.3f);
+                _playerFollowCamera3rdBody.ShoulderOffset = new Vector3(1.0f, 0.0f, 0.0f);
+                _playerFollowCamera3rdBody.CameraDistance = 4.0f;
             }
         }
     }

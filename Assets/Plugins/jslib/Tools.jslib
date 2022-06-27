@@ -6,10 +6,13 @@ mergeInto(LibraryManager.library, {
     loadScene: function () {
         __UnityLib__.loadScene();
     },
-    showFocusWindow: function () {
-        __UnityLib__.showFocusWindow();
+    showFocusWindow: function (id) {
+        __UnityLib__.focus_end(id);
     },
-    showFocusTipsWindow: function () {
-        __UnityLib__.showFocusTipsWindow();
+    showFocusTipsWindow: function (show) {
+        __UnityLib__.focus_tab(show);
+    },
+    sendProcess: function (p) {
+        __UnityLib__.loading(p);
     },
 });

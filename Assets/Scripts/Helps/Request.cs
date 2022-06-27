@@ -30,7 +30,11 @@ namespace DefaultNamespace
             if (!string.IsNullOrEmpty(request.error))
             {
                 ErrorResult errorResult = JsonUtility.FromJson<ErrorResult>(request.downloadHandler.text);
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.showDialog(errorResult.meta.message);
+#else
                 Debug.Log(errorResult.meta.status_code+" "+errorResult.meta.message);
+#endif
                 yield break;
             }
 
@@ -52,7 +56,11 @@ namespace DefaultNamespace
             if (!string.IsNullOrEmpty(request.error))
             {
                 ErrorResult errorResult = JsonUtility.FromJson<ErrorResult>(request.downloadHandler.text);
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.showDialog(errorResult.meta.message);
+#else
                 Debug.Log(errorResult.meta.status_code+" "+errorResult.meta.message);
+#endif
             }
 
             callback(Convert.ToInt32(request.responseCode), request.error, request.downloadHandler.text);
@@ -65,7 +73,11 @@ namespace DefaultNamespace
             if (!string.IsNullOrEmpty(request.error))
             {
                 ErrorResult errorResult = JsonUtility.FromJson<ErrorResult>(request.downloadHandler.text);
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.showDialog(errorResult.meta.message);
+#else
                 Debug.Log(errorResult.meta.status_code+" "+errorResult.meta.message);
+#endif
                 yield break;
             }
 
@@ -84,7 +96,11 @@ namespace DefaultNamespace
             if (!string.IsNullOrEmpty(request.error))
             {
                 ErrorResult errorResult = JsonUtility.FromJson<ErrorResult>(request.downloadHandler.text);
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.showDialog(errorResult.meta.message);
+#else
                 Debug.Log(errorResult.meta.status_code+" "+errorResult.meta.message);
+#endif
             }
 
             callback(Convert.ToInt32(request.responseCode), request.error, request.downloadHandler.text);
@@ -114,7 +130,7 @@ namespace DefaultNamespace
                 }
                 paramsStr = stringBuilder.ToString();
             }
-            string url = null;
+            string url;
             switch (urlId)
             {
                 case 1:
@@ -156,6 +172,11 @@ namespace DefaultNamespace
 
             if (string.IsNullOrEmpty(url))
             {
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.showDialog("不存在的urlId");
+#else
+                Debug.Log("不存在的urlId");
+#endif
                 return;
             }
             url = url.Replace("\\", "/");

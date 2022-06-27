@@ -13,7 +13,7 @@ namespace DefaultNamespace
 
         public static string QiNiuPrefix = "unity/venue"; // 七牛资源前缀
 
-        public static string AssetVision = "2022062401"; // 资源版本
+        public static string AssetVision = "2022062702"; // 资源版本
 
         public static string AssetPrefix = AssetHost + QiNiuPrefix + AssetVision; // 资源请求前缀
         public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy"; //七牛 AccessKey

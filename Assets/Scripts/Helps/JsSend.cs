@@ -26,7 +26,7 @@ namespace DefaultNamespace
         // 接收画框名 聚焦画框
         public void JsFocusArt(string strParams)
         {
-            FindObjectOfType<OpusShow>().FocusArt(strParams);
+            FindObjectOfType<OpusShow>().OnFocusArt(strParams);
         }
         
         // 取消聚焦画框

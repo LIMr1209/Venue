@@ -34,7 +34,7 @@ namespace DefaultNamespace
         private void Handler(string logString, string stackTrace, LogType type)
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-            if (type == LogType.Exception || type == LogType.Error)
+            if (type == LogType.Exception)
             {
                 Tools.showDialog(logString);
             }

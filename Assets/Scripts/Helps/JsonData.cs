@@ -81,6 +81,7 @@ namespace DefaultNamespace
         public class ArtData
         {
             public string name; // 画框名字
+            public string id; // 作品id
             public string imageUrl; // 画框图片名
             public float[] scale; // 画框缩放值
             public float[] rotate; // 画框旋转值

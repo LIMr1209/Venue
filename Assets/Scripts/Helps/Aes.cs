@@ -38,9 +38,9 @@ namespace DefaultNamespace
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
-                Cryptograph = null;
+                throw new Exception("加密失败：" + e);
             }
 
             return Cryptograph;
@@ -84,9 +84,9 @@ namespace DefaultNamespace
                     }
                 }
             }
-            catch
+            catch(Exception e)
             {
-                original = null;
+                throw new Exception("解密失败：" + e);
             }
 
             return original;

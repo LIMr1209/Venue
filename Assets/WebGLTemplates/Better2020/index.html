@@ -76,12 +76,14 @@
 
       const script = document.createElement("script");
       script.src = loaderUrl;
+      myUnityInstance = null;
       script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
           spinner.style.display = "none";
           progressBarEmpty.style.display = "";
           progressBarFull.style.width = `${100 * progress}%`;
         }).then((unityInstance) => {
+          myUnityInstance = unityInstance;
           loadingCover.style.display = "none";
           if (canFullscreen) {
             if (!hideFullScreenButton) {
