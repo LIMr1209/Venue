@@ -193,7 +193,7 @@ namespace DefaultNamespace
         {
             AssetBundle AB = null;
 
-            // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+             //UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(url);
             UnityWebRequest requestAB = UnityWebRequest.Get(url);
             yield return requestAB.SendWebRequest();
             if (!string.IsNullOrEmpty(requestAB.error))
@@ -201,7 +201,11 @@ namespace DefaultNamespace
                 throw new Exception(requestAB.error);
             }
 
-            // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
+            //AB = DownloadHandlerAssetBundle.GetContent(requestAB);
+            //while (AB == null)
+            //{
+
+            //}
             byte[] abData = requestAB.downloadHandler.data;
             abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
 

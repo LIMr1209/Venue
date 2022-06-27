@@ -13,6 +13,7 @@ using DefaultNamespace;
 
 public class LoadSceneTool : MonoBehaviour
 {
+    [MenuItem("Tools/添加画框")]
     public static void OnLayerH()
     {
         //寻找Hierarchy面板下所有的MeshRenderer
@@ -34,7 +35,7 @@ public class LoadSceneTool : MonoBehaviour
     {
         ViewResult<sceneData> memberResult = null;
         Dictionary<string, string> memberRequest = new Dictionary<string, string>();
-        memberRequest["id"] = "98";
+        memberRequest["id"] = "99";
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
@@ -140,13 +141,8 @@ public class LoadSceneTool : MonoBehaviour
         AddMeshCollider.Add();
         string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
         PrefabUtility.SaveAsPrefabAsset(scene, targetPath);
-
-
-
-        //OnDestoryObj();
+        OnDestoryObj();
         OnSetAssetBundelName(buildurl);
-        
-
     }
 
     private static void OnSetAssetBundelName(string buildurl)

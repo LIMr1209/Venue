@@ -10,10 +10,12 @@ namespace DefaultNamespace
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "scene";
-        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220624/62b563b21067c0d48bff4b55/scene.ab";
+        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab";
+        public string scenePath ;
 
         private void Awake()
         {
+            scenePath = Application.dataPath + "/AssetsBundles/scene.ab";
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
             enabled = false;  // 默认不启动 前端发送场景url 后启动
@@ -37,7 +39,7 @@ namespace DefaultNamespace
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
