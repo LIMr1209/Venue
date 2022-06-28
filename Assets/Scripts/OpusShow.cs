@@ -283,6 +283,16 @@ namespace DefaultNamespace
                     //name.Contains("paintings")
                     if (hit.collider.gameObject.layer==6)
                     {
+#if !UNITY_EDITOR && UNITY_WEBGL
+                        if (hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                        {
+                            if (customAttr == null || customAttr.id == null)
+                            {
+                                return;
+                            }
+                        }
+#endif
+                            
                         if(TiTrans==null|| TiTrans != hit.transform)
                         {
                             TiTrans = hit.transform;
@@ -298,6 +308,7 @@ namespace DefaultNamespace
                     {
                         if (IsActionTifalse)
                         {
+                            TiTrans = null;
                             OnActionTi(false);
                             IsActionTifalse = false;
                         }

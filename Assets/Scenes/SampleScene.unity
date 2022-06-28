@@ -341,7 +341,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1.5
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1096,8 +1096,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneModel: scene
-  sceneUrl: https://s3.taihuoniao.com/unity/scene.ab
-  scenePath: 
+  sceneUrl: https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab
 --- !u!114 &4895661117118384628
 MonoBehaviour:
   m_ObjectHideFlags: 0
