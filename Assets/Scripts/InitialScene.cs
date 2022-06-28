@@ -53,6 +53,14 @@ namespace DefaultNamespace
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
                     AbInit.instances.FinishSlider();
+                    Light[] lights = FindObjectsOfType<Light>();
+                    foreach (Light i in lights)
+                    {
+                        if (i.gameObject.name != "Directional Light")
+                        {
+                            i.gameObject.SetActive(false);
+                        }
+                    }
                 })); 
 #endif             
             // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
