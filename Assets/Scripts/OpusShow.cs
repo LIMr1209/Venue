@@ -14,8 +14,6 @@ namespace DefaultNamespace
         private Vector3 _velocity = Vector3.zero;
         public float smoothTime = 1.0f;
         public int maxDistance = 10;
-        private Vector3 startPoint;
-        private Quaternion startRotation;
         private bool isPlayerMove;
         private bool isClick;
         //private List<Showcase> showcaseList = new List<Showcase>();
@@ -24,13 +22,12 @@ namespace DefaultNamespace
         private bool IsActionTifalse = true;
         Transform Player;
         Transform TiTrans;
+        Transform TargetArt;
 
         private void Start()
         {
             isClick = true;
             isPlayerMove = true;
-            startPoint = transform.position;
-            startRotation = transform.localRotation;
         }
 
         private void Update()
@@ -85,8 +82,6 @@ namespace DefaultNamespace
             if (controller) controller.enabled = false;
             CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
-            startPoint = transform.position;
-            startRotation = transform.localRotation;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
             Quaternion qqq = art.rotation;
@@ -163,14 +158,11 @@ namespace DefaultNamespace
         // 取消聚焦
         public void CancelFocusArt()
         {
-            if (startPoint != Vector3.zero)
-            {
-                //AddshowcaseList = false;
-                transform.DOMove(startPoint, 1);
-                transform.DORotateQuaternion(startRotation, 1).OnComplete(() =>
+                if (TargetArt != null) Player.LookAt(TargetArt.transform);
+                transform.DOMove(Player.position, 0.1f);
+                transform.DOLookAt(Player.position, 0.1f).OnComplete(() =>
                 {
                     // 启用人物控制器
-                    startPoint = Vector3.zero;
                     ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
                     if (controller) controller.enabled = true;
                     CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
@@ -178,7 +170,7 @@ namespace DefaultNamespace
                     isClick = true;
                     IsActionTi = true;
                 });
-            }
+
         }
 
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
@@ -213,8 +205,7 @@ namespace DefaultNamespace
             if (controller) controller.enabled = false;
             CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
-            startPoint = transform.position;
-            startRotation = transform.localRotation;
+            TargetArt = art;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
             float index = OnGetArtLengDic(art) * -2;
@@ -226,9 +217,11 @@ namespace DefaultNamespace
                 art.localPosition.z);
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
+           
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
+                Player.position = point + new Vector3(-0.2f * indexDot, -1f, 0);
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -238,6 +231,7 @@ namespace DefaultNamespace
 #endif
             });
         }
+
 
         public float OnGetArtLengDic(Transform art)
         {
@@ -286,6 +280,8 @@ namespace DefaultNamespace
                 Player = GameObject.Find("PlayerArmature(Clone)").transform;
                 IsActionTi = true;
                 AddshowcaseList = false;
+                GameObject[] Arr = GameObject.FindGameObjectsWithTag("Player");
+
             }
 
             if (IsActionTi)
