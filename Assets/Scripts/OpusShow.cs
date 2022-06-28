@@ -158,7 +158,6 @@ namespace DefaultNamespace
         // 取消聚焦
         public void CancelFocusArt()
         {
-                if (TargetArt != null) Player.LookAt(TargetArt.transform);
                 transform.DOMove(Player.position, 0.1f);
                 transform.DOLookAt(Player.position, 0.1f).OnComplete(() =>
                 {
