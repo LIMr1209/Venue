@@ -97,6 +97,10 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDYes;
+        private int _animIDNo;
+        private int _animIDWave;
+        private int _animIDSmile;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -159,6 +163,7 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            OtherAction();
         }
 
         private void LateUpdate()
@@ -182,6 +187,10 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDYes = Animator.StringToHash("Yes");
+            _animIDNo = Animator.StringToHash("No");
+            _animIDWave = Animator.StringToHash("Wave");
+            _animIDSmile = Animator.StringToHash("Smile");
         }
 
         private void GroundedCheck()
@@ -378,6 +387,17 @@ namespace StarterAssets
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z),
                 GroundedRadius);
+        }
+
+        private void OtherAction()
+        {
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDYes, _input.yes);
+                _animator.SetBool(_animIDNo, _input.no);
+                _animator.SetBool(_animIDWave, _input.wave);
+                _animator.SetBool(_animIDSmile, _input.smile);
+            }
         }
 
         private void OnFootstep(AnimationEvent animationEvent)

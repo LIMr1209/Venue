@@ -20,12 +20,14 @@ namespace DefaultNamespace
         // 接收画框名字 作品id 作品url  替换场景中画框的材质贴图
         public void JsReplaceArtImage(string strParams)
         {
+            Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
             OpusShow.ReplaceArtImage(data);
         }
         // 接收画框名 聚焦画框
         public void JsFocusArt(string strParams)
         {
+            Debug.Log("接收到的画框名:"+strParams);
             FindObjectOfType<OpusShow>().OnFocusArt(strParams);
         }
         

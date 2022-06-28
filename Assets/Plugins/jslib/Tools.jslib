@@ -15,4 +15,7 @@ mergeInto(LibraryManager.library, {
     sendProcess: function (p) {
         __UnityLib__.loading(p);
     },
+    canalFocus:function () {
+        __UnityLib__.canal_focus();
+    },
 });

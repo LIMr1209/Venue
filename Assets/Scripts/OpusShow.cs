@@ -174,6 +174,9 @@ namespace DefaultNamespace
                     if (virtualCamera) virtualCamera.enabled = true;
                     isClick = true;
                     IsActionTi = true;
+#if !UNITY_EDITOR && UNITY_WEBGL
+                    Tools.canalFocus();  // 调用前端取消聚焦
+#endif
                 });
             }
         }
@@ -187,9 +190,10 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
-
+                Debug.Log("接收画框名："+i.name);
                 // 设置自定义id
                 CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                Debug.Log("接收作品id:"+i.id);
                 customAttr.id = i.id;
 
                 AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
@@ -230,6 +234,7 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                 {
+                    Debug.Log("传递作品id"+customAttr.id);
                     Tools.showFocusWindow(customAttr.id);
                 }
 #endif
@@ -287,7 +292,7 @@ namespace DefaultNamespace
 
             if (IsActionTi)
             {
-                Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward * 3);
+                    Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward * 3);
                 Debug.DrawRay(Player.position + new Vector3(0, 2, 0), Player.forward * 3, Color.blue);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))

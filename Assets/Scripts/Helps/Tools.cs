@@ -20,5 +20,8 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern void sendProcess(float p); // 发送进度条给前端
         
+        [DllImport("__Internal")]
+        public static extern void canalFocus(); // 发送进度条给前端
+        
     }
 }
