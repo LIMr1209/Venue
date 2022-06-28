@@ -46,6 +46,7 @@ namespace Editor
         {
             string path = Application.dataPath + "/AssetsBundles/scene.ab";
             string key = Path.Combine(scenePrefix, "scene.ab").Replace("\\", "/");
+            Debug.Log("OnUpLoadAB  Key ; " + key);
             // 加密
             byte[] fileBytes = Aes.FileToByte(path);
             //byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);

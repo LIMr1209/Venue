@@ -10,7 +10,7 @@ namespace DefaultNamespace
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
         public string sceneModel = "scene";
-        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab";
+        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220628/62b96fe7baae4131bab41cd1/scene.ab";
         public string scenePath ;
 
         private void Awake()
