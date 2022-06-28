@@ -134,7 +134,7 @@ namespace DefaultNamespace
             // 通知前端显示聚焦后ui
             if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
             { 
-                Tools.showFocusWindow(customAttr.id);
+                Tools.showFocusWindow(customAttr.artId);
             }
 #endif
         }
@@ -185,7 +185,7 @@ namespace DefaultNamespace
                 // 设置自定义id
                 CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
                 Debug.Log("接收作品id:"+i.id);
-                customAttr.id = i.id;
+                customAttr.artId = i.id;
 
                 AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
                 // 轴方向不一样 可能会有问题
@@ -226,8 +226,8 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                 {
-                    Debug.Log("传递作品id"+customAttr.id);
-                    Tools.showFocusWindow(customAttr.id);
+                    Debug.Log("传递作品id"+customAttr.artId);
+                    Tools.showFocusWindow(customAttr.artId);
                 }
 #endif
             });

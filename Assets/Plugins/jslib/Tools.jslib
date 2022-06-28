@@ -6,13 +6,16 @@ mergeInto(LibraryManager.library, {
     loadScene: function () {
         __UnityLib__.loadScene();
     },
-    showFocusWindow: function (id) {
-        __UnityLib__.focus_end(id);
+    showFocusWindow: function (artId) {
+        var data = Pointer_stringify(artId);
+        console.log("unity send finish 999:"+data)
+        __UnityLib__.focus_end(data);
     },
     showFocusTipsWindow: function (show) {
         __UnityLib__.focus_tab(show);
     },
     sendProcess: function (p) {
+        console.log("load process:"+p)
         __UnityLib__.loading(p);
     },
     canalFocus:function () {

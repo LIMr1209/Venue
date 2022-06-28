@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -78,12 +79,12 @@ namespace DefaultNamespace
                 // ));
             
             // StartCoroutine(
-            //     AbInit.instances.OnWebRequestLoadAssetBundleMaterial("hdri", "", (material) =>
+            //     AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
             //     {
-            //         
             //         RenderSettings.skybox = material;
             //         Shader shader1 = Shader.Find("Skybox/Panoramic");
             //         material.shader = shader1;
+            //         Debug.Log(material.mainTexture.name);
             //         DynamicGI.UpdateEnvironment();
             //     })); 
         }
@@ -103,15 +104,19 @@ namespace DefaultNamespace
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
-            if (Input.GetKeyDown(KeyCode.N))
-            {
-                string text =
-                    "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
-                FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            }
+            // if (Input.GetKeyDown(KeyCode.N))
+            // {
+            //     string text =
+            //         "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
+            //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
+            // }
             // if (Input.GetKeyDown(KeyCode.M))
             // {
-            //     FindObjectOfType<JsSend>().JsFocusArt("art_1 (1)");
+            //     Tools.showFocusWindow(Convert.ToString(398));
+            // }
+            // if (Input.GetKeyDown(KeyCode.B))
+            // {
+            //     Tools.showFocusWindow("test");
             // }
         }
     }
