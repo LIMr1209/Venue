@@ -214,7 +214,7 @@ namespace DefaultNamespace
             startRotation = transform.localRotation;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
-            float index = 0.025f; //-0.09148948 - 0.5599864 - 0.09148948
+            float index = OnGetArtLengDic(art) * -2;
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
@@ -234,6 +234,21 @@ namespace DefaultNamespace
                 }
 #endif
             });
+        }
+
+        public float OnGetArtLengDic(Transform art)
+        {
+            Vector3 length = art.GetComponent<MeshFilter>().mesh.bounds.size;
+            float index;
+            if (art.localScale.z == art.localScale.y)
+            {
+                index = art.localScale.y * length.y;
+            }
+            else
+            {
+                index = art.localScale.z < art.localScale.y ? art.localScale.z * length.z : art.localScale.y * length.y;
+            }
+            return index;
         }
 
 

@@ -41,7 +41,8 @@ public class LoadSceneTool : MonoBehaviour
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
             OnDownLoadSceneTesture(memberResult.data.qiniu_path);
             OnDownLoadScene(memberResult.data.fbx_file_url,memberResult.data.qiniu_path);
-            
+            Debug.Log("data.fbx_file_url : " + memberResult.data.fbx_file_url);
+            Debug.Log("data.qiniu_path : " + memberResult.data.qiniu_path);
         });
     }
 
@@ -95,6 +96,7 @@ public class LoadSceneTool : MonoBehaviour
         foreach (string i in files)
         {
             string path = Path.Combine(Globle.FrfileHost, i).Replace("\\", "/");
+            Debug.Log("OnDownLoadSceneTesture  Path ; " + path);
             WWW w = new WWW(path);
             while (!w.isDone)
             {
