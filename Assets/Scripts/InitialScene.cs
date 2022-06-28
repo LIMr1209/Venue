@@ -31,12 +31,11 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
-                    Debug.Log("添加控制器");
                     AddController controller = FindObjectOfType<AddController>();
-                    controller.AddThird();
+                    if (controller) controller.AddThird();
+                    OpusShow opusShow = FindObjectOfType<OpusShow>();
+                    if (opusShow) opusShow.enabled = true;
                     AbInit.instances.FinishSlider();
-                    Debug.Log("场景加载完成通知ui");
-                    Tools.loadScene();
                     Light[] lights = FindObjectsOfType<Light>();
                     foreach (Light i in lights)
                     {
@@ -45,14 +44,18 @@ namespace DefaultNamespace
                             i.gameObject.SetActive(false);
                         }
                     }
+                    Tools.loadScene();
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
-                    controller.AddThird();
+                    if (controller) controller.AddThird();
+                    OpusShow opusShow = FindObjectOfType<OpusShow>();
+                    if (opusShow) opusShow.enabled = true;
                     AbInit.instances.FinishSlider();
+                    
                     Light[] lights = FindObjectsOfType<Light>();
                     foreach (Light i in lights)
                     {
@@ -63,27 +66,26 @@ namespace DefaultNamespace
                     }
                 })); 
 #endif             
-            // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
-            //     {
-            //         Material material = new Material("hdri");
-            //         Shader shader1 = Shader.Find("Skybox/Panoramic");
-            //         material.shader = shader1;
-            //         material.mainTexture = texture;
-            //         RenderSettings.skybox = material;
-            //         DynamicGI.UpdateEnvironment();
-            //     }
-            // ));
+                // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
+                // {
+                //     Material material = new Material("hdri");
+                //     Shader shader1 = Shader.Find("Skybox/Panoramic");
+                //     material.shader = shader1;
+                //     material.mainTexture = texture;
+                //     RenderSettings.skybox = material;
+                //     DynamicGI.UpdateEnvironment();
+                // }
+                // ));
             
-            // StartCoroutine(
-            //     AbInit.instances.OnWebRequestLoadAssetBundleMaterial("hdri", "", (material) =>
-            //     {
-            //         
-            //         RenderSettings.skybox = material;
-            //         Shader shader1 = Shader.Find("Skybox/Panoramic");
-            //         material.shader = shader1;
-            //         materia
-            //         DynamicGI.UpdateEnvironment();
-            //     })); 
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("hdri", "", (material) =>
+                {
+                    
+                    RenderSettings.skybox = material;
+                    Shader shader1 = Shader.Find("Skybox/Panoramic");
+                    material.shader = shader1;
+                    DynamicGI.UpdateEnvironment();
+                })); 
         }
 
         private void OnApplicationFocus(bool hasFocus)
@@ -101,12 +103,12 @@ namespace DefaultNamespace
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
-            // if (Input.GetKeyDown(KeyCode.N))
-            // {
-            //     string text =
-            //         "[{\"name\": \"art_1 (1)\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
-            //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            // }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                string text =
+                    "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
+                FindObjectOfType<JsSend>().JsReplaceArtImage(text);
+            }
             // if (Input.GetKeyDown(KeyCode.M))
             // {
             //     FindObjectOfType<JsSend>().JsFocusArt("art_1 (1)");

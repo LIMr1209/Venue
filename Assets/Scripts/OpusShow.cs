@@ -31,6 +31,7 @@ namespace DefaultNamespace
             isPlayerMove = true;
             startPoint = transform.position;
             startRotation = transform.localRotation;
+            enabled = false; // 默认禁用 场景加载完启用
         }
 
         private void Update()
@@ -51,17 +52,13 @@ namespace DefaultNamespace
                         if (art.layer == 6)
                         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                            if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                            if (!art.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                             {
-                                if (customAttr.id != null)
-                                {
-                                    OnFocusArt(art.transform);
-                                }
+                                return;
                             }
-#else
+#endif
                             //FocusArt(art.transform);
                             OnFocusArt(art.transform);
-#endif
                         }
                     }
                 }
@@ -247,7 +244,7 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
             Tools.showFocusTipsWindow(isAction);
 #endif
-            Debug.Log(1111);
+            Debug.Log(isAction);
         }
 
         public void OnFocusArtDic()
@@ -284,12 +281,9 @@ namespace DefaultNamespace
                     if (hit.collider.gameObject.layer==6)
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                        if (hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                        if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                         {
-                            if (customAttr == null || customAttr.id == null)
-                            {
-                                return;
-                            }
+                            return;
                         }
 #endif
                             
