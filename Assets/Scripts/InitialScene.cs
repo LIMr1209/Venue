@@ -81,9 +81,9 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
                 {
-                    RenderSettings.skybox = material;
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;
+                    RenderSettings.skybox = material;
                     DynamicGI.UpdateEnvironment();
                 })); 
         }
