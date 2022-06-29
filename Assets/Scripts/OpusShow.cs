@@ -28,18 +28,22 @@ namespace DefaultNamespace
         private void Start()
         {
             isClick = true;
-            isPlayerMove = true;
+            isPlayerMove = false;
         }
 
         private void Update()
         {
-            ////-3.141593    1.570535    0
-            //if (Input.GetKeyDown(KeyCode.M))
-            //{
-            //    GameObject art = GameObject.Find("paintings-022");
-            //    //art.transform.localRotation = Quaternion.Euler(new Vector3(1.570535f, -3.141593f, 0));
-            //    art.transform.localRotation = new Quaternion(1.570535f, -3.141593f, 0,  1);
-            //}
+            //-3.141593    1.570535    0
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                GameObject art = GameObject.Find("paintings-022");
+                //Quaternion aaa = art.transform.localRotation;
+                Vector3 aaa = art.transform.localEulerAngles;
+                Debug.Log(aaa);
+                //art.transform.localRotation = Quaternion.Euler(new Vector3(1.570535f, -3.141593f, 0));
+                //art.transform.localRotation = new Quaternion(0.70711f, 0.70711f, 0, 0);
+                art.transform.localEulerAngles = new Vector3(1.570535f, -3.141593f, 0);
+            }
 
 
 
@@ -169,7 +173,7 @@ namespace DefaultNamespace
         // 取消聚焦
         public void CancelFocusArt()
         {
-            Player.position = startPoint;
+                Player.position = startPoint;
                 transform.DOMove(Player.position, 0.1f);
                 transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
                 {
@@ -181,7 +185,7 @@ namespace DefaultNamespace
                     isClick = true;
                     IsActionTi = true;
                 });
-
+            isPlayerMove = false;
         }
 
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
@@ -227,13 +231,14 @@ namespace DefaultNamespace
             IsActionTi = false;
             OnActionTi(false);
             isClick = false;
+            isPlayerMove = false;
             // 禁用人物控制器
             ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
             if (controller) controller.enabled = false;
             CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
             TargetArt = art;
-            isPlayerMove = false;
+            
             Vector3 point = Vector3.zero;
             float index = OnGetArtLengDic(art) * -2;
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
