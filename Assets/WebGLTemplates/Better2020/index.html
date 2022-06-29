@@ -23,6 +23,25 @@
     </div>
     <div id="unity-fullscreen-button" style="display: none;"></div>
     <script>
+      var __UnityLib__= new Object();
+      __UnityLib__.loadScene = function (){
+        
+      }
+      __UnityLib__.errorMessage = function (error) {
+        window.alert(error)
+      }
+      __UnityLib__.focus_end = function (artId) {
+        console.log("接收画框id"+artId)
+      }
+      __UnityLib__.focus_tab = function (show) {
+        console.log("focus tab "+show)
+      }
+      __UnityLib__.loading = function (p) {
+        console.log("received process "+p)
+      }
+      __UnityLib__.canal_focus = function (){
+        console.log("取消聚焦")
+      }
       const hideFullScreenButton = "{{{ HIDE_FULL_SCREEN_BUTTON }}}";
       const buildUrl = "Build";
       const loaderUrl = buildUrl + "/{{{ LOADER_FILENAME }}}";
@@ -98,6 +117,15 @@
         });
       };
       document.body.appendChild(script);
+      var recaptureInputAndFocus = function() {
+        var canvas = document.getElementById("#unity-canvas");
+        if(canvas) {
+          canvas.setAttribute("tabindex", "1");
+          canvas.focus();
+        } else
+          setTimeout(recaptureInputAndFocus, 100);
+      }
+      recaptureInputAndFocus();
     </script>
   </body>
 </html>

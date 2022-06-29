@@ -24,11 +24,16 @@ namespace DefaultNamespace
         Transform TiTrans;
         Transform TargetArt;
 
+        private void Awake()
+        {
+            enabled = false; // 默认禁用 场景加载完启用
+        }
+
         private void Start()
         {
             isClick = true;
             isPlayerMove = true;
-            enabled = false; // 默认禁用 场景加载完启用
+            Player = GameObject.FindWithTag("Player").transform;
         }
 
         private void Update()
@@ -276,13 +281,10 @@ namespace DefaultNamespace
             //    AddshowcaseList = false;
             //}
         
-            if (AddshowcaseList && GameObject.Find("PlayerArmature(Clone)"))
+            if (AddshowcaseList)
             {
-                Player = GameObject.Find("PlayerArmature(Clone)").transform;
                 IsActionTi = true;
                 AddshowcaseList = false;
-                GameObject[] Arr = GameObject.FindGameObjectsWithTag("Player");
-
             }
 
             if (IsActionTi)

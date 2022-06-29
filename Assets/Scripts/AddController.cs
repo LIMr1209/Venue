@@ -14,7 +14,8 @@ namespace DefaultNamespace
         private string thirdFollowCameraAb = "playerfollowcamera";
 
         // private string capsuleAb = "playercapsule";
-        private string armatureAb = "playerarmature";
+        // private string armatureAb = "playerarmature";
+        private string armatureAb = "figure01";
 
         // private GameObject _firstPlayerFollowCamera;
         // private GameObject _thirdPlayerFollowCamera;
@@ -61,6 +62,7 @@ namespace DefaultNamespace
                     {
                         _player = obj;
                         _player.SetActive(false);
+                        ShaderProblem.ResetShader(_player); // 解决shader问题
                         cinemachineTarget =
                             _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                     }

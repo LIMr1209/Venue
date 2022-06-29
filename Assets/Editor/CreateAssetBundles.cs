@@ -94,7 +94,7 @@ public class CreateAssetBundles
     // }
     
     [MenuItem("AB/标记名称(可多选)/视角控制器")]
-    public static void Test()
+    public static void MarkMaterController()
     {
         UnityEngine.Object[] objItem = Selection.objects;
         foreach (UnityEngine.Object item in objItem)
@@ -110,6 +110,24 @@ public class CreateAssetBundles
             asset.SaveAndReimport();
         }
     }
+    
+    // [MenuItem("AB/标记名称(可多选)/材质")]
+    // public static void MarkMaterial()
+    // {
+    //     UnityEngine.Object[] objItem = Selection.objects;
+    //     foreach (UnityEngine.Object item in objItem)
+    //     {
+    //         string a_path = AssetDatabase.GetAssetPath(item);
+    //         AssetImporter asset = AssetImporter.GetAtPath(a_path);
+    //         int BeginIndex = a_path.IndexOf(item.name);
+    //         int LastIndex = a_path.IndexOf(".");
+    //         int len = LastIndex - BeginIndex;
+    //         string bundleName = a_path.Substring(BeginIndex, len);
+    //         asset.assetBundleName = "Material/"+bundleName;
+    //         asset.assetBundleVariant = "ab";
+    //         asset.SaveAndReimport();
+    //     }
+    // }
 
     [MenuItem("AB/标记名称(可多选)/其他")]
     public static void OnSetAssetsBundleNames()

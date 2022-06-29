@@ -49,6 +49,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "No",
+                    "type": "Button",
+                    "id": "aeee70ed-d254-4d61-9439-7e80689499db",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Wave",
+                    "type": "Button",
+                    "id": "4d593c6c-0a2e-403c-b25d-928f08bf0ea1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Smile",
+                    "type": "Button",
+                    "id": "bc6b48d3-e74b-4a43-ba9b-5a4ed75e0d19",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -192,6 +219,39 @@
                     "processors": "",
                     "groups": "KeyboardMouse",
                     "action": "Yes",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0ba10616-3b68-4546-b30c-6354cf864adc",
+                    "path": "<Keyboard>/u",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "No",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6bf27b7b-82e3-4eaf-95e6-de08111c05db",
+                    "path": "<Keyboard>/i",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardMouse",
+                    "action": "Wave",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67d252ba-293f-49c2-ab10-bc43beb17f27",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Smile",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

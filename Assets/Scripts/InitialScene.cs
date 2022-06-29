@@ -78,15 +78,14 @@ namespace DefaultNamespace
                 // }
                 // ));
             
-            // StartCoroutine(
-            //     AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
-            //     {
-            //         RenderSettings.skybox = material;
-            //         Shader shader1 = Shader.Find("Skybox/Panoramic");
-            //         material.shader = shader1;
-            //         Debug.Log(material.mainTexture.name);
-            //         DynamicGI.UpdateEnvironment();
-            //     })); 
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
+                {
+                    RenderSettings.skybox = material;
+                    Shader shader1 = Shader.Find("Skybox/Panoramic");
+                    material.shader = shader1;
+                    DynamicGI.UpdateEnvironment();
+                })); 
         }
 
         private void OnApplicationFocus(bool hasFocus)
