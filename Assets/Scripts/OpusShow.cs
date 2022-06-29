@@ -12,6 +12,7 @@ namespace DefaultNamespace
     {
         private RaycastHit _raycastHit;
         private Vector3 _velocity = Vector3.zero;
+        private Vector3 startPoint;
         public float smoothTime = 1.0f;
         public int maxDistance = 10;
         private bool isPlayerMove;
@@ -32,6 +33,16 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            ////-3.141593    1.570535    0
+            //if (Input.GetKeyDown(KeyCode.M))
+            //{
+            //    GameObject art = GameObject.Find("paintings-022");
+            //    //art.transform.localRotation = Quaternion.Euler(new Vector3(1.570535f, -3.141593f, 0));
+            //    art.transform.localRotation = new Quaternion(1.570535f, -3.141593f, 0,  1);
+            //}
+
+
+
             OnFocusArtDic();
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
@@ -158,8 +169,9 @@ namespace DefaultNamespace
         // 取消聚焦
         public void CancelFocusArt()
         {
+            Player.position = startPoint;
                 transform.DOMove(Player.position, 0.1f);
-                transform.DOLookAt(Player.position, 0.1f).OnComplete(() =>
+                transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
                 {
                     // 启用人物控制器
                     ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
@@ -181,12 +193,28 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
-
+                //-3.141593    1.570535    0
                 // 设置自定义id
-                CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                customAttr.id = i.id;
-
-                AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                if (i.id != null||i.imageUrl!=null)
+                {
+                    CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                    customAttr.id = i.id;
+                    AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                }
+                
+                Vector3 artPosition = new Vector3(i.position[0], -i.position[2], i.position[1]);
+                //Vector3 artRotate = new Vector3(i.rotate[2], i.rotate[2], i.rotate[0]);
+                Vector3 artScala = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
+                art.transform.localPosition = artPosition;
+                //art.transform.localRotation = Quaternion.Euler(artRotate);
+                art.transform.localScale = artScala;
+                //Debug.Log("i.name : " + i.name);
+                //for (int r = 0; r < i.rotate.Length; r++)
+                //{
+                //    Debug.Log("i.rotate"+r+" : " + i.rotate[r]);
+                //}
+                
+                //(-0.09, -0.04, -0.09)
                 // 轴方向不一样 可能会有问题
                 // art.transform.localPosition = new Vector3(i.position[0], i.position[1], i.position[2]);
                 // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
@@ -211,16 +239,26 @@ namespace DefaultNamespace
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
+            for(int a = 0; a < art.parent.childCount; a++)
+            {
+                if (art.parent.GetChild(a).name.Contains("point"))
+                {
+                    point = art.parent.GetChild(a).position;
+                    startPoint = point;
+                }
+            }
             point = art.position;
+            startPoint = point;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (index * indexDot),
                 art.localPosition.z);
+            point.y = art.position.y;
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
            
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
-                Player.position = point + new Vector3(-0.2f * indexDot, -1f, 0);
+                Player.position = point + new Vector3(-0.3f*indexDot, -1f, 0);
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -285,8 +323,8 @@ namespace DefaultNamespace
 
             if (IsActionTi)
             {
-                Ray ray = new Ray(Player.position + new Vector3(0, 2, 0), Player.forward * 3);
-                Debug.DrawRay(Player.position + new Vector3(0, 2, 0), Player.forward * 3, Color.blue);
+                Ray ray = new Ray(Player.position + new Vector3(0, 1.7f, 0), Player.forward * 3);
+                Debug.DrawRay(Player.position + new Vector3(0, 1.7f, 0), Player.forward * 3, Color.blue);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {

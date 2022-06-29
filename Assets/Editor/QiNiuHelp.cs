@@ -135,7 +135,15 @@ namespace Editor
             };
             RefreshResult ret = manager.RefreshDirs(dirs);
         }
-        
+
+        // 刷新文件
+        public static void RefreshFiles(string[] urls)
+        {
+            Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
+            CdnManager manager = new CdnManager(mac);
+            RefreshResult ret = manager.RefreshUrls(urls);
+        }
+
         // 获取七牛指定文件夹下的所有文件
         public static List<string> ListFiles(string dir, string bucket)
         {

@@ -13,7 +13,7 @@ namespace DefaultNamespace
         public string sceneModel = "scene";
         
         [HideInInspector]
-        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab";
+        public string sceneUrl = "https://cdn1.d3ingo.com/model_scene/220629/62b96fe7baae4131bab41cd1/scene.ab";
 
         private void Awake()
         {
@@ -48,7 +48,7 @@ namespace DefaultNamespace
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     controller.AddThird();
