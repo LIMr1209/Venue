@@ -218,6 +218,7 @@ namespace DefaultNamespace
                 art.transform.localPosition = artPosition;
                 //art.transform.localRotation = Quaternion.Euler(artRotate);
                 art.transform.localScale = artScala;
+                Debug.Log(i.name + " : " + "artPosition : " + artPosition + "artScala : " + artScala);
                 //Debug.Log("i.name : " + i.name);
                 //for (int r = 0; r < i.rotate.Length; r++)
                 //{

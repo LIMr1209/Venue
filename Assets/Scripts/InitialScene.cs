@@ -49,12 +49,12 @@ namespace DefaultNamespace
                 })); 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     if (controller) controller.AddThird();
-                    OpusShow opusShow = FindObjectOfType<OpusShow>();
-                    if (opusShow) opusShow.enabled = true;
+                    // OpusShow opusShow = FindObjectOfType<OpusShow>();
+                    // if (opusShow) opusShow.enabled = true;
                     AbInit.instances.FinishSlider();
                     
                     Light[] lights = FindObjectsOfType<Light>();
