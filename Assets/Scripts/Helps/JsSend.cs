@@ -34,6 +34,7 @@ namespace DefaultNamespace
         // 接收画框名 聚焦画框
         public void JsFocusArt(string strParams)
         {
+            Debug.Log("接收到的画框名:"+strParams);
             FindObjectOfType<OpusShow>().OnFocusArt(strParams);
         }
         

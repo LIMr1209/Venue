@@ -25,10 +25,17 @@ namespace DefaultNamespace
         Transform TiTrans;
         Transform TargetArt;
 
+        private void Awake()
+        {
+            enabled = false; // 默认禁用 场景加载完启用
+        }
+
         private void Start()
         {
             isClick = true;
             isPlayerMove = false;
+            Player = GameObject.FindWithTag("Player").transform;
+
         }
 
         private void Update()
@@ -63,17 +70,13 @@ namespace DefaultNamespace
                         if (art.layer == 6)
                         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                            if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                            if (!art.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                             {
-                                if (customAttr.id != null)
-                                {
-                                    OnFocusArt(art.transform);
-                                }
+                                return;
                             }
-#else
+#endif
                             //FocusArt(art.transform);
                             OnFocusArt(art.transform);
-#endif
                         }
                     }
                 }
@@ -152,7 +155,7 @@ namespace DefaultNamespace
             // 通知前端显示聚焦后ui
             if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
             { 
-                Tools.showFocusWindow(customAttr.id);
+                Tools.showFocusWindow(customAttr.artId);
             }
 #endif
         }
@@ -184,6 +187,9 @@ namespace DefaultNamespace
                     if (virtualCamera) virtualCamera.enabled = true;
                     isClick = true;
                     IsActionTi = true;
+#if !UNITY_EDITOR && UNITY_WEBGL
+                    Tools.canalFocus();  // 调用前端取消聚焦
+#endif
                 });
             isPlayerMove = false;
         }
@@ -202,7 +208,7 @@ namespace DefaultNamespace
                 if (i.id != null||i.imageUrl!=null)
                 {
                     CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                    customAttr.id = i.id;
+                    customAttr.artId = i.id;
                     AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
                 }
                 
@@ -268,7 +274,8 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                 {
-                    Tools.showFocusWindow(customAttr.id);
+                    Debug.Log("传递作品id"+customAttr.artId);
+                    Tools.showFocusWindow(customAttr.artId);
                 }
 #endif
             });
@@ -298,7 +305,7 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
             Tools.showFocusTipsWindow(isAction);
 #endif
-            Debug.Log(1111);
+            Debug.Log(isAction);
         }
 
         public void OnFocusArtDic()
@@ -317,19 +324,18 @@ namespace DefaultNamespace
             //    AddshowcaseList = false;
             //}
         
-            if (AddshowcaseList && GameObject.Find("PlayerArmature(Clone)"))
+            if (AddshowcaseList)
             {
-                Player = GameObject.Find("PlayerArmature(Clone)").transform;
                 IsActionTi = true;
                 AddshowcaseList = false;
-                GameObject[] Arr = GameObject.FindGameObjectsWithTag("Player");
-
             }
 
             if (IsActionTi)
             {
+
                 Ray ray = new Ray(Player.position + new Vector3(0, 1.7f, 0), Player.forward * 3);
                 Debug.DrawRay(Player.position + new Vector3(0, 1.7f, 0), Player.forward * 3, Color.blue);
+
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {
@@ -337,12 +343,9 @@ namespace DefaultNamespace
                     if (hit.collider.gameObject.layer==6)
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                        if (hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                        if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                         {
-                            if (customAttr == null || customAttr.id == null)
-                            {
-                                return;
-                            }
+                            return;
                         }
 #endif
                             

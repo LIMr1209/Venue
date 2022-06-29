@@ -5,88 +5,122 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-	public class StarterAssetsInputs : MonoBehaviour
-	{
-		[Header("角色移动输入的值")]
-		public Vector2 move;
-		public Vector2 look;
-		public bool jump;
-		public bool sprint;
+    public class StarterAssetsInputs : MonoBehaviour
+    {
+        [Header("角色移动输入的值")] public Vector2 move;
+        public Vector2 look;
+        public bool jump;
+        public bool sprint;
+        public bool yes;
+        public bool no;
+        public bool wave;
+        public bool smile;
 
-		[Header("移动设置")]
-		public bool analogMovement;
-		[Tooltip("是否能跳跃")]
-		public bool jumpAllow = true;
+        [Header("移动设置")] public bool analogMovement;
+        [Tooltip("是否能跳跃")] public bool jumpAllow = true;
 
-		[Header("鼠标光标设置")]
-		[Tooltip("显示鼠标")]
-		public bool cursorLocked = false;
-		[Tooltip("不锁定视角")]
-		public bool cursorInputForLook = true;
+        [Header("鼠标光标设置")] [Tooltip("显示鼠标")] public bool cursorLocked = false;
+        [Tooltip("不锁定视角")] public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
-		}
+        public void OnMove(InputValue value)
+        {
+            MoveInput(value.Get<Vector2>());
+        }
 
-		public void OnLook(InputValue value)
-		{
-			if(cursorInputForLook)
-			{
-				LookInput(value.Get<Vector2>());
-			}
-		}
+        public void OnLook(InputValue value)
+        {
+            if (cursorInputForLook)
+            {
+                LookInput(value.Get<Vector2>());
+            }
+        }
 
-		// private void Update()
-		// {
-		// 	Debug.Log(look);
-		// }
+        public void OnJump(InputValue value)
+        {
+            if (jumpAllow)
+            {
+                JumpInput(value.isPressed);
+            }
+        }
 
-		public void OnJump(InputValue value)
-		{
-			if (jumpAllow)
-			{
-				JumpInput(value.isPressed);
-			}
-		}
+        public void OnSprint(InputValue value)
+        {
+            SprintInput(value.isPressed);
+        }
 
-		public void OnSprint(InputValue value)
-		{
-			SprintInput(value.isPressed);
-		}
+        public void OnYes(InputValue value)
+        {
+            YesInput(value.isPressed);
+        }
+
+        public void OnNo(InputValue value)
+        {
+            NoInput(value.isPressed);
+        }
+
+        public void OnWave(InputValue value)
+        {
+            WaveInput(value.isPressed);
+        }
+
+        public void OnSmile(InputValue value)
+        {
+            SmileInput(value.isPressed);
+        }
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
-		{
-			move = newMoveDirection;
-		} 
+        public void MoveInput(Vector2 newMoveDirection)
+        {
+            move = newMoveDirection;
+        }
 
-		public void LookInput(Vector2 newLookDirection)
-		{
-			look = newLookDirection;
-		}
+        public void LookInput(Vector2 newLookDirection)
+        {
+            look = newLookDirection;
+        }
 
-		public void JumpInput(bool newJumpState)
-		{
-			jump = newJumpState;
-		}
+        public void JumpInput(bool newJumpState)
+        {
+            jump = newJumpState;
+        }
 
-		public void SprintInput(bool newSprintState)
-		{
-			sprint = newSprintState;
-		}
+        public void SprintInput(bool newSprintState)
+        {
+            sprint = newSprintState;
+        }
 
-		private void OnApplicationFocus(bool hasFocus)
-		{
-			SetCursorState(cursorLocked);
-		}
+        public void YesInput(bool newYesState)
+        {
+            yes = newYesState;
+        }
 
-		private void SetCursorState(bool newState)
-		{
-			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
-		}
-	}
-	
+        public void NoInput(bool newNoState)
+        {
+            no = newNoState;
+        }
+
+        public void WaveInput(bool newWaveState)
+        {
+            wave = newWaveState;
+        }
+
+        public void SmileInput(bool newSmileState)
+        {
+            smile = newSmileState;
+        }
+
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            SetCursorState(cursorLocked);
+        }
+
+
+        private void SetCursorState(bool newState)
+        {
+            Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+        }
+    }
 }
