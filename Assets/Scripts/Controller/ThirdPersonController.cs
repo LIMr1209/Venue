@@ -101,6 +101,7 @@ namespace StarterAssets
         private int _animIDNo;
         private int _animIDWave;
         private int _animIDSmile;
+        private int _animIDDead;
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
         private PlayerInput _playerInput;
@@ -191,6 +192,7 @@ namespace StarterAssets
             _animIDNo = Animator.StringToHash("No");
             _animIDWave = Animator.StringToHash("Wave");
             _animIDSmile = Animator.StringToHash("Smile");
+            _animIDDead = Animator.StringToHash("Dead");
         }
 
         private void GroundedCheck()
@@ -397,6 +399,7 @@ namespace StarterAssets
                 _animator.SetBool(_animIDNo, _input.no);
                 _animator.SetBool(_animIDWave, _input.wave);
                 _animator.SetBool(_animIDSmile, _input.smile);
+                _animator.SetBool(_animIDDead, _input.dead);
             }
         }
 
