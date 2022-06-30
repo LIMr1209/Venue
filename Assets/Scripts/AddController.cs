@@ -5,7 +5,7 @@ namespace DefaultNamespace
 {
     public class AddController : MonoBehaviour
     {
-        private bool visual = false; // 第一人称 第三人称切换
+        public bool visual = false; // 第一人称 第三人称切换  true第一人称  false第三人称
 
         // private bool hasController = false;
         private string controllerAb = "controller";
