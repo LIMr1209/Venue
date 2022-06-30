@@ -53,8 +53,8 @@ namespace DefaultNamespace
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     if (controller) controller.AddThird();
-                    // OpusShow opusShow = FindObjectOfType<OpusShow>();
-                    // if (opusShow) opusShow.enabled = true;
+                    OpusShow opusShow = FindObjectOfType<OpusShow>();
+                    if (opusShow) opusShow.enabled = true;
                     AbInit.instances.FinishSlider();
                     
                     Light[] lights = FindObjectsOfType<Light>();
@@ -67,16 +67,6 @@ namespace DefaultNamespace
                     }
                 })); 
 #endif             
-                // StartCoroutine(AbInit.instances.DownloadTexture("https://s3.taihuoniao.com/unity/photo_studio_01_1k.hdr", (texture) =>
-                // {
-                //     Material material = new Material("hdri");
-                //     Shader shader1 = Shader.Find("Skybox/Panoramic");
-                //     material.shader = shader1;
-                //     material.mainTexture = texture;
-                //     RenderSettings.skybox = material;
-                //     DynamicGI.UpdateEnvironment();
-                // }
-                // ));
             
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>

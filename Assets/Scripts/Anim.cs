@@ -1,22 +1,40 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace
+namespace StarterAssets
 {
     public class Anim : StateMachineBehaviour
     {
+        private StarterAssetsInputs starterAssetsInputs;
+        private int _animIDYes;
+        private int _animIDNo;
+        private int _animIDWave;
+        private int _animIDSmile;
+        private int _animIDDead;
+        
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo,
             int layerIndex)
         {
+            starterAssetsInputs = animator.gameObject.GetComponent<StarterAssetsInputs>();
+            _animIDYes = Animator.StringToHash("Yes");
+            _animIDNo = Animator.StringToHash("No");
+            _animIDWave = Animator.StringToHash("Wave");
+            _animIDSmile = Animator.StringToHash("Smile");
+            _animIDDead = Animator.StringToHash("Dead");
         }
 
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo,
             int layerIndex)
         {
-            int animIDYes = Animator.StringToHash("Yes");
-            bool yes = animator.GetBool(animIDYes);
-            animator.SetBool(animIDYes, false);
-            yes = animator.GetBool(animIDYes);
-            Debug.Log(yes);
+            animator.SetBool(_animIDYes, false);
+            animator.SetBool(_animIDNo, false);
+            animator.SetBool(_animIDWave, false);
+            animator.SetBool(_animIDSmile, false);
+            animator.SetBool(_animIDDead, false);
+            starterAssetsInputs.yes = false;
+            starterAssetsInputs.no = false;
+            starterAssetsInputs.wave = false;
+            starterAssetsInputs.smile = false;
+            starterAssetsInputs.dead = false;
         }
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo,

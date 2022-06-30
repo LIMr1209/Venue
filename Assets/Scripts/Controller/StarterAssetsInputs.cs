@@ -15,6 +15,7 @@ namespace StarterAssets
         public bool no;
         public bool wave;
         public bool smile;
+        public bool dead;
 
         [Header("移动设置")] public bool analogMovement;
         [Tooltip("是否能跳跃")] public bool jumpAllow = true;
@@ -68,6 +69,10 @@ namespace StarterAssets
         {
             SmileInput(value.isPressed);
         }
+        public void OnDead(InputValue value)
+        {
+            DeadInput(value.isPressed);
+        }
 #endif
 
 
@@ -110,8 +115,12 @@ namespace StarterAssets
         {
             smile = newSmileState;
         }
-
-
+        
+        public void DeadInput(bool newSmileState)
+        {
+            dead = newSmileState;
+        }
+        
         private void OnApplicationFocus(bool hasFocus)
         {
             SetCursorState(cursorLocked);
