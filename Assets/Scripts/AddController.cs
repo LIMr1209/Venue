@@ -58,7 +58,7 @@ namespace DefaultNamespace
                     }
                 ));
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, new Vector3(0,0,0) ,new Vector3(0,0,0),(obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, new Vector3(0,0,0) ,new Vector3(0,-180,0),(obj) =>
                     {
                         _player = obj;
                         _player.SetActive(false);
