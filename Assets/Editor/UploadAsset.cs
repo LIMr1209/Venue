@@ -64,8 +64,8 @@ namespace Editor
         [MenuItem("Tools/上传构建")]
         public static void UploadBuild()
         {
-            string buildPath = @"C:\Users\thn\Desktop\VenueBuild";
-            string suffixPath = @"C:\Users\thn\Desktop\";
+            string buildPath = @"C:\Users\pc\Desktop\VenueBuild";
+            string suffixPath = @"C:\Users\pc\Desktop\";
             List<string> files = new List<string>();
             QiNiuHelp.ForeachFile(buildPath, ref files);
             foreach (string i in files)
@@ -84,11 +84,11 @@ namespace Editor
             // 刷新cdn 缓存
             //QiNiuHelp.RefreshDirs("unity/VenueBuild/");
             string[] urls = new[]
-            {
-                "unity/VenueBuild/Build/VenueBuild.data",
-                "unity/VenueBuild/Build/VenueBuild.framework.js",
-                "unity/VenueBuild/Build/VenueBuild.loader.js",
-                "unity/VenueBuild/Build/VenueBuild.wasm"
+ {
+                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.data",
+                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.framework.js",
+                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.loader.js",
+                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.wasm"
             };
             QiNiuHelp.RefreshFiles(urls);
 

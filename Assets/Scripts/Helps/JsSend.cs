@@ -34,6 +34,14 @@ namespace DefaultNamespace
             OpusShow.ReplaceArtImage(data);
         }
 
+        public void JsSetShowcaseArt(string strParams)
+        {
+            Debug.Log("接收画父物体");
+            Debug.Log(strParams);
+            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
+            OpusShow.ReplaceArtImage(data);
+        }
+
         // 接收画框名 聚焦画框
         public void JsFocusArt(string strParams)
         {
