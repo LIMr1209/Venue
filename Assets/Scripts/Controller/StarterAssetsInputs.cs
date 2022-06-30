@@ -13,7 +13,7 @@ namespace StarterAssets
         public bool sprint;
         public bool yes;
         public bool no;
-        public bool wave;
+        public bool applaud;
         public bool smile;
         public bool dead;
 
@@ -37,14 +37,6 @@ namespace StarterAssets
             }
         }
         
-        public void OnQELook(InputValue value)
-        {
-            if (cursorInputForLook)
-            {
-                LookInput(value.Get<Vector2>());
-            }
-        }
-
         public void OnJump(InputValue value)
         {
             if (jumpAllow)
@@ -68,9 +60,9 @@ namespace StarterAssets
             NoInput(value.isPressed);
         }
 
-        public void OnWave(InputValue value)
+        public void OnApplaud(InputValue value)
         {
-            WaveInput(value.isPressed);
+            ApplaudInput(value.isPressed);
         }
 
         public void OnSmile(InputValue value)
@@ -114,9 +106,9 @@ namespace StarterAssets
             no = newNoState;
         }
 
-        public void WaveInput(bool newWaveState)
+        public void ApplaudInput(bool newWaveState)
         {
-            wave = newWaveState;
+            applaud = newWaveState;
         }
 
         public void SmileInput(bool newSmileState)

@@ -60,9 +60,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Wave",
+                    "name": "Applaud",
                     "type": "Button",
-                    "id": "4d593c6c-0a2e-403c-b25d-928f08bf0ea1",
+                    "id": "592c04fc-1cad-4f45-bcc3-022441c2a003",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -85,15 +85,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "QELook",
-                    "type": "Value",
-                    "id": "1f7ac6fb-d766-4c94-a7fe-585f27ed3e02",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -253,17 +244,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6bf27b7b-82e3-4eaf-95e6-de08111c05db",
-                    "path": "<Keyboard>/i",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "Wave",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "67d252ba-293f-49c2-ab10-bc43beb17f27",
                     "path": "<Keyboard>/o",
                     "interactions": "",
@@ -285,37 +265,15 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "2D Vector",
-                    "id": "876099c6-48c8-4444-8055-8cc07a2990d9",
-                    "path": "2DVector(mode=1)",
+                    "name": "",
+                    "id": "a90aff67-31aa-465c-8486-d91591d10b13",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "QELook",
-                    "isComposite": true,
+                    "groups": "KeyboardMouse",
+                    "action": "Applaud",
+                    "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "Left",
-                    "id": "558a656a-d9a4-4edf-9428-22b8220d167e",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "QELook",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Right",
-                    "id": "ce837da3-cdb3-40b0-b819-94129370905a",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardMouse",
-                    "action": "QELook",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         }

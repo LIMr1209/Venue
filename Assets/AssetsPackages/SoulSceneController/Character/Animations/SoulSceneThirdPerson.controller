@@ -343,7 +343,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: WaveAni
+  m_Name: ApplaudAni
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -358,7 +358,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: e982a58fb2f0bbe4db4d6f3243522a74, type: 2}
+  m_Motion: {fileID: 7400000, guid: 676c589342567ff4fbcb76cafdd54c59, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -415,7 +415,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
-  - m_Name: Wave
+  - m_Name: Applaud
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -483,7 +483,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: Wave
+    m_ConditionEvent: Applaud
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -793726602968945937}
@@ -892,7 +892,7 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 676c589342567ff4fbcb76cafdd54c59, type: 2}
+    m_Motion: {fileID: 7400000, guid: e982a58fb2f0bbe4db4d6f3243522a74, type: 2}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1

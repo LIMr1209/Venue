@@ -7,7 +7,7 @@ namespace StarterAssets
         private StarterAssetsInputs starterAssetsInputs;
         private int _animIDYes;
         private int _animIDNo;
-        private int _animIDWave;
+        private int _animIDApplaud;
         private int _animIDSmile;
         private int _animIDDead;
         
@@ -17,7 +17,7 @@ namespace StarterAssets
             starterAssetsInputs = animator.gameObject.GetComponent<StarterAssetsInputs>();
             _animIDYes = Animator.StringToHash("Yes");
             _animIDNo = Animator.StringToHash("No");
-            _animIDWave = Animator.StringToHash("Wave");
+            _animIDApplaud = Animator.StringToHash("Applaud");
             _animIDSmile = Animator.StringToHash("Smile");
             _animIDDead = Animator.StringToHash("Dead");
         }
@@ -27,12 +27,12 @@ namespace StarterAssets
         {
             animator.SetBool(_animIDYes, false);
             animator.SetBool(_animIDNo, false);
-            animator.SetBool(_animIDWave, false);
+            animator.SetBool(_animIDApplaud, false);
             animator.SetBool(_animIDSmile, false);
             animator.SetBool(_animIDDead, false);
             starterAssetsInputs.yes = false;
             starterAssetsInputs.no = false;
-            starterAssetsInputs.wave = false;
+            starterAssetsInputs.applaud = false;
             starterAssetsInputs.smile = false;
             starterAssetsInputs.dead = false;
         }

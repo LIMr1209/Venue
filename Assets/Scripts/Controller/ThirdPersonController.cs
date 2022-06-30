@@ -99,7 +99,7 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
         private int _animIDYes;
         private int _animIDNo;
-        private int _animIDWave;
+        private int _animIDApplaud;
         private int _animIDSmile;
         private int _animIDDead;
 
@@ -190,7 +190,7 @@ namespace StarterAssets
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
             _animIDYes = Animator.StringToHash("Yes");
             _animIDNo = Animator.StringToHash("No");
-            _animIDWave = Animator.StringToHash("Wave");
+            _animIDApplaud = Animator.StringToHash("Applaud");
             _animIDSmile = Animator.StringToHash("Smile");
             _animIDDead = Animator.StringToHash("Dead");
         }
@@ -397,7 +397,7 @@ namespace StarterAssets
             {
                 _animator.SetBool(_animIDYes, _input.yes);
                 _animator.SetBool(_animIDNo, _input.no);
-                _animator.SetBool(_animIDWave, _input.wave);
+                _animator.SetBool(_animIDApplaud, _input.applaud);
                 _animator.SetBool(_animIDSmile, _input.smile);
                 _animator.SetBool(_animIDDead, _input.dead);
             }
