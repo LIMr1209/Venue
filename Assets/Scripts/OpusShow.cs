@@ -10,6 +10,7 @@ namespace DefaultNamespace
 {
     public class OpusShow : MonoBehaviour
     {
+        AddController addController;
         private RaycastHit _raycastHit;
         private Vector3 _velocity = Vector3.zero;
         private Vector3 startPoint;
@@ -32,6 +33,7 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            addController = GetComponent<AddController>();
             isClick = true;
             isPlayerMove = false;
             Player = GameObject.FindWithTag("Player").transform;
@@ -40,8 +42,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            //-3.141593    1.570535    0
-            if (Input.GetKeyDown(KeyCode.M))
+            if (Input.GetKeyDown(KeyCode.G))
             {
                 GameObject art = GameObject.Find("showcase-022");
                 Quaternion aaa = art.transform.localRotation;
@@ -51,7 +52,6 @@ namespace DefaultNamespace
                 art.transform.localRotation = new Quaternion(0, 0, 0, 1); 
                 //art.transform.localEulerAngles = new Vector3(1.570535f, -3.141593f, 0);
             }
-
 
 
             OnFocusArtDic();
@@ -176,18 +176,21 @@ namespace DefaultNamespace
         // 取消聚焦
         public void CancelFocusArt()
         {
-                Player.position = startPoint;
-            Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = true;
+            Player.position = startPoint;
+            if (!addController.visual)
+            {
+                Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = true;
+            }
             transform.DOMove(Player.position, 0.1f);
-                transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
-                {
+            transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
+            {
                     // 启用人物控制器
                     ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
-                    if (controller) controller.enabled = true;
-                    CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-                    if (virtualCamera) virtualCamera.enabled = true;
-                    isClick = true;
-                    IsActionTi = true;
+                if (controller) controller.enabled = true;
+                CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+                if (virtualCamera) virtualCamera.enabled = true;
+                isClick = true;
+                IsActionTi = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
                     Tools.canalFocus();  // 调用前端取消聚焦
 #endif
@@ -237,13 +240,13 @@ namespace DefaultNamespace
             CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
             TargetArt = art;
-            
             Vector3 point = Vector3.zero;
             float index = OnGetArtLengDic(art) * -2;
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
-            for(int a = 0; a < art.parent.childCount; a++)
+            point = art.position;
+            for (int a = 0; a < art.parent.childCount; a++)
             {
                 if (art.parent.GetChild(a).name.Contains("point"))
                 {
@@ -251,7 +254,6 @@ namespace DefaultNamespace
                     startPoint = point;
                 }
             }
-            point = art.position;
             startPoint = point;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y + (index * indexDot),
                 art.localPosition.z);
@@ -263,7 +265,10 @@ namespace DefaultNamespace
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
                 Player.position = point + new Vector3(-0.3f*indexDot, -1f, 0);
-                Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = false;
+                if (!addController.visual)
+                {
+                    Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = false;
+                }
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -274,6 +279,7 @@ namespace DefaultNamespace
 #endif
             });
         }
+
 
 
         public float OnGetArtLengDic(Transform art)
