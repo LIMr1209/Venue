@@ -214,14 +214,14 @@ namespace DefaultNamespace
                 }
                 
                 Vector3 artPosition = new Vector3(i.position[0], -i.position[1], i.position[2]);
-                //Quaternion artQuaternion = new Quaternion(i.quaternion[0], i.quaternion[1], i.quaternion[2],i.quaternion[3]);
+                Quaternion artQuaternion = new Quaternion(i.quaternion[0], i.quaternion[1], i.quaternion[2],i.quaternion[3]);
                 Vector3 artScala = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
                 art.transform.localPosition = artPosition;
-                //art.transform.localRotation = artQuaternion;
+                art.transform.localRotation = artQuaternion;
                 art.transform.localScale = artScala;
-                //Debug.Log("name ：" + i.name + " : " + "artPosition : "+ artPosition +
-                    //"artQuaternion : " + artQuaternion + "artScala : " + artScala);
-                Debug.Log("name ：" + i.name + " : " + "artPosition : " + artPosition +"artScala : " + artScala);
+                Debug.Log("name ：" + i.name + " : " + "artPosition : "+ artPosition +
+                    "artQuaternion : " + artQuaternion + "artScala : " + artScala);
+                //Debug.Log("name ：" + i.name + " : " + "artPosition : " + artPosition +"artScala : " + artScala);
 
                 //Debug.Log("i.name : " + i.name);
                 //for (int r = 0; r < i.rotate.Length; r++)
