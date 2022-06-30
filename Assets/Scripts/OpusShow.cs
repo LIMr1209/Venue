@@ -177,7 +177,8 @@ namespace DefaultNamespace
         public void CancelFocusArt()
         {
                 Player.position = startPoint;
-                transform.DOMove(Player.position, 0.1f);
+            Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = true;
+            transform.DOMove(Player.position, 0.1f);
                 transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
                 {
                     // 启用人物控制器
@@ -218,6 +219,7 @@ namespace DefaultNamespace
                 art.transform.localPosition = artPosition;
                 //art.transform.localRotation = Quaternion.Euler(artRotate);
                 art.transform.localScale = artScala;
+                Debug.Log(i.name + " : " + "i.position : " + i.position + "i.scale : " + i.scale);
                 //Debug.Log("i.name : " + i.name);
                 //for (int r = 0; r < i.rotate.Length; r++)
                 //{
@@ -270,6 +272,7 @@ namespace DefaultNamespace
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
                 Player.position = point + new Vector3(-0.3f*indexDot, -1f, 0);
+                Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = false;
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
