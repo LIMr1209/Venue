@@ -3,5 +3,5 @@ guid: 4dfdf4de8cccbfe4d99b7c867ce6ed19
 PrefabImporter:
   externalObjects: {}
   userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  assetBundleName: controller/playerfollowcamera
+  assetBundleVariant: ab

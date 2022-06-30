@@ -36,6 +36,14 @@ namespace StarterAssets
                 LookInput(value.Get<Vector2>());
             }
         }
+        
+        public void OnQELook(InputValue value)
+        {
+            if (cursorInputForLook)
+            {
+                LookInput(value.Get<Vector2>());
+            }
+        }
 
         public void OnJump(InputValue value)
         {
