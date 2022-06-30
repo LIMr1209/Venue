@@ -53,8 +53,8 @@ namespace DefaultNamespace
                 {
                     AddController controller = FindObjectOfType<AddController>();
                     if (controller) controller.AddThird();
-                    OpusShow opusShow = FindObjectOfType<OpusShow>();
-                    if (opusShow) opusShow.enabled = true;
+                    // OpusShow opusShow = FindObjectOfType<OpusShow>();
+                    // if (opusShow) opusShow.enabled = true;
                     AbInit.instances.FinishSlider();
                     
                     Light[] lights = FindObjectsOfType<Light>();
@@ -103,12 +103,12 @@ namespace DefaultNamespace
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
-            // if (Input.GetKeyDown(KeyCode.N))
-            // {
-            //     string text =
-            //         "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
-            //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            // }
+            if (Input.GetKeyDown(KeyCode.N))
+            {
+                string text =
+                    "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
+                FindObjectOfType<JsSend>().JsReplaceArtImage(text);
+            }
             // if (Input.GetKeyDown(KeyCode.M))
             // {
             //     Tools.showFocusWindow(Convert.ToString(398));

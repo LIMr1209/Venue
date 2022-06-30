@@ -20,6 +20,7 @@ namespace DefaultNamespace
         // 接收画框名字 作品id 作品url  替换场景中画框的材质贴图
         public void JsReplaceArtImage(string strParams)
         {
+            Debug.Log("接收作品");
             Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
             OpusShow.ReplaceArtImage(data);
@@ -27,6 +28,16 @@ namespace DefaultNamespace
 
         public void JsSetframeArt(string strParams)
         {
+            Debug.Log("接收画框");
+            Debug.Log(strParams);
+            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
+            OpusShow.ReplaceArtImage(data);
+        }
+
+        public void JsSetShowcaseArt(string strParams)
+        {
+            Debug.Log("接收画父物体");
+            Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
             OpusShow.ReplaceArtImage(data);
         }

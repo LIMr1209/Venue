@@ -86,6 +86,7 @@ namespace DefaultNamespace
             public float[] scale; // 画框缩放值
             public float[] rotate; // 画框旋转值
             public float[] position; // 画框坐标值
+            public float[] quaternion;//画框旋转四元数
         }
 
         [Serializable]
