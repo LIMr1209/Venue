@@ -93,10 +93,13 @@ namespace DefaultNamespace
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
+
             if (Input.GetKeyDown(KeyCode.N))
             {
+                //string text =
+                    //"[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
                 string text =
-                    "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
+                    "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://p4.taihuoniao.com/exhibition_cover/220630/d547f9dd55b1714b1656582308823-0.jpg-m4_3.jpg\",\"quaternion\":[0.7071067811865476,0,0.7071067811865475,0],\"location\":[-0.0036220550537109375,0.003346681594848633,-0.00887298583984375],\"scale\":[0.09148947149515152,0.09148947149515152,0.12227702528948403],\"rotate\":[0,1.5707963267948966,0]}]";
                 FindObjectOfType<JsSend>().JsReplaceArtImage(text);
             }
             // if (Input.GetKeyDown(KeyCode.M))

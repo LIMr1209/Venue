@@ -43,13 +43,13 @@ namespace DefaultNamespace
             //-3.141593    1.570535    0
             if (Input.GetKeyDown(KeyCode.M))
             {
-                GameObject art = GameObject.Find("paintings-022");
-                //Quaternion aaa = art.transform.localRotation;
-                Vector3 aaa = art.transform.localEulerAngles;
+                GameObject art = GameObject.Find("showcase-022");
+                Quaternion aaa = art.transform.localRotation;
+                //Vector3 aaa = art.transform.localEulerAngles;
                 Debug.Log(aaa);
                 //art.transform.localRotation = Quaternion.Euler(new Vector3(1.570535f, -3.141593f, 0));
-                //art.transform.localRotation = new Quaternion(0.70711f, 0.70711f, 0, 0);
-                art.transform.localEulerAngles = new Vector3(1.570535f, -3.141593f, 0);
+                art.transform.localRotation = new Quaternion(0, 0, 0, 1); 
+                //art.transform.localEulerAngles = new Vector3(1.570535f, -3.141593f, 0);
             }
 
 
@@ -204,7 +204,6 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
-                //-3.141593    1.570535    0
                 // 设置自定义id
                 if (i.id != null||i.imageUrl!=null)
                 {
@@ -212,28 +211,17 @@ namespace DefaultNamespace
                     customAttr.artId = i.id;
                     AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
                 }
-                
-                Vector3 artPosition = new Vector3(i.position[0], -i.position[1], i.position[2]);
+                //Vector3 artPosition = new Vector3(i.location[0], -i.location[1], i.location[2]);
                 //Quaternion artQuaternion = new Quaternion(i.quaternion[0], i.quaternion[1], i.quaternion[2],i.quaternion[3]);
-                Vector3 artScala = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-                art.transform.localPosition = artPosition;
-                //art.transform.localRotation = artQuaternion;
-                art.transform.localScale = artScala;
-                //Debug.Log("name ：" + i.name + " : " + "artPosition : "+ artPosition +
-                    //"artQuaternion : " + artQuaternion + "artScala : " + artScala);
-                Debug.Log("name ：" + i.name + " : " + "artPosition : " + artPosition +"artScala : " + artScala);
+                //Vector3 artScala = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+                art.transform.localPosition = new Vector3(-i.location[0], i.location[1]+0.01f, i.location[2]);
+                Debug.Log(art.transform.localRotation);
+                //art.transform.localRotation = new Quaternion(i.quaternion[0], i.quaternion[2], i.quaternion[1], i.quaternion[3]);
+                art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
+                Debug.Log("name ：" + i.name + " : " + "artPosition : "+ art.transform.localPosition +
+                    "artQuaternion : " + art.transform.localRotation + "artScala : " + art.transform.localScale);
+                Debug.Log(i.quaternion[0] + "  " + i.quaternion[1] + "  " + i.quaternion[2] + "  " + i.quaternion[3]);
 
-                //Debug.Log("i.name : " + i.name);
-                //for (int r = 0; r < i.rotate.Length; r++)
-                //{
-                //    Debug.Log("i.rotate"+r+" : " + i.rotate[r]);
-                //}
-
-                //(-0.09, -0.04, -0.09)
-                // 轴方向不一样 可能会有问题
-                // art.transform.localPosition = new Vector3(i.position[0], i.position[1], i.position[2]);
-                // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-                // art.transform.localRotation = Quaternion.Euler(i.position[0], i.position[1], i.position[2]);
             }
         }
 
