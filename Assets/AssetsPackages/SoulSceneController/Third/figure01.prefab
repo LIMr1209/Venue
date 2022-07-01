@@ -96,7 +96,7 @@ MonoBehaviour:
   SpeedChangeRate: 10
   JumpHeight: 1.2
   Gravity: -15
-  QElookSpeed: 0.2
+  QElookSpeed: 1
   JumpTimeout: 0.3
   FallTimeout: 0.15
   Grounded: 1

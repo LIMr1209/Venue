@@ -4,7 +4,6 @@ using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
 // using UnityEngine.EventSystems;
-using System.Collections.Generic;
 
 namespace DefaultNamespace
 {
@@ -14,6 +13,7 @@ namespace DefaultNamespace
         private RaycastHit _raycastHit;
         private Vector3 _velocity = Vector3.zero;
         private Vector3 startPoint;
+        private Quaternion startQuaternion;
         public float smoothTime = 1.0f;
         public int maxDistance = 10;
         private bool isPlayerMove;
@@ -22,7 +22,10 @@ namespace DefaultNamespace
         private bool AddshowcaseList = true;
         private bool IsActionTi = false;
         private bool IsActionTifalse = true;
-        Transform Player;
+        private Transform Player;
+        private ThirdPersonController controller;
+        private CinemachineVirtualCamera virtualCamera;
+        private SkinnedMeshRenderer playerMeshRender;
         Transform TiTrans;
         Transform TargetArt;
 
@@ -37,6 +40,9 @@ namespace DefaultNamespace
             isClick = true;
             isPlayerMove = false;
             Player = GameObject.FindWithTag("Player").transform;
+            controller = Player.GetComponent<ThirdPersonController>();
+            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            playerMeshRender = Player.GetComponentInChildren<SkinnedMeshRenderer>();
 
         }
 
@@ -80,7 +86,6 @@ namespace DefaultNamespace
                                 return;
                             }
 #endif
-                            //FocusArt(art.transform);
                             OnFocusArt(art.transform);
                         }
                     }
@@ -101,9 +106,7 @@ namespace DefaultNamespace
         {
             isClick = false;
             // 禁用人物控制器
-            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
             if (controller) controller.enabled = false;
-            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
             isPlayerMove = false;
             Vector3 point = Vector3.zero;
@@ -182,17 +185,16 @@ namespace DefaultNamespace
         public void CancelFocusArt()
         {
             Player.position = startPoint;
+            Player.rotation = startQuaternion;
             if (!addController.visual)
             {
-                Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = true;
+                playerMeshRender.enabled = true;
             }
             transform.DOMove(Player.position, 0.1f);
             transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
             {
-                    // 启用人物控制器
-                    ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
+                // 启用人物控制器
                 if (controller) controller.enabled = true;
-                CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
                 if (virtualCamera) virtualCamera.enabled = true;
                 isClick = true;
                 IsActionTi = true;
@@ -252,9 +254,7 @@ namespace DefaultNamespace
             isClick = false;
             isPlayerMove = false;
             // 禁用人物控制器
-            ThirdPersonController controller = FindObjectOfType<ThirdPersonController>();
             if (controller) controller.enabled = false;
-            CinemachineVirtualCamera virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             if (virtualCamera) virtualCamera.enabled = false;
             TargetArt = art;
             Vector3 point = Vector3.zero;
@@ -277,14 +277,14 @@ namespace DefaultNamespace
             point.y = art.position.y;
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
-           
+            startQuaternion = lookAtRot;
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
                 Player.position = point + new Vector3(-0.3f*indexDot, -1f, 0);
                 if (!addController.visual)
                 {
-                    Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = false;
+                    playerMeshRender.enabled = false;
                 }
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
