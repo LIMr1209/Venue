@@ -89,6 +89,23 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            // if (Input.GetKeyDown(KeyCode.C))
+            // {
+            //     var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));
+            //     for (int i = 0; i < tArray.Length; i++)
+            //     {
+            //         MeshRenderer t = tArray[i] as MeshRenderer;
+            //         //这个很重要，博主发现如果没有这个代码，unity是不会察觉到编辑器有改动的，自然设置完后直接切换场景改变是不被保存
+            //         //的  如果不加这个代码  在做完更改后 自己随便手动修改下场景里物体的状态 在保存就好了 
+            //         t.gameObject.AddComponent<BoxCollider>();
+            //         if (t.gameObject.TryGetComponent<MeshCollider>(out MeshCollider meshCollider))
+            //         {
+            //             meshCollider.enabled = false;
+            //         }
+            //
+            //     }
+            // }
+
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
