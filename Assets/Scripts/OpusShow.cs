@@ -44,13 +44,18 @@ namespace DefaultNamespace
         {
             if (Input.GetKeyDown(KeyCode.G))
             {
-                GameObject art = GameObject.Find("showcase-022");
-                Quaternion aaa = art.transform.localRotation;
-                //Vector3 aaa = art.transform.localEulerAngles;
-                Debug.Log(aaa);
-                //art.transform.localRotation = Quaternion.Euler(new Vector3(1.570535f, -3.141593f, 0));
-                art.transform.localRotation = new Quaternion(0, 0, 0, 1); 
-                //art.transform.localEulerAngles = new Vector3(1.570535f, -3.141593f, 0);
+                GameObject art1 = GameObject.Find("frames-016");
+                GameObject art2 = GameObject.Find("frames-029");
+                GameObject art3 = GameObject.Find("frames-021");
+                GameObject art4 = GameObject.Find("frames-023");
+                Debug.Log("frames-016"+art1.transform.forward);
+                Debug.Log("frames-029"+art2.transform.forward);
+                Debug.Log("frames-021"+art3.transform.forward);
+                Debug.Log("frames-023"+art4.transform.forward);
+                art1.transform.Translate(-Vector3.right * 2, Space.Self);
+                art2.transform.Translate(-Vector3.right * 2, Space.Self);
+                art3.transform.Translate(-Vector3.right * 2, Space.Self);
+                art4.transform.Translate(-Vector3.right * 2, Space.Self);
             }
 
 
@@ -198,7 +203,7 @@ namespace DefaultNamespace
             isPlayerMove = false;
         }
 
-        public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
+        public static void ReplaceArtImage(JsonData.ArtData[] artDataList, bool isArt=false)
         {
             foreach (JsonData.ArtData i in artDataList)
             {
@@ -207,24 +212,36 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
-                // 设置自定义id
-                if (i.id != null||i.imageUrl!=null)
-                {
-                    CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                    customAttr.artId = i.id;
-                    AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
-                }
-                //Vector3 artPosition = new Vector3(i.location[0], -i.location[1], i.location[2]);
-                //Quaternion artQuaternion = new Quaternion(i.quaternion[0], i.quaternion[1], i.quaternion[2],i.quaternion[3]);
-                //Vector3 artScala = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-                art.transform.localPosition = new Vector3(-i.location[0], i.location[1]+0.01f, i.location[2]);
-                Debug.Log(art.transform.localRotation);
-                //art.transform.localRotation = new Quaternion(i.quaternion[0], i.quaternion[2], i.quaternion[1], i.quaternion[3]);
+                art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
+                art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
                 art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
-                Debug.Log("name ：" + i.name + " : " + "artPosition : "+ art.transform.localPosition +
-                    "artQuaternion : " + art.transform.localRotation + "artScala : " + art.transform.localScale);
-                Debug.Log(i.quaternion[0] + "  " + i.quaternion[1] + "  " + i.quaternion[2] + "  " + i.quaternion[3]);
-
+                if (isArt) 
+                {
+                    if (art.transform.forward.y >= 1)
+                    {
+                        // 设置自定义id
+                        CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                        customAttr.artId = i.id;
+                        AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                    }
+                }
+                if (art.transform.childCount <= 0)
+                {
+                    Transform frames=null;
+                    Transform paintings=null;
+                    for (int a = 0; a < art.transform.parent.childCount; a++)
+                    {
+                        if (art.transform.parent.GetChild(a).name.Contains("frames"))
+                        {
+                            frames = art.transform.parent.GetChild(a);
+                        }
+                        if(art.transform.parent.GetChild(a).name.Contains("paintings"))
+                        {
+                            paintings = art.transform.parent.GetChild(a);
+                        }
+                    }
+                    paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y, frames.localPosition.z);
+                }
             }
         }
 
@@ -245,7 +262,7 @@ namespace DefaultNamespace
             int indexDot = Vector3.Dot(art.parent.up, transform.position - art.parent.position) <= 0 ? 1 : -1;
             art.localPosition = new Vector3(art.localPosition.x, art.localPosition.y - (index * indexDot),
                 art.localPosition.z);
-            point = art.position;
+            //point = art.position;
             for (int a = 0; a < art.parent.childCount; a++)
             {
                 if (art.parent.GetChild(a).name.Contains("point"))

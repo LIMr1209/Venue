@@ -35,7 +35,7 @@ public class LoadSceneTool : MonoBehaviour
     {
         ViewResult<sceneData> memberResult = null;
         Dictionary<string, string> memberRequest = new Dictionary<string, string>();
-        memberRequest["id"] = "99";
+        memberRequest["id"] = "101";
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);
@@ -170,9 +170,9 @@ public class LoadSceneTool : MonoBehaviour
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
         UploadAsset.OnUpLoadAB(buildurl);
-        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
-        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
-        //DeleteAllFile(Application.dataPath + "/Resources",true);
+        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
+        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
+        DeleteAllFile(Application.dataPath + "/Resources",true);
         UnityEditor.AssetDatabase.Refresh();
     }
 
