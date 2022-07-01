@@ -14,6 +14,7 @@ namespace DefaultNamespace
         private RaycastHit _raycastHit;
         private Vector3 _velocity = Vector3.zero;
         private Vector3 startPoint;
+        private Quaternion startQuaternion;
         public float smoothTime = 1.0f;
         public int maxDistance = 10;
         private bool isPlayerMove;
@@ -182,6 +183,9 @@ namespace DefaultNamespace
         public void CancelFocusArt()
         {
             Player.position = startPoint;
+
+            Player.rotation = startQuaternion;
+
             if (!addController.visual)
             {
                 Player.Find("小灵人").GetComponent<SkinnedMeshRenderer>().enabled = true;
@@ -277,7 +281,7 @@ namespace DefaultNamespace
             point.y = art.position.y;
             Vector3 forwordDir = point - art.position;
             Quaternion lookAtRot = Quaternion.LookRotation(-forwordDir);
-           
+            startQuaternion = lookAtRot;
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
