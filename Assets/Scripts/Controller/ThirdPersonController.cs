@@ -38,6 +38,9 @@ namespace StarterAssets
 
         [Tooltip("重力")]
         public float Gravity = -15.0f;
+        
+        [Tooltip("QE look ")]
+        public float QElookSpeed = 0.1f;
 
         [Space(10)]
         [Tooltip("再次跳跃所需的时间。设置为0f可立即再次跳转")]
@@ -221,6 +224,18 @@ namespace StarterAssets
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+            }else if (Keyboard.current[Key.Q].isPressed)
+            {
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+                _cinemachineTargetYaw -= QElookSpeed * deltaTimeMultiplier;
+                _input.qlook = false;
+            }else if (Keyboard.current[Key.E].isPressed)
+            {
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+                _cinemachineTargetYaw += QElookSpeed * deltaTimeMultiplier;
+                _input.elook = false;
             }
 
             // 夹紧旋转，使我们的值限制为360度

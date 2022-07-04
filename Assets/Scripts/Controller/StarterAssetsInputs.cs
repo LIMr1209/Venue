@@ -16,7 +16,8 @@ namespace StarterAssets
         public bool applaud;
         public bool smile;
         public bool dead;
-
+        public bool qlook;
+        public bool elook;
         [Header("移动设置")] public bool analogMovement;
         [Tooltip("是否能跳跃")] public bool jumpAllow = true;
 
@@ -34,6 +35,22 @@ namespace StarterAssets
             if (cursorInputForLook)
             {
                 LookInput(value.Get<Vector2>());
+            }
+        }
+        
+        public void OnQLook(InputValue value)
+        {
+            if (cursorInputForLook)
+            {
+                // KeyQInput(value.isPressed);
+            }
+        }
+        
+        public void OnELook(InputValue value)
+        {
+            if (cursorInputForLook)
+            {
+                // KeyEInput(value.isPressed);
             }
         }
         
@@ -84,6 +101,16 @@ namespace StarterAssets
         public void LookInput(Vector2 newLookDirection)
         {
             look = newLookDirection;
+        }
+        
+        public void KeyQInput(bool qLookStat)
+        {
+            qlook = qLookStat;
+        }
+        
+        public void KeyEInput(bool eLookStat)
+        {
+            elook = eLookStat;
         }
 
         public void JumpInput(bool newJumpState)
