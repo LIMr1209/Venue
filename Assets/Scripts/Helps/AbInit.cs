@@ -179,7 +179,7 @@ namespace DefaultNamespace
                 callback(obj);
             }
 
-            AB.UnloadAsync(false);
+            // AB.UnloadAsync(false);
         }
 
         public delegate void MaterialCallback(Material material);
@@ -245,17 +245,20 @@ namespace DefaultNamespace
         {
             AssetBundle AB = null;
 
-            UnityWebRequest requestAB = UnityWebRequest.Get(url);
+            // UnityWebRequest requestAB = UnityWebRequest.Get(url);
+            UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(url);
             yield return requestAB.SendWebRequest();
             if (!string.IsNullOrEmpty(requestAB.error))
             {
                 throw new Exception(requestAB.error);
             }
+            
+            AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
 
-            byte[] abData = requestAB.downloadHandler.data;
+            // byte[] abData = requestAB.downloadHandler.data;
             // abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
 
-            AB = AssetBundle.LoadFromMemory(abData);
+            // AB = AssetBundle.LoadFromMemory(abData);
 
             if (AB == null)
             {

@@ -15,6 +15,9 @@ namespace DefaultNamespace
 
         [HideInInspector]
         public string sceneUrl;
+        private float _deltaTime;
+        private int _count;
+        public float fps;
 
         private void Awake()
         {
@@ -91,6 +94,15 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            _count++;
+            _deltaTime += Time.deltaTime;
+
+            if (_count % 60 == 0)
+            {
+                _count = 1;
+                fps = 60f/_deltaTime;
+                _deltaTime = 0;
+            }
             // if (Input.GetKeyDown(KeyCode.C))
             // {
             //     var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));

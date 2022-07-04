@@ -55,6 +55,11 @@ namespace DefaultNamespace
             FindObjectOfType<OpusShow>().CancelFocusArt();
         }
 
+        
+        public void JsConsoleFps()
+        {
+            Debug.Log(Mathf.Ceil(FindObjectOfType<InitialScene>().fps));
+        }
 
     }
 }
