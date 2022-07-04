@@ -54,10 +54,10 @@ namespace DefaultNamespace
                 GameObject art2 = GameObject.Find("frames-029");
                 GameObject art3 = GameObject.Find("frames-021");
                 GameObject art4 = GameObject.Find("frames-023");
-                Debug.Log("frames-016"+art1.transform.forward);
-                Debug.Log("frames-029"+art2.transform.forward);
-                Debug.Log("frames-021"+art3.transform.forward);
-                Debug.Log("frames-023"+art4.transform.forward);
+                Debug.Log("frames-016" + art1.transform.forward);
+                Debug.Log("frames-029" + art2.transform.forward);
+                Debug.Log("frames-021" + art3.transform.forward);
+                Debug.Log("frames-023" + art4.transform.forward);
                 art1.transform.Translate(-Vector3.right * 2, Space.Self);
                 art2.transform.Translate(-Vector3.right * 2, Space.Self);
                 art3.transform.Translate(-Vector3.right * 2, Space.Self);
@@ -201,11 +201,11 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                     Tools.canalFocus();  // 调用前端取消聚焦
 #endif
-                });
+            });
             isPlayerMove = false;
         }
 
-        public static void ReplaceArtImage(JsonData.ArtData[] artDataList, bool isArt=false)
+        public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
         {
             foreach (JsonData.ArtData i in artDataList)
             {
@@ -214,10 +214,17 @@ namespace DefaultNamespace
                 {
                     throw (new Exception("画框不存在"));
                 }
+                if (i.id != null && i.imageUrl != null)
+                {
+                    // 设置自定义id
+                    CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                    customAttr.artId = i.id;
+                    AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                }
                 art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
                 art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
                 art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
-                if (isArt) 
+                if (i.id != null && i.imageUrl != null)
                 {
                     if (art.transform.forward.y >= 1)
                     {
@@ -229,15 +236,15 @@ namespace DefaultNamespace
                 }
                 if (art.transform.childCount <= 0)
                 {
-                    Transform frames=null;
-                    Transform paintings=null;
+                    Transform frames = null;
+                    Transform paintings = null;
                     for (int a = 0; a < art.transform.parent.childCount; a++)
                     {
                         if (art.transform.parent.GetChild(a).name.Contains("frames"))
                         {
                             frames = art.transform.parent.GetChild(a);
                         }
-                        if(art.transform.parent.GetChild(a).name.Contains("paintings"))
+                        if (art.transform.parent.GetChild(a).name.Contains("paintings"))
                         {
                             paintings = art.transform.parent.GetChild(a);
                         }
@@ -281,7 +288,7 @@ namespace DefaultNamespace
             transform.DOMove(point, 1);
             transform.DORotateQuaternion(lookAtRot, 1).OnComplete(() =>
             {
-                Player.position = point + new Vector3(-0.3f*indexDot, -1f, 0);
+                Player.position = point + new Vector3(-0.3f * indexDot, -1f, 0);
                 if (!addController.visual)
                 {
                     playerMeshRender.enabled = false;
@@ -340,7 +347,7 @@ namespace DefaultNamespace
             //    }
             //    AddshowcaseList = false;
             //}
-        
+
             if (AddshowcaseList)
             {
                 IsActionTi = true;
@@ -357,7 +364,7 @@ namespace DefaultNamespace
                 if (Physics.Raycast(ray, out hit, 3))
                 {
                     //name.Contains("paintings")
-                    if (hit.collider.gameObject.layer==6)
+                    if (hit.collider.gameObject.layer == 6)
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
                         if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -365,8 +372,8 @@ namespace DefaultNamespace
                             return;
                         }
 #endif
-                            
-                        if(TiTrans==null|| TiTrans != hit.transform)
+
+                        if (TiTrans == null || TiTrans != hit.transform)
                         {
                             TiTrans = hit.transform;
                             OnActionTi(true);

@@ -23,7 +23,7 @@ namespace DefaultNamespace
             Debug.Log("接收作品");
             Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            OpusShow.ReplaceArtImage(data,true);
+            OpusShow.ReplaceArtImage(data);
         }
 
         public void JsSetframeArt(string strParams)
