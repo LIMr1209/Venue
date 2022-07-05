@@ -7,29 +7,19 @@ namespace DefaultNamespace
     {
         public bool visual = false; // 第一人称 第三人称切换  true第一人称  false第三人称
 
-        // private bool hasController = false;
         private string controllerAb = "controller";
-        // private string firstFollowCameraAb = "firstplayerfollowcamera";
 
         private string thirdFollowCameraAb = "playerfollowcamera";
 
-        // private string capsuleAb = "playercapsule";
         // private string armatureAb = "playerarmature";
         private string armatureAb = "figure01";
 
-        // private GameObject _firstPlayerFollowCamera;
-        // private GameObject _thirdPlayerFollowCamera;
         private GameObject _playerFollowCamera;
         private CinemachineVirtualCamera _cinemachineVirtualCamera;
         private Cinemachine3rdPersonFollow _playerFollowCamera3rdBody;
         private GameObject _player;
         private Transform cinemachineTarget;
         public float zoomSpeed = 10.0f;
-
-        private void Start()
-        {
-            // AddThird();
-        }
 
         private void Awake()
         {
@@ -71,19 +61,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            // if (!hasController)
-            // {
-            //     AddThird();
-            // }
-            if (Input.GetKeyDown("v"))
-            {
-                if (_player)
-                {
-                    Vector3 location = _player.transform.localPosition;
-                    Vector3 rotation = _player.transform.localRotation.eulerAngles;
-                    SwithVisul(location, rotation);
-                }
-            }
+            if (Input.GetKeyDown("v") && _player) SwithVisul();
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
@@ -104,34 +82,14 @@ namespace DefaultNamespace
             // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
         }
 
-        private void SwithVisul(Vector3 location, Vector3 rotation)
+        private void SwithVisul()
         {
-            // if (visual)
-            // {
-            //     _firstPlayerFollowCamera.SetActive(false);
-            //     AddThird(location, rotation);
-            //     visual = false;
-            // }
-            // else
-            // {
-            //     _thirdPlayerFollowCamera.SetActive(false);
-            //     AddFirst(location, rotation);
-            //     visual = true;
-            // }
-            if (visual)
-            {
-                AddThird(location, rotation);
-            }
-            else
-            {
-                AddFirst(location, rotation);
-            }
+            if (visual) AddThird();
+            else AddFirst();
         }
 
         public void AddFirst()
         {
-            // Vector3 location = new Vector3(-85, -2, 0);
-            // Vector3 rotation = new Vector3(0, 90, 0);
             Vector3 location = Vector3.zero;
             Vector3 rotation = Vector3.zero;
             AddFirst(location, rotation);
@@ -139,17 +97,10 @@ namespace DefaultNamespace
 
         private void AddFirst(Vector3 location, Vector3 rotation)
         {
-            // if (_firstPlayerFollowCamera)
-            // {
-            //     _firstPlayerFollowCamera.SetActive(true);
-            //     
-            // }
-
             if (_player)
             {
                 _player.SetActive(true);
                 _cinemachineVirtualCamera.Follow = cinemachineTarget;
-                // _firstPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
                 visual = true;
                 SetFollowCameraBody();
@@ -158,8 +109,6 @@ namespace DefaultNamespace
 
         public void AddThird()
         {
-            // Vector3 location = new Vector3(-85, -1.5f, 0);
-            // Vector3 rotation = new Vector3(0, 90, 0);
             Vector3 location = Vector3.zero;
             Vector3 rotation = Vector3.zero;
             AddThird(location, rotation);
@@ -167,18 +116,11 @@ namespace DefaultNamespace
 
         public void AddThird(Vector3 location, Vector3 rotation)
         {
-            // if (_thirdPlayerFollowCamera)
-            // {
-            //     _thirdPlayerFollowCamera.SetActive(true);
-            // }
-
             if (_player)
             {
                 _player.SetActive(true);
                 _cinemachineVirtualCamera.Follow = cinemachineTarget;
-                // _thirdPlayerFollowCamera.GetComponent<CinemachineVirtualCamera>().Follow = cinemachineTarget;
                 _player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
-                // hasController = true;
                 visual = false;
                 SetFollowCameraBody();
             }

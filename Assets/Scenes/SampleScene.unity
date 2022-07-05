@@ -1098,6 +1098,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneModel: scene
   sceneUrl: https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab
+  fps: 0
 --- !u!114 &4895661117118384628
 MonoBehaviour:
   m_ObjectHideFlags: 0
