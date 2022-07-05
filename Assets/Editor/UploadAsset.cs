@@ -72,7 +72,7 @@ namespace Editor
             {
                 // 上传文件名
                 string keySuffix = i.Replace(suffixPath, "").Replace("\\", "/");
-                string key = Path.Combine("unity", keySuffix).Replace("\\", "/");
+                string key = Path.Combine(Globle.QiNiuPrefix, keySuffix).Replace("\\", "/");
                 // 加密
                 HttpResult result = QiNiuHelp.Upload(i, key, Globle.AbBucket, true);
                 if (result.Code != 200)
@@ -84,11 +84,11 @@ namespace Editor
             // 刷新cdn 缓存
             //QiNiuHelp.RefreshDirs("unity/VenueBuild/");
             string[] urls = new[]
- {
-                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.data",
-                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.framework.js",
-                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.loader.js",
-                "https://s3.taihuoniao.com/unity/VenueBuild/Build/VenueBuild.wasm"
+            {
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.data"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.framework.js"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.loader.js"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.wasm"),
             };
             QiNiuHelp.RefreshFiles(urls);
 

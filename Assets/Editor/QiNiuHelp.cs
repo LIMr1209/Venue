@@ -150,7 +150,7 @@ namespace Editor
             Mac mac = new Mac(Globle.QiNiuAccessKey, Globle.QiNiuSecretKey);
             Config config = GetConfig(bucket);
             BucketManager bucketManager = new BucketManager(mac, config);
-            ListResult listRet = bucketManager.ListFiles("frfile", dir, "", 0, "#");
+            ListResult listRet = bucketManager.ListFiles(Globle.SceneBucket, dir, "", 0, "#");
             if (listRet.Code != (int)HttpCode.OK)
             {
                 Debug.Log(listRet.ToString());

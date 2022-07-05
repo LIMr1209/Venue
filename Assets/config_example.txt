@@ -1,0 +1,19 @@
+[Asset]
+Vision = 2022063005
+QiNiuAccessKey = ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy
+QiNiuSecretKey = r-NUrKsnRBEwTQxbLONVrK9tPuncXyHmcq4BkSc7
+SceneBucket = frfile
+FrfileHost = https://cdn1.d3ingo.com
+AbBucket = frstatic
+AssetHost = https://s3.taihuoniao.com
+QiNiuPrefix = unity/venue
+AssetBundleDir = AssetsBundles
+
+
+[Aes]
+AesIv = 1234567890123456
+AesKey = 12345678901234561234567890123456
+
+
+[Service]
+Host = http://render-dev.d3ingo.com

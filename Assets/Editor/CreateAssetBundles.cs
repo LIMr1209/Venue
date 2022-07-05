@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using DefaultNamespace;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Windows;
 
@@ -9,7 +10,7 @@ public class CreateAssetBundles
         //要创建的目录
         string[] arguments = System.Environment.GetCommandLineArgs();
         Debug.Log(arguments);
-        string assetBundleDirectory = "Assets/AssetsBundles";
+        string assetBundleDirectory = "Assets/"+Globle.AssetBundleDir;
         Debug.Log(11111);
         if(!Directory.Exists(assetBundleDirectory))
         {
@@ -38,29 +39,11 @@ public class CreateAssetBundles
         BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
     }
     
-    public static void TaestBuildAllAssetBundlesLocal()
-    {
-        //要创建的目录
-        string assetBundleDirectory = "Assets/AssetsBundles";
-        if (!Directory.Exists(assetBundleDirectory))
-        {
-            Directory.CreateDirectory(assetBundleDirectory);
-        }
-        //三个参数：第一个是创建的目录位置，第二个是AssetBundle的压缩方式，第三个是创建的平台。
-        // 压缩方式 默认  LZMA
-        // UncompressedAssetBundle 不压缩
-        // ChunkBasedCompression lz4 压缩  折中
-        // WebGL 构建
-        BuildPipeline.BuildAssetBundles(assetBundleDirectory, BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.WebGL);
-    }
-
-
-
     [MenuItem("AB/Build")]
     public static void BuildAllAssetBundlesLocal()
     {
         //要创建的目录
-        string assetBundleDirectory = "Assets/AssetsBundles";
+        string assetBundleDirectory = "Assets/"+Globle.AssetBundleDir;
         if (!Directory.Exists(assetBundleDirectory))
         {
             Directory.CreateDirectory(assetBundleDirectory);
