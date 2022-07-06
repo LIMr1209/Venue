@@ -14,6 +14,7 @@ namespace DefaultNamespace
         private Animator _animator;
         private CharacterController _character;
         private int _animIDSpeed;
+        private int _animIDJump;
 
         private void Awake()
         {
@@ -38,8 +39,8 @@ namespace DefaultNamespace
             agent.updatePosition = false; // 当为 false 时：代理位置不会应用于变换位置，反之亦然。 解决走不动的问题
             _animator = GetComponent<Animator>();
             _character = GetComponent<CharacterController>();
-        
             _animIDSpeed = Animator.StringToHash("Speed");
+            _animIDJump = Animator.StringToHash("Jump");
             AgentCamera agentCamera = FindObjectOfType<AgentCamera>();
             if (agentCamera) agentCamera.enabled = true;
 
@@ -71,6 +72,11 @@ namespace DefaultNamespace
 
         public void MovePoint(Vector3 targetPos)
         {
+            if (_animator.GetBool(_animIDJump))
+            {
+                return;
+            }
+
             if (!agent.hasPath)
             {
                 agent.enabled = false; // 重新启动 让代理的位置跟着代理  问题就是 连续点击寻路时会卡顿
