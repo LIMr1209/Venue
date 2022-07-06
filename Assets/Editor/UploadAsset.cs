@@ -85,10 +85,10 @@ namespace Editor
             //QiNiuHelp.RefreshDirs("unity/VenueBuild/");
             string[] urls = new[]
             {
-                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.data"),
-                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.framework.js"),
-                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.loader.js"),
-                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.wasm"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.data").Replace("\\","/"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.framework.js").Replace("\\","/"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.loader.js").Replace("\\","/"),
+                Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, "VenueBuild/Build/VenueBuild.wasm").Replace("\\","/"),
             };
             QiNiuHelp.RefreshFiles(urls);
 

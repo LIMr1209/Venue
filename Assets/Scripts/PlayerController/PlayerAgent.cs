@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace DefaultNamespace
@@ -14,7 +15,7 @@ namespace DefaultNamespace
         private CharacterController _character;
         private int _animIDSpeed;
 
-        private void Start()
+        private void Awake()
         {
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(Aoe, "", (obj) =>
@@ -23,7 +24,12 @@ namespace DefaultNamespace
                         _target.SetActive(false);
                         ShaderProblem.ResetParticleShader(_target);
                     }
-            ));
+                ));
+               
+        }
+
+        private void Start()
+        {
             agent = GetComponent<NavMeshAgent>();
             if (!agent)
             {
