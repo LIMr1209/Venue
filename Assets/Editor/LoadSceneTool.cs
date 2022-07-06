@@ -169,7 +169,7 @@ public class LoadSceneTool : MonoBehaviour
             }
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
-        UploadAsset.OnUpLoadAB(buildurl);
+        // UploadAsset.OnUpLoadAB(buildurl);
         // DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
         // DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
         // DeleteAllFile(Application.dataPath + "/Resources",true);
