@@ -50,19 +50,24 @@ namespace DefaultNamespace
         {
             if (Input.GetKeyDown(KeyCode.G))
             {
-                GameObject art1 = GameObject.Find("frames-016");
-                GameObject art2 = GameObject.Find("frames-029");
-                GameObject art3 = GameObject.Find("frames-021");
-                GameObject art4 = GameObject.Find("frames-023");
-                Debug.Log("frames-016" + art1.transform.forward);
-                Debug.Log("frames-029" + art2.transform.forward);
-                Debug.Log("frames-021" + art3.transform.forward);
-                Debug.Log("frames-023" + art4.transform.forward);
-                art1.transform.Translate(-Vector3.right * 2, Space.Self);
-                art2.transform.Translate(-Vector3.right * 2, Space.Self);
-                art3.transform.Translate(-Vector3.right * 2, Space.Self);
-                art4.transform.Translate(-Vector3.right * 2, Space.Self);
+                GameObject art1 = GameObject.Find("paintings-023");
+                GameObject art2 = GameObject.Find("paintings-029");
+                GameObject art3 = GameObject.Find("paintings-024");
+                GameObject art4 = GameObject.Find("showcase-024");
+                Debug.Log("paintings-016" + art1.transform.right);
+                Debug.Log("paintings-029" + art2.transform.right);
+                Debug.Log("paintings-021" + art3.transform.right);
+                Debug.Log("paintings-023" + art4.transform.right);
+                //Debug.Log(art3.transform.localRotation+"/"+art4.transform.rotation);
+                //art1.transform.Translate(-Vector3.right * 2, Space.Self);
+                //art2.transform.Translate(-Vector3.right * 2, Space.Self);
+                //art3.transform.Translate(-Vector3.right * 2, Space.Self);
+                //art4.transform.Translate(-Vector3.right * 2, Space.Self);
+                //art3.transform.parent.rotation = art3.transform.rotation;
+                //art3.transform.parent.eulerAngles = art3.transform.parent.eulerAngles + new Vector3(180,0,-90);
+                //art3.transform.parent.eulerAngles = art3.transform.parent.eulerAngles + new Vector3(180, 0, -90);
             }
+        
 
 
             OnFocusArtDic();
@@ -221,38 +226,69 @@ namespace DefaultNamespace
                     customAttr.artId = i.id;
                     AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
                 }
-                art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
-                art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
-                art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
-                if (i.id != null && i.imageUrl != null)
-                {
-                    if (art.transform.forward.y >= 1)
-                    {
-                        // 设置自定义id
-                        CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                        customAttr.artId = i.id;
-                        AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
-                    }
-                }
-                if (art.transform.childCount <= 0)
-                {
-                    Transform frames = null;
-                    Transform paintings = null;
-                    for (int a = 0; a < art.transform.parent.childCount; a++)
-                    {
-                        if (art.transform.parent.GetChild(a).name.Contains("frames"))
-                        {
-                            frames = art.transform.parent.GetChild(a);
-                        }
-                        if (art.transform.parent.GetChild(a).name.Contains("paintings"))
-                        {
-                            paintings = art.transform.parent.GetChild(a);
-                        }
-                    }
-                    paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y, frames.localPosition.z);
-                }
+
+                OnSetArtV3(art, i);
             }
         }
+
+
+
+
+        public static void OnSetArtV3(GameObject art, JsonData.ArtData i)
+        {
+            art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
+            if (i.name.Contains("showcase"))
+            {
+                Transform sss = null;
+                for (int s = 0; s < art.transform.childCount; s++)
+                {
+                    if (art.transform.GetChild(s).name.Contains("paintings"))
+                    {
+                        sss = art.transform.GetChild(s);
+                    }
+                }
+                if (art.transform.right.y != 1)
+                {
+                    art.transform.rotation = sss.rotation;
+                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, -90);
+                }
+                else
+                {
+                    art.transform.rotation = sss.rotation;
+                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, 90);
+                }
+
+            }
+            else
+            {
+                art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
+            }
+            art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
+
+            if (i.name.Contains("painting"))
+            {
+                Transform frames = null;
+                Transform paintings = null;
+                for (int a = 0; a < art.transform.parent.childCount; a++)
+                {
+                    if (art.transform.parent.GetChild(a).name.Contains("frames"))
+                    {
+                        frames = art.transform.parent.GetChild(a);
+                    }
+                    if (art.transform.parent.GetChild(a).name.Contains("paintings"))
+                    {
+                        paintings = art.transform.parent.GetChild(a);
+                    }
+                }
+                float index = paintings.right.x+ paintings.right.z > 0 ? 0.01f : -0.01f;
+                paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y + index, frames.localPosition.z);
+            }
+        }
+
+
+
+
+
 
         public void OnFocusArt(Transform art)
         {

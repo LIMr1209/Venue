@@ -170,9 +170,9 @@ public class LoadSceneTool : MonoBehaviour
         }
         CreateAssetBundles.BuildAllAssetBundlesLocal();
         UploadAsset.OnUpLoadAB(buildurl);
-        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
-        DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
-        DeleteAllFile(Application.dataPath + "/Resources",true);
+        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs",false);
+        //DeleteAllFile(Application.dataPath + "/AssetsPackages/OtherPrefabs/textures",false);
+        //DeleteAllFile(Application.dataPath + "/Resources",true);
         UnityEditor.AssetDatabase.Refresh();
     }
 
