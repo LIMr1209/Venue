@@ -48,24 +48,7 @@ namespace DefaultNamespace
                 }
             }
 
-
-            for (int i = 0; i < listMat.Count; i++)
-
-            {
-                Material m = listMat[i];
-
-                if (null == m)
-
-                    continue;
-
-                var shaderName = m.shader.name;
-
-                var newShader = Shader.Find(shaderName);
-
-                if (newShader != null)
-
-                    m.shader = newShader;
-            }
+            ResetShader(listMat);
         }
 
         // 粒子 
@@ -105,7 +88,11 @@ namespace DefaultNamespace
                 }
             }
 
+            ResetShader(listMat);
+        }
 
+        public static void ResetShader(List<Material> listMat)
+        {
             for (int i = 0; i < listMat.Count; i++)
 
             {
