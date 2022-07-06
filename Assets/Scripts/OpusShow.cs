@@ -329,7 +329,6 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
             Tools.showFocusTipsWindow(isAction);
 #endif
-            Debug.Log(isAction);
         }
 
         public void OnFocusArtDic()

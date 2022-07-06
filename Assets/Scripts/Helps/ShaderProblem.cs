@@ -9,7 +9,8 @@ namespace DefaultNamespace
 {
     public class ShaderProblem
     {
-        public static void ResetShader(Object obj)
+        // mesh 对象
+        public static void ResetMeshShader(Object obj)
 
         {
             List<Material> listMat = new List<Material>();
@@ -39,6 +40,63 @@ namespace DefaultNamespace
 
                     {
                         Material[] materialsArr = item.sharedMaterials;
+
+                        foreach (Material m in materialsArr)
+
+                            listMat.Add(m);
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < listMat.Count; i++)
+
+            {
+                Material m = listMat[i];
+
+                if (null == m)
+
+                    continue;
+
+                var shaderName = m.shader.name;
+
+                var newShader = Shader.Find(shaderName);
+
+                if (newShader != null)
+
+                    m.shader = newShader;
+            }
+        }
+
+        // 粒子 
+        public static void ResetParticleShader(Object obj)
+        {
+            List<Material> listMat = new List<Material>();
+
+            listMat.Clear();
+
+            if (obj is Material)
+
+            {
+                Material m = obj as Material;
+
+                listMat.Add(m);
+            }
+
+            else if (obj is GameObject)
+
+            {
+                GameObject go = obj as GameObject;
+
+                ParticleSystemRenderer[] rends = go.GetComponentsInChildren<ParticleSystemRenderer>();
+
+                if (null != rends)
+
+                {
+                    foreach (ParticleSystemRenderer item in rends)
+
+                    {
+                        Material[] materialsArr = item.materials;
 
                         foreach (Material m in materialsArr)
 

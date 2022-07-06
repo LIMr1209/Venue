@@ -52,7 +52,7 @@ namespace DefaultNamespace
                     {
                         _player = obj;
                         _player.SetActive(false);
-                        ShaderProblem.ResetShader(_player); // 解决shader问题
+                        ShaderProblem.ResetMeshShader(_player); // 解决shader问题
                         cinemachineTarget =
                             _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                     }
@@ -71,7 +71,7 @@ namespace DefaultNamespace
                         AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
                             new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
                             {
-                                ShaderProblem.ResetShader(_player); // 解决shader问题
+                                ShaderProblem.ResetMeshShader(_player); // 解决shader问题
                             }
                         ));
                 }
