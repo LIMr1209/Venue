@@ -36,39 +36,14 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
-                    AddController controller = FindObjectOfType<AddController>();
-                    if (controller) controller.AddThird();
-                    OpusShow opusShow = FindObjectOfType<OpusShow>();
-                    if (opusShow) opusShow.enabled = true;
-                    AbInit.instances.FinishSlider();
-                    Light[] lights = FindObjectsOfType<Light>();
-                    foreach (Light i in lights)
-                    {
-                        if (i.gameObject.name != "Directional Light")
-                        {
-                            i.gameObject.SetActive(false);
-                        }
-                    }
+                    AfterScene();
                     Tools.loadScene();
                 })); 
 #else
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
-                    AddController controller = FindObjectOfType<AddController>();
-                    if (controller) controller.AddThird();
-                    OpusShow opusShow = FindObjectOfType<OpusShow>();
-                    if (opusShow) opusShow.enabled = true;
-                    AbInit.instances.FinishSlider();
-                    
-                    Light[] lights = FindObjectsOfType<Light>();
-                    foreach (Light i in lights)
-                    {
-                        if (i.gameObject.name != "Directional Light")
-                        {
-                            i.gameObject.SetActive(false);
-                        }
-                    }
+                    AfterScene();
                 })); 
 #endif             
             
@@ -80,6 +55,27 @@ namespace DefaultNamespace
                     RenderSettings.skybox = material;
                     DynamicGI.UpdateEnvironment();
                 })); 
+        }
+
+        public void AfterScene()
+        {
+            AddController controller = FindObjectOfType<AddController>();
+            if (controller) controller.AddThird();
+            OpusShow opusShow = FindObjectOfType<OpusShow>();
+            if (opusShow) opusShow.enabled = true;
+                    
+            Light[] lights = FindObjectsOfType<Light>();
+            foreach (Light i in lights)
+            {
+                if (i.gameObject.name != "Directional Light")
+                {
+                    i.gameObject.SetActive(false);
+                }
+            }
+
+            RunTimeBakeNavMesh runTimeBakeNavMesh = FindObjectOfType<RunTimeBakeNavMesh>();
+            runTimeBakeNavMesh.BakeNav();
+            AbInit.instances.FinishSlider();
         }
 
         private void OnApplicationFocus(bool hasFocus)
