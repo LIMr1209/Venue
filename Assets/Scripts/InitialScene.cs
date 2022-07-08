@@ -43,9 +43,9 @@ namespace DefaultNamespace
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
-                    //OnSetLightMap(obj);
+                    OnSetLightMap(obj);
                     Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
                     AfterScene();
                 })); 
@@ -96,7 +96,6 @@ namespace DefaultNamespace
                     string bundleName = item.Key.Substring(BeginIndex, len);
                     Debug.Log(bundleName);
                     Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
-                    //Debug.LogError(item.Value.LoadAsset<Texture2D>(item.Key));
                     lightMap.OnAddLightmapTexs(texture2D);
                 }
             }

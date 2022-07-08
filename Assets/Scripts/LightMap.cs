@@ -155,8 +155,10 @@ public class LightMap : MonoBehaviour
         {
             ldata[t] = new LightmapData();
             ldata[t].lightmapColor = lightmapTextures[t];
+            Debug.Log(ldata[t]);
         }
 
         LightmapSettings.lightmaps = ldata;
+        Debug.Log(ldata);
     }
 }
