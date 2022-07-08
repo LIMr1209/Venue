@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-
+﻿using System.IO;
+using UnityEngine;
+using UnityEditor;
 namespace DefaultNamespace
 {
     public class InitialScene : MonoBehaviour
@@ -26,7 +27,7 @@ namespace DefaultNamespace
             Debug.Log("通知发送场景url");
             Tools.loadScene(); // 通知发送场景url
 #else
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220630/62bda0ea5e8137d4fabd5c11/scene.ab";
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
 #endif
         }
 
@@ -40,9 +41,12 @@ namespace DefaultNamespace
                     Tools.loadScene();
                 })); 
 #else
+
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
+                    OnSetLightMap(obj);
+                    Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
                     AfterScene();
                 })); 
 #endif             
@@ -78,6 +82,22 @@ namespace DefaultNamespace
             AbInit.instances.FinishSlider();
         }
 
+        public void OnSetLightMap(GameObject obj)
+        {
+            LightMap lightMap = obj.GetComponent<LightMap>();
+            lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
+            foreach (var item in AbInit.instances.AssetBundelLightMapDic)
+            {
+                if (item.Key.Contains("Lightmap"))
+                {
+                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(item.Key);
+                    lightMap.OnAddLightmapTexs(texture2D);
+                }
+            }
+            lightMap.i = 0;
+        }
+
+        
         private void OnApplicationFocus(bool hasFocus)
         {
             /*#if !UNITY_EDITOR && UNITY_WEBGL

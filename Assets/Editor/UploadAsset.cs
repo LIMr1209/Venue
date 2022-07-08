@@ -27,6 +27,7 @@ namespace Editor
                 string replacePath = Application.dataPath.Replace("/", "\\") + "\\";
                 string keySuffix = i.Replace(replacePath, "");
                 string key = Path.Combine(Globle.QiNiuPrefix, Globle.AssetVision, keySuffix).Replace("\\", "/");
+                Debug.Log(key);
                 // 加密
                 byte[] fileBytes = Aes.FileToByte(i);
                 byte[] encryptBytes = Aes.AESEncrypt(fileBytes, Globle.AesKey, Globle.AesIv);
@@ -64,8 +65,8 @@ namespace Editor
         [MenuItem("Tools/上传构建")]
         public static void UploadBuild()
         {
-            string buildPath = @"C:\Users\thn\Desktop\VenueBuild";
-            string suffixPath = @"C:\Users\thn\Desktop\";
+            string buildPath = @"C:\Users\pc\Desktop\VenueBuild";
+            string suffixPath = @"C:\Users\pc\Desktop\";
             List<string> files = new List<string>();
             QiNiuHelp.ForeachFile(buildPath, ref files);
             foreach (string i in files)
