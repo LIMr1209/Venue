@@ -96,7 +96,6 @@ namespace DefaultNamespace
 #endif
             AssetBundle assetBundleManifest = AssetBundle.LoadFromMemory(abData);
             manifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
-            Debug.Log(111);
         }
         
         public Dictionary<string, AssetBundle> AssetBundelDeps = new Dictionary<string, AssetBundle>();
@@ -251,7 +250,7 @@ namespace DefaultNamespace
             deppath = deppath.Replace("\\", "/");
             foreach (var item in deps)
             {
-                if (!AssetBundelLightMapDic.ContainsKey(item))
+                if (!AssetBundelLightMapDic.ContainsKey("Lightmap"))
                 {
                     string depPath = Path.Combine(deppath, item).Replace("\\", "/");
                     //UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
@@ -264,11 +263,8 @@ namespace DefaultNamespace
                     AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
                     AssetBundelLightMapDic.Add(item, andep);
                 }
+               
             }
-
-
-
-
 
 
             AssetBundle AB = null;

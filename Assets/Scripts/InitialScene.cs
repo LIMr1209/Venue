@@ -45,7 +45,7 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
-                    OnSetLightMap(obj);
+                    //OnSetLightMap(obj);
                     Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
                     AfterScene();
                 })); 
@@ -88,13 +88,20 @@ namespace DefaultNamespace
             lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
             foreach (var item in AbInit.instances.AssetBundelLightMapDic)
             {
-                if (item.Key.Contains("Lightmap"))
+                if (item.Key.Contains("lightmap"))
                 {
-                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(item.Key);
+                    int BeginIndex = item.Key.IndexOf("/")+1;
+                    int LastIndex = item.Key.IndexOf(".");
+                    int len = LastIndex - BeginIndex;
+                    string bundleName = item.Key.Substring(BeginIndex, len);
+                    Debug.Log(bundleName);
+                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
+                    //Debug.LogError(item.Value.LoadAsset<Texture2D>(item.Key));
                     lightMap.OnAddLightmapTexs(texture2D);
                 }
             }
             lightMap.i = 0;
+
         }
 
         

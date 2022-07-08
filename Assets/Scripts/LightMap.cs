@@ -147,16 +147,16 @@ public class LightMap : MonoBehaviour
             return;
         }
 
-        //LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
-        //LightmapData[] ldata = new LightmapData[lightmapTextures.Length];
-        //LightmapSettings.lightmaps = null;
+        LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
+        LightmapData[] ldata = new LightmapData[lightmapTextures.Length];
+        LightmapSettings.lightmaps = null;
 
-        //for (int t = 0, tLength = lightmapTextures.Length; t < tLength; ++t)
-        //{
-        //    ldata[t] = new LightmapData();
-        //    ldata[t].lightmapColor = lightmapTextures[t];
-        //}
+        for (int t = 0, tLength = lightmapTextures.Length; t < tLength; ++t)
+        {
+            ldata[t] = new LightmapData();
+            ldata[t].lightmapColor = lightmapTextures[t];
+        }
 
-        //LightmapSettings.lightmaps = ldata;
+        LightmapSettings.lightmaps = ldata;
     }
 }
