@@ -11,7 +11,7 @@ namespace DefaultNamespace
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
         [HideInInspector]
-        public string sceneModel = "scene";
+        public string sceneModel;
 
         [HideInInspector]
         public string sceneUrl;
@@ -27,6 +27,7 @@ namespace DefaultNamespace
             Debug.Log("通知发送场景url");
             Tools.loadScene(); // 通知发送场景url
 #else
+            sceneModel = "scene";
             sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
 #endif
         }
@@ -64,10 +65,7 @@ namespace DefaultNamespace
         public void AfterScene()
         {
             AddController controller = FindObjectOfType<AddController>();
-            if (controller) controller.AddThird();
-            OpusShow opusShow = FindObjectOfType<OpusShow>();
-            if (opusShow) opusShow.enabled = true;
-                    
+            controller.enabled = true;
             Light[] lights = FindObjectsOfType<Light>();
             foreach (Light i in lights)
             {
@@ -78,7 +76,7 @@ namespace DefaultNamespace
             }
 
             RunTimeBakeNavMesh runTimeBakeNavMesh = FindObjectOfType<RunTimeBakeNavMesh>();
-            runTimeBakeNavMesh.BakeNav();
+            runTimeBakeNavMesh.BakeNav(); // 动态烘培导航区域
             AbInit.instances.FinishSlider();
         }
 

@@ -155,7 +155,7 @@ namespace DefaultNamespace
                 yield return requestAB.SendWebRequest();
                 if (!string.IsNullOrEmpty(requestAB.error))
                 {
-                    throw new Exception(requestAB.error);
+                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error+" "+abPath);
                 }
 
                 // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
@@ -170,7 +170,7 @@ namespace DefaultNamespace
 
             if (AB == null)
             {
-                throw (new Exception("unity AB包资源加载错误"));
+                throw (new Exception("资源包"+name+"加载错误"));
             }
 
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
@@ -207,7 +207,7 @@ namespace DefaultNamespace
                 yield return requestAB.SendWebRequest();
                 if (!string.IsNullOrEmpty(requestAB.error))
                 {
-                    throw new Exception(requestAB.error);
+                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error);
                 }
 
                 // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
@@ -221,7 +221,7 @@ namespace DefaultNamespace
 
             if (AB == null)
             {
-                throw (new Exception("unity AB包资源加载错误"));
+                throw (new Exception("资源包"+name+"加载错误"));
             }
 
             Material material = AB.LoadAsset<Material>(name);
@@ -278,7 +278,7 @@ namespace DefaultNamespace
             yield return requestAB.SendWebRequest();
             if (!string.IsNullOrEmpty(requestAB.error))
             {
-                throw new Exception(requestAB.error);
+                throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error);
             }
             
             AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
@@ -290,7 +290,7 @@ namespace DefaultNamespace
 
             if (AB == null)
             {
-                throw (new Exception("场景AB包加载错误"));
+                throw (new Exception("资源包"+name+"加载错误"));
             }
 
             GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
@@ -312,7 +312,7 @@ namespace DefaultNamespace
             {
                 if (www.error == "Data Processing Error, see Download Handler error")
                 {
-                    throw new Exception("下载贴图失败");
+                    throw new Exception("贴图加载错误");
                 }
                 throw new Exception(www.error);
             }

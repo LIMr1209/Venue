@@ -39,11 +39,14 @@ namespace DefaultNamespace
             addController = GetComponent<AddController>();
             isClick = true;
             isPlayerMove = false;
+            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        }
+
+        private void OnEnable()
+        {
             Player = GameObject.FindWithTag("Player").transform;
             controller = Player.GetComponent<ThirdPersonController>();
-            virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
             playerMeshRender = Player.GetComponentInChildren<SkinnedMeshRenderer>();
-
         }
 
         private void Update()

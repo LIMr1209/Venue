@@ -11,13 +11,6 @@ namespace DefaultNamespace
         //是否退出程序当异常发生时  
         public bool isQuitWhenException = false;
 
-
-        private void Awake()
-        {
-            //注册异常处理
-            if (isHandler) Application.logMessageReceived += Handler;
-        }
-
         void OnEnable()
         {
             // 取消注册
