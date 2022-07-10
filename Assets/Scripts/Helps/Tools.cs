@@ -23,5 +23,7 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern void canalFocus(); // 发送进度条给前端
         
+        [DllImport("__Internal")]
+        public static extern void selectTrans(); // 选中时通知前端 选中的名字 显示ui 前端记录 选中的画框 更改位置时需要传过来
     }
 }

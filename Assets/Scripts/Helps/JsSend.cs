@@ -70,6 +70,12 @@ namespace DefaultNamespace
             _opusShow.CancelFocusArt();
         }
         
+        
+        public void JsConsoleFps()
+        {
+            Debug.Log(Mathf.Ceil(_initialScene.fps));
+        }
+        
         // 更换角色
         public void JsUpdateCharacter(string characterId)
         {
@@ -77,9 +83,23 @@ namespace DefaultNamespace
             _addController.UpdateCharacter();
         }
 
-        public void JsConsoleFps()
+        // 编辑器中 js 发送画框位置 图片等信息 有就更换 没有就忽略
+        public void JsUpdateTransArt(string strParams)
         {
-            Debug.Log(Mathf.Ceil(_initialScene.fps));
+            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
+            OpusShow.ReplaceArtImage(data);
+        }
+        
+        // 编辑器中 js 删除画框 清空 纹理 对象等内存
+        public void JsDeleteArt(string artName)
+        {
+            
+        }
+        
+        // 编辑器中 js 复制画框 新名字 位置一样 引用得材质 需要复制一份
+        public void JsCopyArt(string artName)
+        {
+            
         }
 
     }
