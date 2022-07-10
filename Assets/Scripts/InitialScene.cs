@@ -27,7 +27,7 @@ namespace DefaultNamespace
             Debug.Log("通知发送场景url");
             Tools.loadScene(); // 通知发送场景url
 #else
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220630/62bda0ea5e8137d4fabd5c11/scene.ab";
 #endif
         }
 
@@ -37,6 +37,7 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
+                    
                     AfterScene();
                     Tools.loadScene();
                 })); 
@@ -45,7 +46,11 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
-                    OnSetLightMap(obj);
+                    if (GameObject.Find("default_camera"))
+                    {
+                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                    }
+                    //OnSetLightMap(obj);
                     Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
                     AfterScene();
                 })); 
