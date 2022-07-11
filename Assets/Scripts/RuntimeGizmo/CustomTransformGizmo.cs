@@ -41,12 +41,12 @@ namespace DefaultNamespace
             }
         }
 
-        public override void UpdateTransForm(Vector3 originalPivot, Vector3 planeNormal, Vector3 previousMousePosition,
-            TransformType transType, Vector3 projectedAxis, Vector3 axis, Vector3 currentSnapMovementAmount,
-            float currentSnapScaleAmount, float currentSnapRotationAmount, Vector3 otherAxis1, Vector3 otherAxis2)
+        public override void UpdateTransForm(Vector3 originalPivot, Vector3 planeNormal, ref Vector3 previousMousePosition,
+            TransformType transType, Vector3 projectedAxis, Vector3 axis, ref Vector3 currentSnapMovementAmount,
+            ref float currentSnapScaleAmount, ref float currentSnapRotationAmount, Vector3 otherAxis1, Vector3 otherAxis2)
         {
-            base.UpdateTransForm(originalPivot, planeNormal, previousMousePosition, transType, projectedAxis, axis,
-                currentSnapMovementAmount, currentSnapScaleAmount, currentSnapRotationAmount, otherAxis1,
+            base.UpdateTransForm(originalPivot, planeNormal, ref previousMousePosition, transType, projectedAxis, axis,
+                ref currentSnapMovementAmount, ref currentSnapScaleAmount, ref currentSnapRotationAmount, otherAxis1,
                 otherAxis2);
 #if !UNITY_EDITOR && UNITY_WEBGL
             Transform target = targetRootsOrdered[0];
