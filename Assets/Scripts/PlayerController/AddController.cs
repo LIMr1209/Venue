@@ -37,30 +37,39 @@ namespace DefaultNamespace
             //             _thirdPlayerFollowCamera.SetActive(false);
             //         }
             //     ));
-            StartCoroutine(
+            
+            
+        }
+
+        bool isAdd = true;
+        private void Update()
+        {
+            if (AbInit.instances.manifest!=null&&isAdd)
+            {
+                StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
-                    {
-                        _playerFollowCamera = obj;
-                        // _playerFollowCamera.SetActive(false);
-                        _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
-                        _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
-                            .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-                    }
+                {
+                    _playerFollowCamera = obj;
+                    // _playerFollowCamera.SetActive(false);
+                    _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
+                    _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+                        .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+                }
                 ));
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, new Vector3(0,0,0) ,new Vector3(0,-180,0),(obj) =>
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
                     {
                         _player = obj;
                         _player.SetActive(false);
                         ShaderProblem.ResetMeshShader(_player); // 解决shader问题
                         cinemachineTarget =
-                            _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                        _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
                     }
-                ));
-        }
+                    ));
+                isAdd = false;
+            }
 
-        private void Update()
-        {
+
             if (Input.GetKeyDown("v") && _player) SwithVisul();
 
             if (Input.GetKeyDown(KeyCode.Z))

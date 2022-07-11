@@ -127,6 +127,35 @@ public class LightMap : MonoBehaviour
 
     public void OnLoadLightmap()
     {
+        if (null == rendererList || rendererList.Length == 0)
+        {
+            Debug.Log(gameObject.name + " 的 光照信息为空");
+            return;
+        }
+        Renderer[] renders = GetComponentsInChildren<Renderer>(true);
+
+        for (int r = 0, rLength = renders.Length; r < rLength; ++r)
+        {
+            renders[r].lightmapIndex = rendererList[r].lightmapIndex;
+            renders[r].lightmapScaleOffset = rendererList[r].lightmapOffsetScale;
+        }
+
+        if (null == lightmapTextures || lightmapTextures.Length == 0)
+        {
+            return;
+        }
+        LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
+        LightmapData[] ldata = new LightmapData[lightmapTextures.Length];
+        LightmapSettings.lightmaps = null;
+        for (int t = 0, tLength = lightmapTextures.Length; t < tLength; ++t)
+        {
+            ldata[t] = new LightmapData();
+            ldata[t].lightmapColor = lightmapTextures[t];
+        }
+        LightmapSettings.lightmaps = ldata;
+
+
+        ////rendererList贴图信息
         //if (null == rendererList || rendererList.Length == 0)
         //{
         //    Debug.Log(gameObject.name + " 的 光照信息为空");
@@ -140,8 +169,7 @@ public class LightMap : MonoBehaviour
         //    renders[r].lightmapIndex = rendererList[r].lightmapIndex;
         //    renders[r].lightmapScaleOffset = rendererList[r].lightmapOffsetScale;
         //}
-
-
+        ////lightmapTextures  光照贴图
         //if (null == lightmapTextures || lightmapTextures.Length == 0)
         //{
         //    return;
@@ -155,43 +183,10 @@ public class LightMap : MonoBehaviour
         //{
         //    ldata[t] = new LightmapData();
         //    ldata[t].lightmapColor = lightmapTextures[t];
-        //    Debug.Log(ldata[t]);
         //}
 
         //LightmapSettings.lightmaps = ldata;
+        //Debug.Log(ldata);
 
-
-
-        //rendererList贴图信息
-        if (null == rendererList || rendererList.Length == 0)
-        {
-            Debug.Log(gameObject.name + " 的 光照信息为空");
-            return;
-        }
-
-        Renderer[] renders = GetComponentsInChildren<Renderer>(true);
-
-        for (int r = 0, rLength = renders.Length; r < rLength; ++r)
-        {
-            renders[r].lightmapIndex = rendererList[r].lightmapIndex;
-            renders[r].lightmapScaleOffset = rendererList[r].lightmapOffsetScale;
-        }
-        //lightmapTextures  光照贴图
-        if (null == lightmapTextures || lightmapTextures.Length == 0)
-        {
-            return;
-        }
-
-        LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
-        LightmapData[] ldata = new LightmapData[lightmapTextures.Length];
-        LightmapSettings.lightmaps = null;
-
-        for (int t = 0, tLength = lightmapTextures.Length; t < tLength; ++t)
-        {
-            ldata[t] = new LightmapData();
-            ldata[t].lightmapColor = lightmapTextures[t];
-        }
-
-        LightmapSettings.lightmaps = ldata;
     }
 }
