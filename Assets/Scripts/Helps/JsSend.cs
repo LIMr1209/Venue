@@ -1,5 +1,4 @@
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
 using static DefaultNamespace.JsonData;
 
@@ -11,6 +10,7 @@ namespace DefaultNamespace
         private InitialScene _initialScene;
         private AbInit _abInit;
         private OpusShow _opusShow;
+        // private EditorOpusShow _editorOpusShow;
         private AddController _addController;
 
         public void Start()
@@ -18,6 +18,7 @@ namespace DefaultNamespace
             _initialScene = FindObjectOfType<InitialScene>();
             _abInit = FindObjectOfType<AbInit>();
             _opusShow = FindObjectOfType<OpusShow>();
+            // _editorOpusShow = FindObjectOfType<EditorOpusShow>();
             _addController = FindObjectOfType<AddController>();
 
         }
@@ -93,13 +94,13 @@ namespace DefaultNamespace
         // 编辑器中 js 删除画框 清空 纹理 对象等内存
         public void JsDeleteArt(string artName)
         {
-            
+            OpusShow.DeleteArt(artName);
         }
         
         // 编辑器中 js 复制画框 新名字 位置一样 引用得材质 需要复制一份
         public void JsCopyArt(string artName)
         {
-            
+            OpusShow.CopyArt(artName);
         }
 
     }

@@ -19,8 +19,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, 1000))
                 {

@@ -3,19 +3,19 @@ using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
+
 // using UnityEngine.EventSystems;
 
 namespace DefaultNamespace
 {
     public class OpusShow : MonoBehaviour
     {
-        AddController addController;
+        private AddController addController;
         private RaycastHit _raycastHit;
-        private Vector3 _velocity = Vector3.zero;
         private Vector3 startPoint;
         private Quaternion startQuaternion;
-        public float smoothTime = 1.0f;
-        public int maxDistance = 10;
+        public int maxDistance = 200;
         private bool isPlayerMove;
         private bool isClick;
         //private List<Showcase> showcaseList = new List<Showcase>();
@@ -26,15 +26,15 @@ namespace DefaultNamespace
         private ThirdPersonController controller;
         private CinemachineVirtualCamera virtualCamera;
         private SkinnedMeshRenderer playerMeshRender;
-        Transform TiTrans;
-        Transform TargetArt;
+        private Transform TiTrans;
+        protected Transform TargetArt;
 
         private void Awake()
         {
             enabled = false; // 默认禁用 场景加载完启用
         }
 
-        private void Start()
+        public virtual void Start()
         {
             addController = GetComponent<AddController>();
             isClick = true;
@@ -71,8 +71,6 @@ namespace DefaultNamespace
                 //art3.transform.parent.eulerAngles = art3.transform.parent.eulerAngles + new Vector3(180, 0, -90);
             }
         
-
-
             OnFocusArtDic();
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
@@ -109,74 +107,6 @@ namespace DefaultNamespace
             }
         }
 
-        // 聚焦
-        private void FocusArt(Transform art)
-        {
-            isClick = false;
-            // 禁用人物控制器
-            if (controller) controller.enabled = false;
-            if (virtualCamera) virtualCamera.enabled = false;
-            isPlayerMove = false;
-            Vector3 point = Vector3.zero;
-            Quaternion qqq = art.rotation;
-            if (Vector3.Dot(art.forward, art.position - transform.position) > 0)
-            {
-                if (art.forward.z == -1)
-                {
-                    point = art.position + new Vector3(0, 0, 5);
-                }
-                else if (art.forward.x == 1)
-                {
-                    point = art.position + new Vector3(-5, 0, 0);
-                }
-                else if (art.forward.z == 1)
-                {
-                    point = art.position + new Vector3(0, 0, -5);
-                }
-                else
-                {
-                    point = art.position + new Vector3(5, 0, 0);
-                }
-            }
-            else
-            {
-                if (art.forward.z == -1)
-                {
-                    Debug.Log(1);
-                    point = art.position + new Vector3(0, 0, -5);
-                    qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y, art.rotation.z));
-                }
-                else if (art.forward.x == 1)
-                {
-                    Debug.Log(2);
-                    point = art.position + new Vector3(5, 0, 0);
-                }
-                else if (art.forward.z == 1)
-                {
-                    Debug.Log(3);
-                    point = art.position + new Vector3(0, 0, 5);
-                    qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 180, art.rotation.z));
-                }
-                else
-                {
-                    Debug.Log(4);
-                    point = art.position + new Vector3(-5, 0, 0);
-                    qqq = Quaternion.Euler(new Vector3(art.rotation.x, art.rotation.y + 90, art.rotation.z));
-                }
-            }
-
-            transform.DOMove(point, 1);
-            transform.DORotateQuaternion(qqq, 1).OnComplete(() => { isPlayerMove = true; });
-#if !UNITY_EDITOR && UNITY_WEBGL
-            // 通知前端显示聚焦后ui
-            if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
-            { 
-                Tools.showFocusWindow(customAttr.artId);
-            }
-#endif
-        }
-
-
         // 前端发送消息聚焦
         public void OnFocusArt(string name)
         {
@@ -190,7 +120,7 @@ namespace DefaultNamespace
         }
 
         // 取消聚焦
-        public void CancelFocusArt()
+        public virtual void CancelFocusArt()
         {
             Player.position = startPoint;
             Player.rotation = startQuaternion;
@@ -213,6 +143,36 @@ namespace DefaultNamespace
             isPlayerMove = false;
         }
 
+        // 复制art
+        public static void CopyArt(string artName)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+            GameObject clone = Instantiate(art, art.transform.parent);
+            clone.name = artName + "_c";
+            GameObject paining = clone.transform.GetChild(1).gameObject;
+            MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
+            Material material = Instantiate(painingRender.material);
+            painingRender.material = material;
+        }
+        
+        // 删除art
+        public static void DeleteArt(string artName)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+            GameObject paining = art.transform.GetChild(1).gameObject;
+            Material material = paining.GetComponent<MeshRenderer>().material;
+            Destroy(art);
+            Destroy(material);
+        }
+
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
         {
             foreach (JsonData.ArtData i in artDataList)
@@ -227,14 +187,22 @@ namespace DefaultNamespace
                     // 设置自定义id
                     CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
                     customAttr.artId = i.id;
-                    AbInit.instances.ReplaceMaterialImage(art, i.imageUrl);
+                    GameObject paining = art.transform.GetChild(1).gameObject;
+                    AbInit.instances.ReplaceMaterialImage(paining, i.imageUrl);
                 }
 
-                OnSetArtV3(art, i);
+                NewOnSetArtV3(art, i);
             }
         }
 
-
+        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
+        {
+            art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
+            art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            Quaternion rotate = new Quaternion();
+            rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            art.transform.localRotation = rotate;
+        }
 
 
         public static void OnSetArtV3(GameObject art, JsonData.ArtData i)
@@ -287,12 +255,7 @@ namespace DefaultNamespace
                 paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y + index, frames.localPosition.z);
             }
         }
-
-
-
-
-
-
+        // 聚焦
         public void OnFocusArt(Transform art)
         {
             IsActionTi = false;
@@ -342,8 +305,6 @@ namespace DefaultNamespace
 #endif
             });
         }
-
-
 
         public float OnGetArtLengDic(Transform art)
         {

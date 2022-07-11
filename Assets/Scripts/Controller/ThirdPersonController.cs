@@ -220,7 +220,7 @@ namespace StarterAssets
         private void CameraRotation()
         {
             // 如果有输入且摄像头位置不固定 并且鼠标左键按下
-            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition && Mouse.current.leftButton.isPressed)
+            if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition && Input.GetMouseButton(0))
             {
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;

@@ -1,6 +1,6 @@
 mergeInto(LibraryManager.library, {
-    selectTrans:function (artName) {
-        var data = Pointer_stringify(artName);
+    selectTrans:function (artData) {
+        var data = Pointer_stringify(artData);
         __UnityLib__.select_trans(data);
     },
 });
