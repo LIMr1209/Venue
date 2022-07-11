@@ -26,6 +26,7 @@ namespace DefaultNamespace
         private GameObject _mask;
         private bool _switchCharacter;
         public float zoomSpeed = 10.0f;
+        bool isAdd = true;
 
         private void Awake()
         {
@@ -38,60 +39,86 @@ namespace DefaultNamespace
                             .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
                     }
                 ));
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, (obj) =>
-                    {
-                        _player = obj;
-                        cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-                    }
-                ));
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, (obj) =>
+            //         {
+            //             _player = obj;
+            //             cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+            //         }
+            //     ));
             enabled = false;
         }
 
-        private void Start()
-        {
-            _opusShow = FindObjectOfType<OpusShow>();
-            characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
-                    new Vector3(0, -180, 0), (obj) =>
-                    {
-                        _mask = obj;
-                        _mask.transform.SetParent(_player.transform, false);
-                        ShaderProblem.ResetMeshShader(obj); // 解决shader问题
-                        _opusShow.enabled = true;
-                        AddThird();
-                    }
-                ));
-        }
+        // private void Start()
+        // {
+        //     _opusShow = FindObjectOfType<OpusShow>();
+        //     characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
+        //     StartCoroutine(
+        //         AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
+        //             new Vector3(0, -180, 0), (obj) =>
+        //             {
+        //                 _mask = obj;
+        //                 _mask.transform.SetParent(_player.transform, false);
+        //                 ShaderProblem.ResetMeshShader(obj); // 解决shader问题
+        //                 _opusShow.enabled = true;
+        //                 AddThird();
+        //             }));
+            
+            
+        // }
 
         private void Update()
         {
-            if (_switchCharacter)
+            if (AbInit.instances.manifest != null && isAdd)
             {
-                SetCharacterColorAni();
-            }
-            else
-            {
-                if (Input.GetKeyDown("v") && _player) SwithVisul();
-
-                if (Input.GetKeyDown(KeyCode.Z))
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
+                        {
+                            _playerFollowCamera = obj;
+                            // _playerFollowCamera.SetActive(false);
+                            _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
+                            _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+                                .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+                        }
+                    ));
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
+                        new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
+                        {
+                            _player = obj;
+                            _player.SetActive(false);
+                            ShaderProblem.ResetMeshShader(_player); // 解决shader问题
+                            cinemachineTarget =
+                                _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                        }
+                    ));
+                isAdd = false;
+                if (_switchCharacter)
                 {
-                    for (int i = 0; i < 50; i++)
-                    {
-                        StartCoroutine(
-                            AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
-                                new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
-                                {
-                                    ShaderProblem.ResetMeshShader(_player); // 解决shader问题
-                                }
-                            ));
-                    }
+                    SetCharacterColorAni();
                 }
+                else
+                {
+                    if (Input.GetKeyDown("v") && _player) SwithVisul();
 
-                // float scroll = Input.GetAxis("Mouse ScrollWheel");
-                // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
-                // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
+                    if (Input.GetKeyDown(KeyCode.Z))
+                    {
+                        for (int i = 0; i < 50; i++)
+                        {
+                            StartCoroutine(
+                                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
+                                    new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
+                                    {
+                                        ShaderProblem.ResetMeshShader(_player); // 解决shader问题
+                                    }
+                                ));
+                        }
+                    }
+
+                    // float scroll = Input.GetAxis("Mouse ScrollWheel");
+                    // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
+                    // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
+                }
             }
         }
 
