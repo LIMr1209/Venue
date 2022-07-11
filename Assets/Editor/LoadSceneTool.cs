@@ -1,12 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using System.IO;
-using System;
 using UnityEditor;
-using UnityEngine.Networking;
-using System.Net;
 using Editor;
 using static DefaultNamespace.JsonData;
 using DefaultNamespace;
@@ -23,7 +18,7 @@ public class LoadSceneTool : MonoBehaviour
             MeshRenderer t = tArray[i] as MeshRenderer;
             if (t.gameObject.name.Contains("paintings"))
             {
-                t.gameObject.layer = 6;
+                t.gameObject.layer = LayerMask.NameToLayer(Globle.focusArtLayer);
             }
             Undo.RecordObject(t, t.gameObject.name);
             EditorUtility.SetDirty(t);

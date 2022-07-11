@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 
 // using UnityEngine.EventSystems;
 
@@ -30,8 +27,6 @@ namespace DefaultNamespace
         private SkinnedMeshRenderer playerMeshRender;
         private Transform TiTrans;
         protected Transform TargetArt;
-        private string _focusLayer = "art"; // 聚焦层
-        private string _locklayer = "artLock"; // 锁定层
 
         private void Awake()
         {
@@ -88,7 +83,7 @@ namespace DefaultNamespace
                     {
                         // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
-                        // if (LayerMask.NameToLayer())
+                        if (art.layer == LayerMask.NameToLayer(Globle.lockArtlayer) ||art.layer == LayerMask.NameToLayer(Globle.focusArtLayer))
                         {
 #if !UNITY_EDITOR && UNITY_WEBGL
                             if (!art.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -186,8 +181,8 @@ namespace DefaultNamespace
                 throw (new Exception("画框不存在"));
             }
             GameObject paining = art.transform.GetChild(1).gameObject;
-            // if (locking) paining.layer = LayerMask.NameToLayer(_focusLayer);
-            // else paining.layer = LayerMask.NameToLayer(_focusLayer);
+            if (locking) paining.layer = LayerMask.NameToLayer(Globle.lockArtlayer);
+            else paining.layer = LayerMask.NameToLayer(Globle.focusArtLayer);
         }
         
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
@@ -379,7 +374,8 @@ namespace DefaultNamespace
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {
-                    // if (focusLayer.Contains(LayerMask.LayerToName(hit.collider.gameObject.layer)))
+                    GameObject art = hit.collider.gameObject;
+                    if (art.layer == LayerMask.NameToLayer(Globle.lockArtlayer) ||art.layer == LayerMask.NameToLayer(Globle.focusArtLayer))
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
                         if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -399,7 +395,7 @@ namespace DefaultNamespace
                             OnFocusArt(hit.transform);
                         }
                     }
-                    // else
+                    else
                     {
                         if (IsActionTifalse)
                         {

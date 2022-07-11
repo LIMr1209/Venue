@@ -122,11 +122,11 @@ namespace DefaultNamespace
 
             if (Input.GetKeyDown(KeyCode.X))
             {
-                FindObjectOfType<JsSend>().JsLockArt("showcase-013");
+                FindObjectOfType<JsSend>().JsLockArt("showcase.011");
             }
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                FindObjectOfType<JsSend>().JsUnlockArt("showcase-013");
+                FindObjectOfType<JsSend>().JsUnlockArt("showcase.011");
             }
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
