@@ -96,7 +96,6 @@ namespace DefaultNamespace
 #endif
             AssetBundle assetBundleManifest = AssetBundle.LoadFromMemory(abData);
             manifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
-            Debug.Log(111);
         }
         
         public Dictionary<string, AssetBundle> AssetBundelDeps = new Dictionary<string, AssetBundle>();
@@ -117,6 +116,37 @@ namespace DefaultNamespace
         public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
+
+
+            if (manifest == null)
+            {
+                OnWebRequestAssetBundleManifest();
+            }
+            string[] deps = manifest.GetAllDependencies(name + ".ab");
+            string deppath = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
+            deppath = deppath.Replace("\\", "/");
+            foreach (var item in deps)
+            {
+                if (!AssetBundelLightMapDic.ContainsKey("lightmap"))
+                {
+                    string depPath = Path.Combine(deppath, item).Replace("\\", "/");
+                    //UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+                    UnityWebRequest dep = UnityWebRequest.Get(depPath);
+                    yield return dep.SendWebRequest();
+                    byte[] depBytes = dep.downloadHandler.data;
+
+                    depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
+
+                    AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
+                    AssetBundelLightMapDic.Add(item, andep);
+                }
+
+            }
+
+
+
+
+
             AssetBundle AB = null;
             string path = null;
 #if !UNITY_EDITOR && UNITY_WEBGL
@@ -148,6 +178,8 @@ namespace DefaultNamespace
 //                        AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
 //                    }
 //                }
+
+
 
                 string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
                 // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
@@ -245,18 +277,30 @@ namespace DefaultNamespace
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
-            OnWebRequestAssetBundleManifest();
+            if (manifest == null)
+            {
+                OnWebRequestAssetBundleManifest();
+            }
             string[] deps = manifest.GetAllDependencies(name + ".ab");
             string deppath = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
             deppath = deppath.Replace("\\", "/");
             foreach (var item in deps)
             {
-                if (!AssetBundelLightMapDic.ContainsKey(item))
+                if (!AssetBundelLightMapDic.ContainsKey("lightmap"))
                 {
                     string depPath = Path.Combine(deppath, item).Replace("\\", "/");
                     //UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
                     UnityWebRequest dep = UnityWebRequest.Get(depPath);
-                    yield return dep.SendWebRequest();
+                    dep.SendWebRequest();
+                    while (!dep.isDone)
+                    {
+
+                    }
+                    if (!string.IsNullOrEmpty(dep.error))
+                    {
+                        throw new Exception(dep.error);
+                    }
+                    //yield return dep.SendWebRequest();
                     byte[] depBytes = dep.downloadHandler.data;
 
                     depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
@@ -264,11 +308,8 @@ namespace DefaultNamespace
                     AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
                     AssetBundelLightMapDic.Add(item, andep);
                 }
+               
             }
-
-
-
-
 
 
             AssetBundle AB = null;

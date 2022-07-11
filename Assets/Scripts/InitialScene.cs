@@ -28,7 +28,8 @@ namespace DefaultNamespace
             Tools.loadScene(); // 通知发送场景url
 #else
             sceneModel = "scene";
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            // sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220630/62bda0ea5e8137d4fabd5c11/scene.ab";
 #endif
         }
 
@@ -38,15 +39,20 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
                 {
+                    
                     AfterScene();
                     Tools.loadScene();
                 })); 
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
-                    OnSetLightMap(obj);
+                    if (GameObject.Find("default_camera"))
+                    {
+                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                    }
+                    //OnSetLightMap(obj);
                     Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
                     AfterScene();
                 })); 
@@ -86,13 +92,19 @@ namespace DefaultNamespace
             lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
             foreach (var item in AbInit.instances.AssetBundelLightMapDic)
             {
-                if (item.Key.Contains("Lightmap"))
+                if (item.Key.Contains("lightmap"))
                 {
-                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(item.Key);
+                    int BeginIndex = item.Key.IndexOf("/")+1;
+                    int LastIndex = item.Key.IndexOf(".");
+                    int len = LastIndex - BeginIndex;
+                    string bundleName = item.Key.Substring(BeginIndex, len);
+                    Debug.Log(bundleName);
+                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
                     lightMap.OnAddLightmapTexs(texture2D);
                 }
             }
             lightMap.i = 0;
+
         }
 
         
