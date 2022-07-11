@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 
 // using UnityEngine.EventSystems;
 
@@ -28,6 +30,8 @@ namespace DefaultNamespace
         private SkinnedMeshRenderer playerMeshRender;
         private Transform TiTrans;
         protected Transform TargetArt;
+        private string _focusLayer = "art"; // 聚焦层
+        private string _locklayer = "artLock"; // 锁定层
 
         private void Awake()
         {
@@ -84,7 +88,7 @@ namespace DefaultNamespace
                     {
                         // 作品的图层是6
                         GameObject art = _raycastHit.collider.gameObject;
-                        if (art.layer == 6)
+                        if (LayerMask.NameToLayer())
                         {
 #if !UNITY_EDITOR && UNITY_WEBGL
                             if (!art.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
@@ -172,7 +176,20 @@ namespace DefaultNamespace
             Destroy(art);
             Destroy(material);
         }
-
+        
+        // 锁定解锁 art
+        public static void LockArt(string artName, bool locking)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+            GameObject paining = art.transform.GetChild(1).gameObject;
+            if (locking) paining.layer = LayerMask.NameToLayer(_focusLayer);
+            else paining.layer = LayerMask.NameToLayer(_focusLayer);
+        }
+        
         public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
         {
             foreach (JsonData.ArtData i in artDataList)
@@ -362,8 +379,7 @@ namespace DefaultNamespace
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 3))
                 {
-                    //name.Contains("paintings")
-                    if (hit.collider.gameObject.layer == 6)
+                    if (focusLayer.Contains(LayerMask.LayerToName(hit.collider.gameObject.layer)))
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
                         if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))

@@ -102,6 +102,18 @@ namespace DefaultNamespace
         {
             OpusShow.CopyArt(artName);
         }
+        
+        // Ëø¶¨»­¿ò
+        public void JsLockArt(string artName)
+        {
+            OpusShow.LockArt(artName, true);
+        }
+        
+        // ½âËø»­¿ò
+        public void JsUnlockArt(string artName)
+        {
+            OpusShow.LockArt(artName, false);
+        }
 
     }
 }
