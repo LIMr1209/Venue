@@ -33,31 +33,6 @@ namespace DefaultNamespace
             _abInit.enabled = true;
             _initialScene.enabled = true;
         }
-        
-        // 接收画框名字 作品id 作品url  替换场景中画框的材质贴图
-        public void JsReplaceArtImage(string strParams)
-        {
-            Debug.Log("接收作品");
-            Debug.Log(strParams);
-            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            OpusShow.ReplaceArtImage(data);
-        }
-
-        public void JsSetframeArt(string strParams)
-        {
-            Debug.Log("接收画框");
-            Debug.Log(strParams);
-            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            OpusShow.ReplaceArtImage(data);
-        }
-
-        public void JsSetShowcaseArt(string strParams)
-        {
-            Debug.Log("接收画父物体");
-            Debug.Log(strParams);
-            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            OpusShow.ReplaceArtImage(data);
-        }
 
         // 接收画框名 聚焦画框
         public void JsFocusArt(string strParams)
@@ -86,10 +61,23 @@ namespace DefaultNamespace
         }
 
         // 编辑器中 js 发送画框位置 图片等信息 有就更换 没有就忽略
-        public void JsUpdateTransArt(string strParams)
+        public void JsReplaceArtImage(string strParams)
         {
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            OpusShow.ReplaceArtImage(data);
+            OpusShow.InitArtImage(data);
+        }
+        
+        // 编辑器中 js 发送已删除的画框
+        public void JsInitDeleteArt(string strParams)
+        {
+            ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
+            OpusShow.InitDeleteArt(data);
+        }
+        
+        public void JsUpdateTrans(string strParams)
+        {
+            ArtData data = JsonUtility.FromJson<ArtData>(strParams);
+            OpusShow.UpdateArt(data);
         }
         
         // 编辑器中 js 删除画框 清空 纹理 对象等内存

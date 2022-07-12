@@ -50,26 +50,6 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                GameObject art1 = GameObject.Find("paintings-023");
-                GameObject art2 = GameObject.Find("paintings-029");
-                GameObject art3 = GameObject.Find("paintings-024");
-                GameObject art4 = GameObject.Find("showcase-024");
-                Debug.Log("paintings-016" + art1.transform.right);
-                Debug.Log("paintings-029" + art2.transform.right);
-                Debug.Log("paintings-021" + art3.transform.right);
-                Debug.Log("paintings-023" + art4.transform.right);
-                //Debug.Log(art3.transform.localRotation+"/"+art4.transform.rotation);
-                //art1.transform.Translate(-Vector3.right * 2, Space.Self);
-                //art2.transform.Translate(-Vector3.right * 2, Space.Self);
-                //art3.transform.Translate(-Vector3.right * 2, Space.Self);
-                //art4.transform.Translate(-Vector3.right * 2, Space.Self);
-                //art3.transform.parent.rotation = art3.transform.rotation;
-                //art3.transform.parent.eulerAngles = art3.transform.parent.eulerAngles + new Vector3(180,0,-90);
-                //art3.transform.parent.eulerAngles = art3.transform.parent.eulerAngles + new Vector3(180, 0, -90);
-            }
-        
             OnFocusArtDic();
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
@@ -141,132 +121,7 @@ namespace DefaultNamespace
             });
             isPlayerMove = false;
         }
-
-        // 复制art
-        public static void CopyArt(string artName)
-        {
-            GameObject art = GameObject.Find(artName);
-            if (art == null)
-            {
-                throw (new Exception("画框不存在"));
-            }
-            GameObject clone = Instantiate(art, art.transform.parent);
-            clone.name = artName + "_c";
-            GameObject paining = clone.transform.GetChild(1).gameObject;
-            MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
-            Material material = Instantiate(painingRender.material);
-            painingRender.material = material;
-        }
         
-        // 删除art
-        public static void DeleteArt(string artName)
-        {
-            GameObject art = GameObject.Find(artName);
-            if (art == null)
-            {
-                throw (new Exception("画框不存在"));
-            }
-            GameObject paining = art.transform.GetChild(1).gameObject;
-            Material material = paining.GetComponent<MeshRenderer>().material;
-            Destroy(art);
-            Destroy(material);
-        }
-        
-        // 锁定解锁 art
-        public static void LockArt(string artName, bool locking)
-        {
-            GameObject art = GameObject.Find(artName);
-            if (art == null)
-            {
-                throw (new Exception("画框不存在"));
-            }
-            GameObject paining = art.transform.GetChild(1).gameObject;
-            if (locking) paining.layer = LayerMask.NameToLayer(Globle.lockArtlayer);
-            else paining.layer = LayerMask.NameToLayer(Globle.focusArtLayer);
-        }
-        
-        public static void ReplaceArtImage(JsonData.ArtData[] artDataList)
-        {
-            foreach (JsonData.ArtData i in artDataList)
-            {
-                GameObject art = GameObject.Find(i.name);
-                if (art == null)
-                {
-                    throw (new Exception("画框不存在"));
-                }
-                if (i.id != null && i.imageUrl != null)
-                {
-                    // 设置自定义id
-                    CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                    customAttr.artId = i.id;
-                    GameObject paining = art.transform.GetChild(1).gameObject;
-                    AbInit.instances.ReplaceMaterialImage(paining, i.imageUrl);
-                }
-
-                NewOnSetArtV3(art, i);
-            }
-        }
-
-        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
-        {
-            art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
-            art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-            Quaternion rotate = new Quaternion();
-            rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-            art.transform.localRotation = rotate;
-        }
-
-
-        public static void OnSetArtV3(GameObject art, JsonData.ArtData i)
-        {
-            art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
-            if (i.name.Contains("showcase"))
-            {
-                Transform sss = null;
-                for (int s = 0; s < art.transform.childCount; s++)
-                {
-                    if (art.transform.GetChild(s).name.Contains("paintings"))
-                    {
-                        sss = art.transform.GetChild(s);
-                    }
-                }
-                if (art.transform.right.y != 1)
-                {
-                    art.transform.rotation = sss.rotation;
-                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, -90);
-                }
-                else
-                {
-                    art.transform.rotation = sss.rotation;
-                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, 90);
-                }
-
-            }
-            else
-            {
-                art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
-            }
-            art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
-
-            if (i.name.Contains("painting"))
-            {
-                Transform frames = null;
-                Transform paintings = null;
-                for (int a = 0; a < art.transform.parent.childCount; a++)
-                {
-                    if (art.transform.parent.GetChild(a).name.Contains("frames"))
-                    {
-                        frames = art.transform.parent.GetChild(a);
-                    }
-                    if (art.transform.parent.GetChild(a).name.Contains("paintings"))
-                    {
-                        paintings = art.transform.parent.GetChild(a);
-                    }
-                }
-                float index = paintings.right.x+ paintings.right.z > 0 ? 0.01f : -0.01f;
-                paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y + index, frames.localPosition.z);
-            }
-        }
         // 聚焦
         public void OnFocusArt(Transform art)
         {
@@ -405,6 +260,147 @@ namespace DefaultNamespace
                         }
                     }
                 }
+            }
+        }
+        
+        public static void UpdateArt(JsonData.ArtData artData)
+        {
+            GameObject art = GameObject.Find(artData.name);
+            if (art == null)
+            {
+                            
+                art = CopyArt("showcase-01");
+            }
+            if (artData.id != null && artData.imageUrl != null)
+            {
+                // 设置自定义id
+                CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                customAttr.artId = artData.id;
+                GameObject paining = art.transform.GetChild(1).gameObject;
+                AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
+            }
+            NewOnSetArtV3(art, artData);
+        }
+
+        // 复制art
+        public static GameObject CopyArt(string artName)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+            GameObject clone = Instantiate(art, art.transform.parent);
+            clone.name = artName + "_c";
+            GameObject paining = clone.transform.GetChild(1).gameObject;
+            MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
+            Material material = Instantiate(painingRender.material);
+            painingRender.material = material;
+            return clone;
+        }
+        
+        // 删除art
+        public static void DeleteArt(string artName)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art)
+            {
+                GameObject paining = art.transform.GetChild(1).gameObject;
+                Material material = paining.GetComponent<MeshRenderer>().material;
+                Destroy(art);
+                Destroy(material);
+            }
+        }
+        
+        // 锁定解锁 art
+        public static void LockArt(string artName, bool locking)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+            GameObject paining = art.transform.GetChild(1).gameObject;
+            if (locking) paining.layer = LayerMask.NameToLayer(Globle.lockArtlayer);
+            else paining.layer = LayerMask.NameToLayer(Globle.focusArtLayer);
+        }
+        
+        // 初始化 加载 art
+        public static void InitArtImage(JsonData.ArtData[] artDataList)
+        {
+            foreach (JsonData.ArtData i in artDataList)
+            {
+                UpdateArt(i);
+            }
+        }
+
+        // 初始加载 删除 被标记删除的art
+        public static void InitDeleteArt(JsonData.ArtData[] artDataList)
+        {
+            foreach (JsonData.ArtData i in artDataList)
+            {
+               DeleteArt(i.name);
+            }
+        }
+
+        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
+        {
+            art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
+            art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            Quaternion rotate = new Quaternion();
+            rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            art.transform.localRotation = rotate;
+        }
+
+
+        public static void OnSetArtV3(GameObject art, JsonData.ArtData i)
+        {
+            art.transform.localPosition = new Vector3(-i.location[0], i.location[1], i.location[2]);
+            if (i.name.Contains("showcase"))
+            {
+                Transform sss = null;
+                for (int s = 0; s < art.transform.childCount; s++)
+                {
+                    if (art.transform.GetChild(s).name.Contains("paintings"))
+                    {
+                        sss = art.transform.GetChild(s);
+                    }
+                }
+                if (art.transform.right.y != 1)
+                {
+                    art.transform.rotation = sss.rotation;
+                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, -90);
+                }
+                else
+                {
+                    art.transform.rotation = sss.rotation;
+                    art.transform.eulerAngles = art.transform.eulerAngles + new Vector3(180, 0, 90);
+                }
+
+            }
+            else
+            {
+                art.transform.localRotation = new Quaternion(i.quaternion[3], i.quaternion[1], -i.quaternion[2], i.quaternion[0]);
+            }
+            art.transform.localScale = new Vector3(i.scale[0], i.scale[2], i.scale[1]);
+
+            if (i.name.Contains("painting"))
+            {
+                Transform frames = null;
+                Transform paintings = null;
+                for (int a = 0; a < art.transform.parent.childCount; a++)
+                {
+                    if (art.transform.parent.GetChild(a).name.Contains("frames"))
+                    {
+                        frames = art.transform.parent.GetChild(a);
+                    }
+                    if (art.transform.parent.GetChild(a).name.Contains("paintings"))
+                    {
+                        paintings = art.transform.parent.GetChild(a);
+                    }
+                }
+                float index = paintings.right.x+ paintings.right.z > 0 ? 0.01f : -0.01f;
+                paintings.localPosition = new Vector3(frames.localPosition.x, paintings.localPosition.y + index, frames.localPosition.z);
             }
         }
     }
