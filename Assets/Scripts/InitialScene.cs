@@ -15,36 +15,34 @@ namespace DefaultNamespace
 
         [HideInInspector]
         public string sceneUrl;
+        public string sceneurl;
         private float _deltaTime;
         private int _count;
         public float fps;
+        private bool _isLoad = true;
 
         private void Awake()
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             WebGLInput.captureAllKeyboardInput = false;
-            enabled = false;  // 默认不启动 前端发送场景url 后启动
             Debug.Log("通知发送场景url");
             Tools.loadScene(); // 通知发送场景url
+            enabled = false;  // 默认不启动 前端发送场景url 后启动
 #else
             sceneModel = "scene";
-            // sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220630/62bda0ea5e8137d4fabd5c11/scene.ab";
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneurl= "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/";
 #endif
         }
 
+
         private void Start()
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene",sceneUrl, (obj) =>
-                {
-                    
-                    AfterScene();
-                    Tools.loadScene();
-                })); 
-#else
+            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(sceneurl, "scene.ab"));
 
+#if !UNITY_EDITOR && UNITY_WEBGL
+
+#else
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
@@ -52,12 +50,13 @@ namespace DefaultNamespace
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
-                    //OnSetLightMap(obj);
-                    Debug.Log(AbInit.instances.AssetBundelLightMapDic.Count);
+                    OnSetLightMap(obj);
                     AfterScene();
-                })); 
-#endif             
-            
+                }));
+#endif
+
+
+
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
                 {
@@ -71,7 +70,11 @@ namespace DefaultNamespace
         public void AfterScene()
         {
             AddController controller = FindObjectOfType<AddController>();
-            controller.enabled = true;
+            if(controller) controller.AddThird();
+            OpusShow opusShow = FindObjectOfType<OpusShow>();
+            if (opusShow) opusShow.enabled = true;
+
+
             Light[] lights = FindObjectsOfType<Light>();
             foreach (Light i in lights)
             {
@@ -98,18 +101,38 @@ namespace DefaultNamespace
                     int LastIndex = item.Key.IndexOf(".");
                     int len = LastIndex - BeginIndex;
                     string bundleName = item.Key.Substring(BeginIndex, len);
-                    Debug.Log(bundleName);
                     Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
                     lightMap.OnAddLightmapTexs(texture2D);
                 }
             }
             lightMap.i = 0;
-
+            lightMap.OnLoadLightmap();
         }
 
 
         private void Update()
         {
+#if !UNITY_EDITOR && UNITY_WEBGL
+            if (AbInit.instances.manifest != null && _isLoad)
+            {
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
+                     {
+                        Debug.Log(FindObjectOfType<AbInit>() + "3");
+                        if (GameObject.Find("default_camera"))
+                        {
+                            GameObject.Find("default_camera").gameObject.SetActive(false);
+                        }
+                        Debug.Log(FindObjectOfType<AbInit>() + "8");
+                        OnSetLightMap(obj);
+                        AfterScene();
+                        Debug.Log(FindObjectOfType<AbInit>() + "9");
+                        Tools.loadScene();
+                    }));
+                    _isLoad = false;
+            }
+#endif
+
             _count++;
             _deltaTime += Time.deltaTime;
 
