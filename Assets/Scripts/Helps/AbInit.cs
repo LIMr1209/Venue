@@ -370,7 +370,9 @@ namespace DefaultNamespace
         public void ReplaceMaterialImage(GameObject obj, string url)
         {
             Material material = obj.GetComponent<MeshRenderer>().material;
-            StartCoroutine(DownloadTexture(url, (texture) => { material.mainTexture = texture; }
+            Material cloneMaterial = Instantiate(material);
+            obj.GetComponent<MeshRenderer>().material = cloneMaterial;
+            StartCoroutine(DownloadTexture(url, (texture) => { cloneMaterial.mainTexture = texture; }
             ));
         }
     }

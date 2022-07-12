@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Center: {x: 0, y: 2, z: 0}
   m_LayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 2147483647
   m_UseGeometry: 0
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
@@ -410,7 +410,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344c8bee1d32485ab5882a17413ef500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 1
   maxDistance: 200
 --- !u!114 &4895661117118384630
 MonoBehaviour:
