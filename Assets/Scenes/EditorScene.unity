@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1318136583}
   - component: {fileID: 1318136582}
-  - component: {fileID: 1318136584}
   - component: {fileID: 1318136581}
   - component: {fileID: 1318136580}
   - component: {fileID: 1318136579}
@@ -143,6 +142,7 @@ GameObject:
   - component: {fileID: 1318136575}
   - component: {fileID: 1318136574}
   - component: {fileID: 1318136573}
+  - component: {fileID: 1318136584}
   m_Layer: 0
   m_Name: MainCamera
   m_TagString: MainCamera
@@ -200,7 +200,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 344c8bee1d32485ab5882a17413ef500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smoothTime: 1
   maxDistance: 200
 --- !u!114 &1318136577
 MonoBehaviour:
@@ -232,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneModel: scene
   sceneUrl: https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab
+  sceneurl: 
   fps: 0
 --- !u!114 &1318136579
 MonoBehaviour:
@@ -246,6 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manifest: {fileID: 0}
+  sceneManifest: {fileID: 0}
 --- !u!114 &1318136580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -355,7 +356,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1318136572}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7410e5ddb4341fc45a8099ec1238edeb, type: 3}
+  m_Script: {fileID: 11500000, guid: 85a9ec7b7dd34f788375b6023f903af9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   space: 0
@@ -363,20 +364,20 @@ MonoBehaviour:
   pivot: 0
   centerType: 0
   scaleType: 0
-  SetMoveType: 119
-  SetRotateType: 101
-  SetScaleType: 114
-  SetAllTransformType: 121
-  SetSpaceToggle: 120
-  SetPivotModeToggle: 122
-  SetCenterTypeToggle: 99
-  SetScaleTypeToggle: 115
-  translationSnapping: 306
-  AddSelection: 304
-  RemoveSelection: 306
-  ActionKey: 304
-  UndoAction: 122
-  RedoAction: 121
+  SetMoveType: 0
+  SetRotateType: 0
+  SetScaleType: 0
+  SetAllTransformType: 0
+  SetSpaceToggle: 0
+  SetPivotModeToggle: 0
+  SetCenterTypeToggle: 0
+  SetScaleTypeToggle: 0
+  translationSnapping: 0
+  AddSelection: 0
+  RemoveSelection: 0
+  ActionKey: 0
+  UndoAction: 0
+  RedoAction: 0
   xColor: {r: 1, g: 0, b: 0, a: 0.8}
   yColor: {r: 0, g: 1, b: 0, a: 0.8}
   zColor: {r: 0, g: 0, b: 1, a: 0.8}
