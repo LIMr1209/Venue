@@ -30,15 +30,18 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            //StartCoroutine(
-            //    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
-            //        {
-            //            _playerFollowCamera = obj;
-            //            _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
-            //            _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
-            //                .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-            //        }
-            //    ));
+
+
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
+            //         {
+            //             _playerFollowCamera = obj;
+            //             _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
+            //             _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+            //                 .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            //         }
+            //     ));
+
             // StartCoroutine(
             //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, (obj) =>
             //         {
@@ -46,7 +49,6 @@ namespace DefaultNamespace
             //             cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
             //         }
             //     ));
-            enabled = false;
         }
 
         // private void Start()
@@ -81,8 +83,9 @@ namespace DefaultNamespace
                                 .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
                         }
                     ));
+                characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
                 StartCoroutine(
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb,
                         new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
                         {
                             _player = obj;
@@ -93,6 +96,10 @@ namespace DefaultNamespace
                         }
                     ));
                 isAdd = false;
+            }
+
+            if (!isAdd)
+            {
                 if (_switchCharacter)
                 {
                     SetCharacterColorAni();

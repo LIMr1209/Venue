@@ -44,7 +44,7 @@ namespace DefaultNamespace
 
 #else
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
                     if (GameObject.Find("default_camera"))
                     {
@@ -70,7 +70,7 @@ namespace DefaultNamespace
         public void AfterScene()
         {
             AddController controller = FindObjectOfType<AddController>();
-            controller.enabled = true;
+            if(controller) controller.AddThird();
             OpusShow opusShow = FindObjectOfType<OpusShow>();
             if (opusShow) opusShow.enabled = true;
 
