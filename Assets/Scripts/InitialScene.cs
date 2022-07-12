@@ -15,7 +15,6 @@ namespace DefaultNamespace
 
         [HideInInspector]
         public string sceneUrl;
-        public string sceneurl;
         private float _deltaTime;
         private int _count;
         public float fps;
@@ -31,20 +30,41 @@ namespace DefaultNamespace
 #else
             sceneModel = "scene";
             sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
-            sceneurl= "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/";
 #endif
         }
 
 
         private void Start()
         {
-            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(sceneurl, "scene.ab"));
-
 #if !UNITY_EDITOR && UNITY_WEBGL
+            if (AbInit.instances.manifest != null && _isLoad)
+            {
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
+                     {
+                        Debug.Log(FindObjectOfType<AbInit>() + "3");
+                        if (GameObject.Find("default_camera"))
+                        {
+                            GameObject.Find("default_camera").gameObject.SetActive(false);
+                        }
+                        Debug.Log(FindObjectOfType<AbInit>() + "8");
+                        OnSetLightMap(obj);
+                        AfterScene();
+                        Debug.Log(FindObjectOfType<AbInit>() + "9");
+                        Tools.loadScene();
+                    }));
+                    _isLoad = false;
+            }
 
 #else
+            int BeginIndex = sceneUrl.IndexOf("/scene");
+            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
+            string sceneManifestName = sceneModel + ".ab.manifest";
+            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
+
+
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
                     if (GameObject.Find("default_camera"))
                     {
@@ -112,27 +132,6 @@ namespace DefaultNamespace
 
         private void Update()
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            if (AbInit.instances.manifest != null && _isLoad)
-            {
-                StartCoroutine(
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
-                     {
-                        Debug.Log(FindObjectOfType<AbInit>() + "3");
-                        if (GameObject.Find("default_camera"))
-                        {
-                            GameObject.Find("default_camera").gameObject.SetActive(false);
-                        }
-                        Debug.Log(FindObjectOfType<AbInit>() + "8");
-                        OnSetLightMap(obj);
-                        AfterScene();
-                        Debug.Log(FindObjectOfType<AbInit>() + "9");
-                        Tools.loadScene();
-                    }));
-                    _isLoad = false;
-            }
-#endif
-
             _count++;
             _deltaTime += Time.deltaTime;
 

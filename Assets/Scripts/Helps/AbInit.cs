@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 // using UnityEngine.UI;
@@ -12,7 +14,7 @@ namespace DefaultNamespace
     {
         public static AbInit instances;
         public AssetBundleManifest manifest;
-        public AssetBundleManifest sceneManifest;
+        public List<string> sceneManifestList = new List<string>();
 
         float time = 0;
         float lodingindex = 0;
@@ -100,26 +102,37 @@ namespace DefaultNamespace
 
         public IEnumerator OnWebRequestAssetBundleManifestScene(string url,string name)
         {
-            if (sceneManifest) yield break;
-            string depsUrl = Path.Combine(url, name).Replace("\\", "/");
-            Debug.Log(depsUrl);
-            UnityWebRequest deps = UnityWebRequest.Get(depsUrl);
-            yield return deps.SendWebRequest();
-
-            if (!string.IsNullOrEmpty(deps.error))
-            {
-                throw new Exception(deps.error);
-            }
-            byte[] abData = deps.downloadHandler.data;
-            Debug.Log(abData[1]);
+            if (sceneManifestList.Count != 0) yield break;
+            string depsUrl = null;
+            string data = null;
 #if !UNITY_EDITOR && UNITY_WEBGL
-                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+            depsUrl= Path.Combine(url, name).Replace("\\", "/");
+#else
+            depsUrl = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
+            depsUrl = Path.Combine(depsUrl, name).Replace("\\", "/");
 #endif
-            AssetBundle assetBundleManifest = AssetBundle.LoadFromMemory(abData);
-            Debug.Log(assetBundleManifest);
-            sceneManifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
-            Debug.Log(sceneManifest);
+            WebRequest webR = WebRequest.Create(depsUrl); //URL 是需要获取的网址地址
+            yield return webR;
+            webR.Proxy = null;
+            Stream stream = webR.GetResponse().GetResponseStream();
+            StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("gbk"));
+            data = reader.ReadToEnd();
+            string[] str = data.Split(':');
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i].Contains("/Work/venue/Assets/AssetsBundles/lightmap/lightmap"))
+                {
+                    string s = str[i];
+                    int BeginIndex = s.IndexOf("lightmap");
+                    int LastIndex = s.IndexOf(".");
+                    int len = LastIndex - BeginIndex;
+                    string bundleName = s.Substring(BeginIndex, len);
+                    sceneManifestList.Add(bundleName);
+                }
+            }
         }
+
+
 
 
 
@@ -144,27 +157,7 @@ namespace DefaultNamespace
         public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
-            //string[] deps = manifest.GetAllDependencies(name + ".ab");
-            //string deppath = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-            //deppath = deppath.Replace("\\", "/");
-            //foreach (var item in deps)
-            //{
-            //    if (!AssetBundelLightMapDic.ContainsKey("lightmap"))
-            //    {
-            //        string depPath = Path.Combine(deppath, item).Replace("\\", "/");
-
-            //        UnityWebRequest dep = UnityWebRequest.Get(depPath);
-            //        yield return dep.SendWebRequest();
-            //        byte[] depBytes = dep.downloadHandler.data;
-
-            //        depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
-
-            //        AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
-            //        AssetBundelLightMapDic.Add(item, andep);
-            //    }
-
-            //}
-
+            yield return manifest != null;
             AssetBundle AB = null;
             string path = null;
 #if !UNITY_EDITOR && UNITY_WEBGL
@@ -291,12 +284,15 @@ namespace DefaultNamespace
             Vector3 rotate = new Vector3(0, 0, 0);
             yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObjectUrl(name, url, point, rotate, callback));
         }
-
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
-            yield return manifest != null;
-            string[] deps = manifest.GetAllDependencies(name + ".ab");
+            yield return sceneManifestList.Count != 0;
+            string[] deps = new string[sceneManifestList.Count];
+            for (int i = 0; i < sceneManifestList.Count; i++)
+            {
+                deps[i] = sceneManifestList[i] + ".ab";
+            }
             string deppath = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
             deppath = deppath.Replace("\\", "/");
             foreach (var item in deps)
@@ -304,21 +300,14 @@ namespace DefaultNamespace
                 if (!AssetBundelLightMapDic.ContainsKey("lightmap"))
                 {
                     string depPath = Path.Combine(deppath, item).Replace("\\", "/");
-                    //UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
                     UnityWebRequest dep = UnityWebRequest.Get(depPath);
                     yield return dep.SendWebRequest();
-                    //while (!dep.isDone)
-                    //{
-
-                    //}
                     if (!string.IsNullOrEmpty(dep.error))
                     {
                         throw new Exception(dep.error);
                     }
                     byte[] depBytes = dep.downloadHandler.data;
-
                     depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
-
                     AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
                     AssetBundelLightMapDic.Add(item, andep);
                 }
