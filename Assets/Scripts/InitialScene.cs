@@ -38,7 +38,7 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(sceneurl, "scene.ab"));
+            //StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(sceneurl, "scene.ab"));
 
 #if !UNITY_EDITOR && UNITY_WEBGL
 

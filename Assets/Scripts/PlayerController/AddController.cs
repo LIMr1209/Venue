@@ -30,15 +30,15 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
-                    {
-                        _playerFollowCamera = obj;
-                        _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
-                        _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
-                            .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
-                    }
-                ));
+            //StartCoroutine(
+            //    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
+            //        {
+            //            _playerFollowCamera = obj;
+            //            _cinemachineVirtualCamera = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>();
+            //            _playerFollowCamera3rdBody = _playerFollowCamera.GetComponent<CinemachineVirtualCamera>()
+            //                .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
+            //        }
+            //    ));
             // StartCoroutine(
             //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb, (obj) =>
             //         {
