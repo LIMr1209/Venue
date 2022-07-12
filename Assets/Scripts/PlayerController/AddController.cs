@@ -51,21 +51,21 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            _opusShow = FindObjectOfType<OpusShow>();
-            characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
-                    new Vector3(0, -180, 0), (obj) =>
-                    {
-                        // _mask = obj;
-                        // _mask.transform.SetParent(_player.transform, false);
-                        _player = obj;
-                        cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-                        ShaderProblem.ResetMeshShader(obj); // 解决shader问题
-                        _opusShow.enabled = true;
-                        AddThird();
-                    }
-                ));
+            // _opusShow = FindObjectOfType<OpusShow>();
+            // characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
+            // StartCoroutine(
+            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
+            //         new Vector3(0, -180, 0), (obj) =>
+            //         {
+            //             // _mask = obj;
+            //             // _mask.transform.SetParent(_player.transform, false);
+            //             _player = obj;
+            //             cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+            //             ShaderProblem.ResetMeshShader(obj); // 解决shader问题
+            //             _opusShow.enabled = true;
+            //             AddThird();
+            //         }
+                // ));
         }
 
         // private void Start()
@@ -124,21 +124,6 @@ namespace DefaultNamespace
                 else
                 {
                     if (Input.GetKeyDown("v") && _player) SwithVisul();
-
-                    if (Input.GetKeyDown(KeyCode.Z))
-                    {
-                        for (int i = 0; i < 50; i++)
-                        {
-                            StartCoroutine(
-                                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
-                                    new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
-                                    {
-                                        ShaderProblem.ResetMeshShader(_player); // 解决shader问题
-                                    }
-                                ));
-                        }
-                    }
-
                     // float scroll = Input.GetAxis("Mouse ScrollWheel");
                     // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
                     // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
