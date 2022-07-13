@@ -26,7 +26,6 @@ namespace DefaultNamespace
         private GameObject _mask;
         private bool _switchCharacter;
         public float zoomSpeed = 10.0f;
-        bool isAdd = true;
 
         private void Awake()
         {

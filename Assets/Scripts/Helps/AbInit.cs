@@ -114,7 +114,6 @@ namespace DefaultNamespace
             
             WebRequest webR = WebRequest.Create(depsUrl); //URL 是需要获取的网址地址
             yield return webR;
-            if (webR == null) yield break ;
             webR.Proxy = null;
             Stream stream = webR.GetResponse().GetResponseStream();
             StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("gbk"));

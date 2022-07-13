@@ -18,7 +18,6 @@ namespace DefaultNamespace
         private float _deltaTime;
         private int _count;
         public float fps;
-        private bool _isLoad = true;
 
         private void Awake()
         {
@@ -37,25 +36,21 @@ namespace DefaultNamespace
         private void Start()
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-            if (AbInit.instances.manifest != null && _isLoad)
-            {
-                StartCoroutine(
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
-                     {
-                        Debug.Log(FindObjectOfType<AbInit>() + "3");
-                        if (GameObject.Find("default_camera"))
-                        {
-                            GameObject.Find("default_camera").gameObject.SetActive(false);
-                        }
-                        Debug.Log(FindObjectOfType<AbInit>() + "8");
-                        OnSetLightMap(obj);
-                        AfterScene();
-                        Debug.Log(FindObjectOfType<AbInit>() + "9");
-                        Tools.loadScene();
-                    }));
-                    _isLoad = false;
-            }
-
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
+                 {
+                    Debug.Log(FindObjectOfType<AbInit>() + "3");
+                    if (GameObject.Find("default_camera"))
+                    {
+                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                    }
+                    Debug.Log(FindObjectOfType<AbInit>() + "8");
+                    OnSetLightMap(obj);
+                    AfterScene();
+                    Debug.Log(FindObjectOfType<AbInit>() + "9");
+                    Tools.loadScene();
+                }));
+                _isLoad = false;
 #else
             int BeginIndex = sceneUrl.IndexOf("/scene");
             string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
