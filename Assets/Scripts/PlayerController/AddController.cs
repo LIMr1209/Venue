@@ -26,7 +26,6 @@ namespace DefaultNamespace
         private GameObject _mask;
         private bool _switchCharacter;
         public float zoomSpeed = 10.0f;
-        bool isAdd = true;
 
         private void Awake()
         {
@@ -69,42 +68,39 @@ namespace DefaultNamespace
         //                 _opusShow.enabled = true;
         //                 AddThird();
         //             }));
-            
-            
+
+
         // }
 
         private void Update()
         {
-
-            if (!isAdd)
+            if (_switchCharacter)
             {
-                if (_switchCharacter)
-                {
-                    SetCharacterColorAni();
-                }
-                else
-                {
-                    if (Input.GetKeyDown("v") && _player) SwithVisul();
-
-                    if (Input.GetKeyDown(KeyCode.Z))
-                    {
-                        for (int i = 0; i < 50; i++)
-                        {
-                            StartCoroutine(
-                                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
-                                    new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
-                                    {
-                                        ShaderProblem.ResetMeshShader(_player); // 解决shader问题
-                                    }
-                                ));
-                        }
-                    }
-
-                    // float scroll = Input.GetAxis("Mouse ScrollWheel");
-                    // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
-                    // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
-                }
+                SetCharacterColorAni();
             }
+            else
+            {
+                if (Input.GetKeyDown("v") && _player) SwithVisul();
+
+                if (Input.GetKeyDown(KeyCode.Z))
+                {
+                    for (int i = 0; i < 50; i++)
+                    {
+                        StartCoroutine(
+                            AbInit.instances.OnWebRequestLoadAssetBundleGameObject(armatureAb, controllerAb,
+                                new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
+                                {
+                                    ShaderProblem.ResetMeshShader(_player); // 解决shader问题
+                                    }
+                            ));
+                    }
+                }
+
+                // float scroll = Input.GetAxis("Mouse ScrollWheel");
+                // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
+                // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
+            }
+
         }
 
         private void SwithVisul()
