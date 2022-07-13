@@ -35,6 +35,12 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            int BeginIndex = sceneUrl.IndexOf("/scene");
+            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
+            string sceneManifestName = sceneModel + ".ab.manifest";
+            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
+
+
 #if !UNITY_EDITOR && UNITY_WEBGL
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
@@ -50,13 +56,7 @@ namespace DefaultNamespace
                     Debug.Log(FindObjectOfType<AbInit>() + "9");
                     Tools.loadScene();
                 }));
-                _isLoad = false;
 #else
-            int BeginIndex = sceneUrl.IndexOf("/scene");
-            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
-            string sceneManifestName = sceneModel + ".ab.manifest";
-            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
-
 
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
