@@ -64,7 +64,7 @@ namespace DefaultNamespace
 
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
                 {
                     if (GameObject.Find("default_camera"))
                     {

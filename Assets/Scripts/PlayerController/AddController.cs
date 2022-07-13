@@ -30,27 +30,6 @@ namespace DefaultNamespace
 
         private void Awake()
         {
-            
-        }
-
-        private void Start()
-        {
-            // _opusShow = FindObjectOfType<OpusShow>();
-            // characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
-            // StartCoroutine(
-            //     AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
-            //         new Vector3(0, -180, 0), (obj) =>
-            //         {
-            //             // _mask = obj;
-            //             // _mask.transform.SetParent(_player.transform, false);
-            //             _player = obj;
-            //             cinemachineTarget = _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
-            //             ShaderProblem.ResetMeshShader(obj); // 解决shader问题
-            //             _opusShow.enabled = true;
-            //             AddThird();
-            //         }
-                // ));
-
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
                     {
