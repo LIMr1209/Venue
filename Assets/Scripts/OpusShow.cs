@@ -277,14 +277,16 @@ namespace DefaultNamespace
             {
                 art = CopyArt("showcase-001");
             }
-            if (artData.id != null && artData.imageUrl != null)
+            CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+            if(!string.IsNullOrEmpty(artData.id))  customAttr.artId = artData.id;
+            if (!string.IsNullOrEmpty(artData.imageUrl))
             {
-                // 设置自定义id
-                CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                customAttr.artId = artData.id;
                 GameObject paining = art.transform.GetChild(1).gameObject;
                 AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
             }
+            customAttr.location = artData.location;
+            customAttr.rotateS = artData.rotateS;
+            customAttr.scaleS = artData.scaleS;
             NewOnSetArtV3(art, artData);
         }
 
@@ -362,14 +364,18 @@ namespace DefaultNamespace
 
         public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
         {
-            art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
-            art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
+            art.transform.localPosition += new Vector3(i.location[0], i.location[1], i.location[2]);
+            Vector3 oldScale = art.transform.localScale;
+            art.transform.localScale = new Vector3(i.scaleS*oldScale.x,i.scaleS*oldScale.y, i.scaleS*oldScale.z);
+            art.transform.Rotate(new Vector3(0,i.rotateS,0));
+            // art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
+            // art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
             // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-            Quaternion rotate = new Quaternion();
+            // Quaternion rotate = new Quaternion();
             // rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
-            Quaternion oldRotate = art.transform.localRotation;
-            rotate.eulerAngles = new Vector3(oldRotate.eulerAngles.x, i.rotateS, oldRotate.eulerAngles.z);
-            art.transform.localRotation = rotate;
+            // Quaternion oldRotate = art.transform.localRotation;
+            // rotate.eulerAngles = new Vector3(oldRotate.eulerAngles.x, i.rotateS, oldRotate.eulerAngles.z);
+            // art.transform.localRotation = rotate;
         }
 
 

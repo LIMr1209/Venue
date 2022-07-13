@@ -160,6 +160,8 @@ namespace RuntimeGizmos
         protected static Material lineMaterial;
         protected static Material outlineMaterial;
 
+        protected Vector3 movement;
+        
         void Awake()
         {
             myCamera = GetComponent<Camera>();
@@ -428,8 +430,6 @@ namespace RuntimeGizmos
             {
                 if (transType == TransformType.Move)
                 {
-                    Vector3 movement = Vector3.zero;
-
                     if (hasTranslatingAxisPlane)
                     {
                         movement = mousePosition - previousMousePosition;
@@ -787,7 +787,7 @@ namespace RuntimeGizmos
             }
         }
 
-        public void ClearTargets(bool addCommand = true)
+        public virtual void ClearTargets(bool addCommand = true)
         {
             if (addCommand) UndoRedoManager.Insert(new ClearTargetsCommand(this, targetRootsOrdered));
 

@@ -6,5 +6,8 @@ namespace DefaultNamespace
     public class CustomAttr : MonoBehaviour
     {
         public string artId; // 记录自定义属性 artId
+        public float[] location; // 记录增量位置
+        public float rotateS; // 记录增量旋转
+        public float scaleS; // 记录增量缩放
     }
 }
