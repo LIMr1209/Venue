@@ -112,6 +112,7 @@ namespace DefaultNamespace
         public void OnSetLightMap(GameObject obj)
         {
             LightMap lightMap = obj.GetComponent<LightMap>();
+            if (!lightMap) return;
             lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
             foreach (var item in AbInit.instances.AssetBundelLightMapDic)
             {

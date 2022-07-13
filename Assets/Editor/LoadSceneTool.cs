@@ -144,7 +144,7 @@ public class LoadSceneTool : MonoBehaviour
         string targetPath ="Assets/AssetsPackages/OtherPrefabs/" + scene.name+".prefab";
         PrefabUtility.SaveAsPrefabAsset(scene, targetPath);
         OnDestoryObj();
-        OnSetAssetBundelName(buildurl);
+        //OnSetAssetBundelName(buildurl);
     }
 
     private static void OnSetAssetBundelName(string buildurl)

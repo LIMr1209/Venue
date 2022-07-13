@@ -111,8 +111,10 @@ namespace DefaultNamespace
             depsUrl = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
             depsUrl = Path.Combine(depsUrl, name).Replace("\\", "/");
 #endif
+            
             WebRequest webR = WebRequest.Create(depsUrl); //URL 是需要获取的网址地址
             yield return webR;
+            if (webR == null) yield break ;
             webR.Proxy = null;
             Stream stream = webR.GetResponse().GetResponseStream();
             StreamReader reader = new StreamReader(stream, Encoding.GetEncoding("gbk"));
