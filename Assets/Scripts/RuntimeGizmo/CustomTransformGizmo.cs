@@ -21,6 +21,8 @@ namespace DefaultNamespace
                     if (isAdding)
                     {
                         AddTarget(target);
+                        // 选中后 发送数据
+                        SendArtData(target);
                     }
                     else if (isRemoving)
                     {
@@ -29,6 +31,8 @@ namespace DefaultNamespace
                     else if (!isAdding && !isRemoving)
                     {
                         ClearAndAddTarget(target);
+                        // 选中后 发送数据
+                        SendArtData(target);
                     }
                 }
                 else
@@ -48,22 +52,23 @@ namespace DefaultNamespace
             base.UpdateTransForm(originalPivot, planeNormal, ref previousMousePosition, transType, projectedAxis, axis,
                 ref currentSnapMovementAmount, ref currentSnapScaleAmount, ref currentSnapRotationAmount, otherAxis1,
                 otherAxis2);
+            // 变换时 发送数据
+            SendArtData(targetRootsOrdered[0]);
+        }
+
+        public void SendArtData(Transform target)
+        {
 #if !UNITY_EDITOR && UNITY_WEBGL
-            Transform target = targetRootsOrdered[0];
             JsonData.ArtData artData = new JsonData.ArtData();
             artData.name = target.gameObject.name;
             if (target.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
             {
-                artData.id = target.GetComponent<CustomAttr>().artId;
+                artData.id = customAttr.artId;
             }
-            artData.scale = new float[] {target.localScale[0], target.localScale[1], target.localScale[2]};
+            artData.scaleS = target.localScale[1];
             artData.location = new float[]
                 {target.localPosition[0], target.localPosition[1], target.localPosition[2]};
-            artData.rotate = new float[]
-            {
-                target.localRotation.eulerAngles[0], target.localRotation.eulerAngles[1],
-                target.localRotation.eulerAngles[2]
-            };
+            artData.rotateS = target.localRotation.eulerAngles[1];
             Tools.selectTrans(JsonUtility.ToJson(artData));
 #endif
         }

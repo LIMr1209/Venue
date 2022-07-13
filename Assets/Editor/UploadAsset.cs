@@ -61,12 +61,11 @@ namespace Editor
         }
 
 
-
         [MenuItem("Tools/上传构建")]
         public static void UploadBuild()
         {
-            string buildPath = @"C:\Users\pc\Desktop\VenueBuild";
-            string suffixPath = @"C:\Users\pc\Desktop\";
+            string buildPath = @"C:\Users\thn\Desktop\VenueBuild";
+            string suffixPath = @"C:\Users\thn\Desktop\";
             List<string> files = new List<string>();
             QiNiuHelp.ForeachFile(buildPath, ref files);
             foreach (string i in files)

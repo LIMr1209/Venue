@@ -25,6 +25,7 @@ namespace DefaultNamespace
         private ThirdPersonController controller;
         private CinemachineVirtualCamera virtualCamera;
         private SkinnedMeshRenderer playerMeshRender;
+        private CustomTransformGizmo _customTransformGizmo;
         private Transform TiTrans;
         protected Transform TargetArt;
 
@@ -39,6 +40,7 @@ namespace DefaultNamespace
             isClick = true;
             isPlayerMove = false;
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+            _customTransformGizmo = FindObjectOfType<CustomTransformGizmo>();
         }
 
         private void OnEnable()
@@ -263,13 +265,17 @@ namespace DefaultNamespace
             }
         }
         
-        public static void UpdateArt(JsonData.ArtData artData)
+        public void UpdateArt(JsonData.ArtData artData)
         {
             GameObject art = GameObject.Find(artData.name);
-            if (art == null)
+            if (art && artData.isDel) // 删除了的 模型里面的画框
             {
-                            
-                art = CopyArt("showcase-01");
+                DeleteArt(art.name);
+                return;
+            }
+            if (art == null && !artData.isDel) // 复制的 且没有被标记删除的画框 需要复制
+            {
+                art = CopyArt("showcase-001");
             }
             if (artData.id != null && artData.imageUrl != null)
             {
@@ -283,7 +289,7 @@ namespace DefaultNamespace
         }
 
         // 复制art
-        public static GameObject CopyArt(string artName)
+        public  GameObject CopyArt(string artName, bool select=false)
         {
             GameObject art = GameObject.Find(artName);
             if (art == null)
@@ -296,24 +302,35 @@ namespace DefaultNamespace
             MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
             Material material = Instantiate(painingRender.material);
             painingRender.material = material;
+            // 编辑模式 前端调用复制 需要 选中并且传数据给前端
+            if (select && _customTransformGizmo.enabled)
+            {
+                _customTransformGizmo.ClearAndAddTarget(art.transform);
+                _customTransformGizmo.SendArtData(art.transform);
+            }
             return clone;
         }
         
         // 删除art
-        public static void DeleteArt(string artName)
+        public void DeleteArt(string artName)
         {
             GameObject art = GameObject.Find(artName);
             if (art)
             {
-                GameObject paining = art.transform.GetChild(1).gameObject;
-                Material material = paining.GetComponent<MeshRenderer>().material;
-                Destroy(art);
-                Destroy(material);
+                DeleteArt(art);
             }
+        }
+        // 删除art
+        public void DeleteArt(GameObject art)
+        {
+            GameObject paining = art.transform.GetChild(1).gameObject;
+            Material material = paining.GetComponent<MeshRenderer>().material;
+            Destroy(art);
+            Destroy(material);
         }
         
         // 锁定解锁 art
-        public static void LockArt(string artName, bool locking)
+        public void LockArt(string artName, bool locking)
         {
             GameObject art = GameObject.Find(artName);
             if (art == null)
@@ -326,7 +343,7 @@ namespace DefaultNamespace
         }
         
         // 初始化 加载 art
-        public static void InitArtImage(JsonData.ArtData[] artDataList)
+        public void InitArtImage(JsonData.ArtData[] artDataList)
         {
             foreach (JsonData.ArtData i in artDataList)
             {
@@ -335,7 +352,7 @@ namespace DefaultNamespace
         }
 
         // 初始加载 删除 被标记删除的art
-        public static void InitDeleteArt(JsonData.ArtData[] artDataList)
+        public void InitDeleteArt(JsonData.ArtData[] artDataList)
         {
             foreach (JsonData.ArtData i in artDataList)
             {
@@ -346,9 +363,12 @@ namespace DefaultNamespace
         public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
         {
             art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
-            art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
+            // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
             Quaternion rotate = new Quaternion();
-            rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            // rotate.eulerAngles = new Vector3(i.scale[0], i.scale[1], i.scale[2]);
+            Quaternion oldRotate = art.transform.localRotation;
+            rotate.eulerAngles = new Vector3(oldRotate.eulerAngles.x, i.rotateS, oldRotate.eulerAngles.z);
             art.transform.localRotation = rotate;
         }
 

@@ -83,10 +83,14 @@ namespace DefaultNamespace
             public string name; // 画框名字
             public string id; // 作品id
             public string imageUrl; // 画框图片名
+            public bool isDel; // 是否删除
+            public int nKind; // 模型 视频 图片
             public float[] scale; // 画框缩放值
             public float[] rotate; // 画框旋转值
             public float[] location; // 画框坐标值
             public float[] quaternion;//画框旋转四元数
+            public float scaleS;  // y轴 缩放值
+            public float rotateS; // y轴 旋转值
         }
 
         [Serializable]
