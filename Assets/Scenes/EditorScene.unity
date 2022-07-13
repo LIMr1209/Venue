@@ -231,7 +231,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneModel: scene
   sceneUrl: https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab
-  sceneurl: 
   fps: 0
 --- !u!114 &1318136579
 MonoBehaviour:
@@ -246,7 +245,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   manifest: {fileID: 0}
-  sceneManifest: {fileID: 0}
+  sceneManifestList: []
 --- !u!114 &1318136580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,7 +408,7 @@ MonoBehaviour:
   manuallyHandleGizmo: 0
   selectionMask:
     serializedVersion: 2
-    m_Bits: 4294967291
+    m_Bits: 64
 --- !u!1 &1481622727
 GameObject:
   m_ObjectHideFlags: 0
