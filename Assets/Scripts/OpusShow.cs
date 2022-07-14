@@ -15,7 +15,7 @@ namespace DefaultNamespace
         private Vector3 startPoint;
         private Quaternion startQuaternion;
         public int maxDistance = 200;
-        private bool isPlayerMove;
+        public bool isPlayerMove;
         private bool isClick;
         //private List<Showcase> showcaseList = new List<Showcase>();
         private bool AddshowcaseList = true;
@@ -267,15 +267,21 @@ namespace DefaultNamespace
         
         public void UpdateArt(JsonData.ArtData artData)
         {
+            GameObject baseArt = null;
             GameObject art = GameObject.Find(artData.name);
             if (art && artData.isDel) // 删除了的 模型里面的画框
             {
                 DeleteArt(art.name);
                 return;
             }
-            if (art == null && !artData.isDel) // 复制的 且没有被标记删除的画框 需要复制
+            if (art == null && !artData.isDel) // 复制的 且没有被标记删除的画框 需要复制 （找到基体）
             {
-                art = CopyArt("showcase-001");
+                baseArt = GameObject.Find(artData.cloneBase);
+                if (baseArt == null)
+                {
+                    return;
+                }
+                art = CopyArt(baseArt);
             }
             CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
             if(!string.IsNullOrEmpty(artData.id))  customAttr.artId = artData.id;
@@ -284,22 +290,18 @@ namespace DefaultNamespace
                 GameObject paining = art.transform.GetChild(1).gameObject;
                 AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
             }
+
+            customAttr.cloneBase = baseArt!=null?baseArt.name:"";
             customAttr.location = artData.location;
             customAttr.rotateS = artData.rotateS;
             customAttr.scaleS = artData.scaleS;
             NewOnSetArtV3(art, artData);
         }
 
-        // 复制art
-        public  GameObject CopyArt(string artName, bool select=false)
+        public GameObject CopyArt(GameObject art, bool select = false)
         {
-            GameObject art = GameObject.Find(artName);
-            if (art == null)
-            {
-                throw (new Exception("画框不存在"));
-            }
             GameObject clone = Instantiate(art, art.transform.parent);
-            clone.name = artName + "_c";
+            clone.name = art.name + "_clone";
             GameObject paining = clone.transform.GetChild(1).gameObject;
             MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
             Material material = Instantiate(painingRender.material);
@@ -311,6 +313,18 @@ namespace DefaultNamespace
                 _customTransformGizmo.SendArtData(art.transform);
             }
             return clone;
+        }
+
+        // 复制art
+        public  GameObject CopyArt(string artName, bool select=false)
+        {
+            GameObject art = GameObject.Find(artName);
+            if (art == null)
+            {
+                throw (new Exception("画框不存在"));
+            }
+
+            return CopyArt(art, select);
         }
         
         // 删除art

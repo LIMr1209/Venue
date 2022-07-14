@@ -9,5 +9,6 @@ namespace DefaultNamespace
         public float[] location; // 记录增量位置
         public float rotateS; // 记录增量旋转
         public float scaleS; // 记录增量缩放
+        public string cloneBase;  // 如果是复制出来的 需要记录基体
     }
 }

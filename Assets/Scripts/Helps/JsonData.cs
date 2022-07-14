@@ -91,6 +91,7 @@ namespace DefaultNamespace
             public float[] quaternion;//画框旋转四元数
             public float scaleS;  // y轴 缩放值
             public float rotateS; // y轴 旋转值
+            public string cloneBase; // 如果是复制出来的 需要记录基体
         }
 
         [Serializable]
