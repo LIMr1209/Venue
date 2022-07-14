@@ -80,6 +80,8 @@ namespace DefaultNamespace
 
         public void JsUpdateTrans(string strParams)
         {
+            Debug.Log("接收编辑参数");
+            Debug.Log(strParams);
             ArtData data = JsonUtility.FromJson<ArtData>(strParams);
             _opusShow.UpdateArt(data);
         }

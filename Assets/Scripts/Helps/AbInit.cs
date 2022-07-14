@@ -376,6 +376,9 @@ namespace DefaultNamespace
                 {
                     cloneMaterial.mainTexture = texture;
                     // »­¿ò³ß´ç×ÔÊÊÓ¦
+                    // float proportion = 0.01f;
+                    // obj.transform.parent.localScale.x *= texture.height * proportion;
+                    // obj.transform.parent.localScale.z *= texture.height * proportion;
                 }
             ));
         }
