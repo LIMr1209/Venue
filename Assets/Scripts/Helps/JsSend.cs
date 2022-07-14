@@ -11,7 +11,7 @@ namespace DefaultNamespace
         private AbInit _abInit;
         private OpusShow _opusShow;
         private AddController _addController;
-        private CustomTransformGizmo _customTransformGizmo;
+        private ArtUpdateTrans _artUpdateTrans;
 
         public void Awake()
         {
@@ -19,7 +19,7 @@ namespace DefaultNamespace
             _abInit = FindObjectOfType<AbInit>();
             _opusShow = FindObjectOfType<OpusShow>();
             _addController = FindObjectOfType<AddController>();
-            _customTransformGizmo = FindObjectOfType<CustomTransformGizmo>();
+            _artUpdateTrans = FindObjectOfType<ArtUpdateTrans>();
         }
 
         // 获取初始化参数 场景url 实例化场景对象
@@ -36,7 +36,7 @@ namespace DefaultNamespace
         // 编辑模式 启用 transformGizmo 组件
         public void JsSetModeEditor()
         {
-            _customTransformGizmo.enabled = true;
+            _artUpdateTrans.enabled = true;
         }
 
         // 接收画框名 聚焦画框

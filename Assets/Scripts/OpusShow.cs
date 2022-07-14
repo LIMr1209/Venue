@@ -25,9 +25,9 @@ namespace DefaultNamespace
         private ThirdPersonController controller;
         private CinemachineVirtualCamera virtualCamera;
         private SkinnedMeshRenderer playerMeshRender;
-        private CustomTransformGizmo _customTransformGizmo;
+        private ArtUpdateTrans _artUpdateTrans;
         private Transform TiTrans;
-        protected Transform TargetArt;
+        private Transform TargetArt;
 
         private void Awake()
         {
@@ -40,7 +40,7 @@ namespace DefaultNamespace
             isClick = true;
             isPlayerMove = false;
             virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-            _customTransformGizmo = FindObjectOfType<CustomTransformGizmo>();
+            _artUpdateTrans = FindObjectOfType<ArtUpdateTrans>();
         }
 
         private void OnEnable()
@@ -52,6 +52,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            if(_artUpdateTrans.enabled) return;
             OnFocusArtDic();
             // 鼠标按下的时候发射射线
             if (Input.GetMouseButtonDown(0))
@@ -168,8 +169,8 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                 {
-                    Debug.Log("传递作品id"+customAttr.artId);
-                    Tools.showFocusWindow(customAttr.artId);
+                    Debug.Log("传递作品id"+customAttr.id);
+                    Tools.showFocusWindow(customAttr.id);
                 }
 #endif
             });
@@ -283,8 +284,17 @@ namespace DefaultNamespace
                 }
                 art = CopyArt(baseArt);
             }
-            CustomAttr customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-            if(!string.IsNullOrEmpty(artData.id))  customAttr.artId = artData.id;
+
+            CustomAttr customAttr = art.GetComponent<CustomAttr>();
+            if (!customAttr)
+            {
+                customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                customAttr.oldLocation = art.transform.localPosition;
+                customAttr.oldRotate = art.transform.localRotation;
+                customAttr.oldScale = art.transform.localScale;
+                
+            }
+            if(!string.IsNullOrEmpty(artData.id))  customAttr.id = artData.id;
             if (!string.IsNullOrEmpty(artData.imageUrl))
             {
                 GameObject paining = art.transform.GetChild(1).gameObject;
@@ -295,7 +305,7 @@ namespace DefaultNamespace
             customAttr.location = artData.location;
             customAttr.rotateS = artData.rotateS;
             customAttr.scaleS = artData.scaleS;
-            NewOnSetArtV3(art, artData);
+            NewOnSetArtV3(art, artData, customAttr);
         }
 
         public GameObject CopyArt(GameObject art, bool select = false)
@@ -307,10 +317,10 @@ namespace DefaultNamespace
             Material material = Instantiate(painingRender.material);
             painingRender.material = material;
             // 编辑模式 前端调用复制 需要 选中并且传数据给前端
-            if (select && _customTransformGizmo.enabled)
+            if (select && _artUpdateTrans.enabled)
             {
-                _customTransformGizmo.ClearAndAddTarget(art.transform);
-                _customTransformGizmo.SendArtData(art.transform);
+                _artUpdateTrans.ClearAndAddTarget(clone.transform);
+                _artUpdateTrans.SendArtData(clone.transform);
             }
             return clone;
         }
@@ -376,12 +386,12 @@ namespace DefaultNamespace
             }
         }
 
-        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i)
+        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i, CustomAttr customAttr)
         {
-            art.transform.localPosition += new Vector3(i.location[0], i.location[1], i.location[2]);
-            Vector3 oldScale = art.transform.localScale;
+            art.transform.localPosition = customAttr.oldLocation + new Vector3(i.location[0], i.location[1], i.location[2]);
+            Vector3 oldScale = customAttr.oldScale;
             art.transform.localScale = new Vector3(i.scaleS*oldScale.x,i.scaleS*oldScale.y, i.scaleS*oldScale.z);
-            art.transform.Rotate(new Vector3(0,i.rotateS,0));
+            art.transform.localRotation = customAttr.oldRotate * Quaternion.Euler(0, 0, i.rotateS);
             // art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
             // art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
             // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);

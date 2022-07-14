@@ -77,11 +77,15 @@ namespace DefaultNamespace
 
         public void SendArtData(Transform target)
         {
-#if !UNITY_EDITOR && UNITY_WEBGL            
+#if !UNITY_EDITOR && UNITY_WEBGL
             CustomAttr customAttr = target.GetComponent<CustomAttr>();
+            if (!customAttr)
+            {
+                customAttr = target.gameObject.AddComponent(typeof(CustomAttr)) as CustomAttr;
+            }
             JsonData.ArtData artData = new JsonData.ArtData();
             artData.name = target.gameObject.name;
-            artData.id = customAttr.artId;
+            artData.id = customAttr.id;
             // artData.scaleS = target.localScale[1];
             // artData.location = new float[]
             //     {target.localPosition[0], target.localPosition[1], target.localPosition[2]};
@@ -97,9 +101,13 @@ namespace DefaultNamespace
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
             CustomAttr customAttr = target.GetComponent<CustomAttr>();
+            if (!customAttr)
+            {
+                customAttr = target.gameObject.AddComponent(typeof(CustomAttr)) as CustomAttr;
+            }
             customAttr.location[0] = customAttr.location[0] + movement.x;
-            customAttr.location[1] = customAttr.location[0] + movement.y;
-            customAttr.location[2] = customAttr.location[0] + movement.z;
+            customAttr.location[1] = customAttr.location[1] + movement.y;
+            customAttr.location[2] = customAttr.location[2] + movement.z;
 #endif
         }
     }

@@ -372,7 +372,11 @@ namespace DefaultNamespace
             Material material = obj.GetComponent<MeshRenderer>().material;
             Material cloneMaterial = Instantiate(material);
             obj.GetComponent<MeshRenderer>().material = cloneMaterial;
-            StartCoroutine(DownloadTexture(url, (texture) => { cloneMaterial.mainTexture = texture; }
+            StartCoroutine(DownloadTexture(url, (texture) =>
+                {
+                    cloneMaterial.mainTexture = texture;
+                    // »­¿ò³ß´ç×ÔÊÊÓ¦
+                }
             ));
         }
     }

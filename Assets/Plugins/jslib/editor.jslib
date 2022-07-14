@@ -6,4 +6,8 @@ mergeInto(LibraryManager.library, {
     unSelectTrans:function () {
         __UnityLib__.unSelect();
     },
+    changeMouseStyle:function (styleName) {
+        var data = Pointer_stringify(artData);
+        __UnityLib__.change_mouse(styleName);
+    },
 });

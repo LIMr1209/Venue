@@ -72,7 +72,7 @@ namespace DefaultNamespace
 
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_02", "", (material) =>
                 {
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;
@@ -136,6 +136,12 @@ namespace DefaultNamespace
                 fps = 60f/_deltaTime;
                 _deltaTime = 0;
             }
+
+            // if (Input.GetKeyDown("x"))
+            // {
+            //     GameObject art = GameObject.Find("showcase-011");
+            //     art.transform.localRotation = art.transform.localRotation * Quaternion.Euler(0, 0, 90);
+            // }
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);

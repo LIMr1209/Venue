@@ -20,7 +20,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            if (_opusShow.enabled && !_opusShow.isPlayerMove && Input.GetMouseButtonDown(0))
+            if (_opusShow.enabled && !_opusShow.isPlayerMove && Input.GetMouseButtonDown(1))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, 1000))
                 {
