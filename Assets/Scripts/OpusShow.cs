@@ -312,6 +312,8 @@ namespace DefaultNamespace
             // 编辑模式 前端调用复制 需要 选中并且传数据给前端
             if (select && _artUpdateTrans.enabled)
             {
+                CustomAttr customAttr = CustomAttr.GetCustomAttr(clone);
+                customAttr.cloneBase = art.name;
                 _artUpdateTrans.ClearAndAddTarget(clone.transform);
                 _artUpdateTrans.SendArtData(clone.transform);
             }

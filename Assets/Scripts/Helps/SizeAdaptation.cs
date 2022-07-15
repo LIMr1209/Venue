@@ -10,7 +10,7 @@ namespace DefaultNamespace
             Collider collider = obj.GetComponent<Collider>();
             if (renderer)
             {
-                return renderer.bounds.size;
+                return renderer.localBounds.size;
             }
 
             if (collider)
@@ -29,7 +29,7 @@ namespace DefaultNamespace
             if (customAttr.realSize == Vector2.zero)
             {
                 Vector3 objVector3Size = GetSize(obj);
-                realSize = new Vector2(objVector3Size.x, objVector3Size.y);
+                realSize = new Vector2(objVector3Size.y, objVector3Size.z);
                 customAttr.realSize = realSize;
             }
             if (realSize == Vector2.zero) return;
@@ -38,7 +38,7 @@ namespace DefaultNamespace
             Vector2 newObjSize = Vector2.zero;
             if (contentAspectRatio > 1.0f)
             {
-                if (objAspectRatio > 1.0f)
+                if (objAspectRatio > 1.0f || objAspectRatio == 1f)
                 {
                     // 高缩小
                     newObjSize.x = realSize.x;
@@ -53,7 +53,7 @@ namespace DefaultNamespace
             }
             else
             {
-                if (objAspectRatio > 1.0f)
+                if (objAspectRatio > 1.0f || objAspectRatio == 1f)
                 {
                     // 宽缩小
                     newObjSize.x = realSize.y * contentAspectRatio;
