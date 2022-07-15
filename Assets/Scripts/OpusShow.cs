@@ -4,6 +4,7 @@ using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using UnityEngine.Video;
 
 // using UnityEngine.EventSystems;
 
@@ -70,7 +71,7 @@ namespace DefaultNamespace
                         if (art.layer == LayerMask.NameToLayer(Globle.lockArtlayer) ||art.layer == LayerMask.NameToLayer(Globle.focusArtLayer))
                         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                            if (!art.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                            if (!art.transform.parent.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                             {
                                 return;
                             }
@@ -98,8 +99,9 @@ namespace DefaultNamespace
             {
                 throw (new Exception("画框不存在"));
             }
+            GameObject paining = art.transform.GetChild(1).gameObject;
 
-            OnFocusArt(art.GetComponent<Transform>());
+            OnFocusArt(paining.transform);
         }
 
         // 取消聚焦
@@ -168,7 +170,7 @@ namespace DefaultNamespace
                 }
                 isPlayerMove = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
-                if (art.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                if (art.transform.parent.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                 {
                     Debug.Log("传递作品id"+customAttr.id);
                     Tools.showFocusWindow(customAttr.id);
@@ -237,7 +239,7 @@ namespace DefaultNamespace
                     if (art.layer == LayerMask.NameToLayer(Globle.lockArtlayer) ||art.layer == LayerMask.NameToLayer(Globle.focusArtLayer))
                     {
 #if !UNITY_EDITOR && UNITY_WEBGL
-                        if (!hit.collider.gameObject.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
+                        if (!hit.collider.gameObject.transform.parent.TryGetComponent<CustomAttr>(out CustomAttr customAttr))
                         {
                             return;
                         }
@@ -251,7 +253,7 @@ namespace DefaultNamespace
                         }
                         if (Input.GetKeyDown(KeyCode.T))
                         {
-                            OnFocusArt(hit.transform);
+                            OnFocusArt(hit.transform.parent);
                         }
                     }
                     else
@@ -267,7 +269,7 @@ namespace DefaultNamespace
             }
         }
 
-        public void UpdateArt(JsonData.ArtData artData)
+        public void UpdateArt(JsonData.ArtData artData, bool init = false)
         {
             GameObject baseArt = null;
             GameObject art = GameObject.Find(artData.name);
@@ -287,14 +289,15 @@ namespace DefaultNamespace
                 }
                 art = CopyArt(baseArt);
             }
-
+            if(!art) return;
             CustomAttr customAttr = CustomAttr.GetCustomAttr(art);
             customAttr.SetArtData(artData);
             customAttr.cloneBase = baseArt!=null?baseArt.name:"";
             NewOnSetArtV3(art, customAttr);
+            Debug.Log(art.transform.localScale);
             if (!string.IsNullOrEmpty(artData.imageUrl))
             {
-                if(artData.imageUrl == customAttr.imageUrl) return;
+                if(!init && artData.imageUrl == customAttr.imageUrl) return;
                 customAttr.imageUrl = artData.imageUrl;
                 GameObject paining = art.transform.GetChild(1).gameObject;
                 AbInit.instances.ReplaceMaterialContent(paining, artData.imageUrl, artData.nKind);
@@ -304,16 +307,26 @@ namespace DefaultNamespace
         public GameObject CopyArt(GameObject art, bool select = false)
         {
             GameObject clone = Instantiate(art, art.transform.parent);
-            clone.name = art.name + "_clone";
+            clone.name = art.name + "-" + Guid.NewGuid();
             GameObject paining = clone.transform.GetChild(1).gameObject;
             MeshRenderer painingRender = paining.GetComponent<MeshRenderer>();
             Material material = Instantiate(painingRender.material);
             painingRender.material = material;
+            if (paining.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
+            {
+                videoPlayer.Play();
+            }
             // 编辑模式 前端调用复制 需要 选中并且传数据给前端
             if (select && _artUpdateTrans.enabled)
             {
+                Debug.Log("复制画框 设置自定义属性");
                 CustomAttr customAttr = CustomAttr.GetCustomAttr(clone);
-                customAttr.cloneBase = art.name;
+                Debug.Log("cloneBase "+customAttr.cloneBase);
+                if (String.IsNullOrEmpty(customAttr.cloneBase))
+                {
+                    Debug.Log("设置 cloneBase ");
+                    customAttr.cloneBase = art.name;
+                }
                 _artUpdateTrans.ClearAndAddTarget(clone.transform);
                 _artUpdateTrans.SendArtData(clone.transform);
             }
@@ -321,14 +334,14 @@ namespace DefaultNamespace
         }
 
         // 复制art
-        public  GameObject CopyArt(string artName, bool select=false)
+        public GameObject CopyArt(string artName, bool select=false)
         {
             GameObject art = GameObject.Find(artName);
             if (art == null)
             {
                 throw (new Exception("画框不存在"));
             }
-
+            
             return CopyArt(art, select);
         }
         
@@ -368,7 +381,7 @@ namespace DefaultNamespace
         {
             foreach (JsonData.ArtData i in artDataList)
             {
-                UpdateArt(i);
+                UpdateArt(i,true);
             }
         }
 

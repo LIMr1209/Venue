@@ -32,6 +32,7 @@ namespace DefaultNamespace
                 realSize = new Vector2(objVector3Size.y, objVector3Size.z);
                 customAttr.realSize = realSize;
             }
+
             if (realSize == Vector2.zero) return;
             float contentAspectRatio = contentSize.x / contentSize.y;
             float objAspectRatio = realSize.x / realSize.y;
@@ -69,7 +70,8 @@ namespace DefaultNamespace
 
             Vector2 scaleRatio = new Vector2(newObjSize.x / realSize.x, newObjSize.y / realSize.y);
 
-            parent.localScale = new Vector3(1, 1 * scaleRatio.x, 1 * scaleRatio.y);
+            parent.localScale = new Vector3(1 * customAttr.scaleS, 1 * scaleRatio.x * customAttr.scaleS,
+                1 * scaleRatio.y * customAttr.scaleS);
 
             customAttr.oldScale = parent.localScale;
             // parent.GetComponent<CustomAttr>().oldLocation = parent.localPosition;

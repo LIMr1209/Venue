@@ -135,17 +135,11 @@ namespace DefaultNamespace
                 _deltaTime = 0;
             }
 
-            // if (Input.GetKeyDown("x"))
-            // {
-            //     string text = "{\"id\":529,\"imageUrl\":\"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220715/62d11f1f094abc96a929182b.mp4\",\"name\":\"showcase-034\",\"location\":[0,0,0],\"scaleS\":1,\"rotateS\":0,\"isDel\":false,\"nKind\":3,\"cloneBase\":\"\"}";
-            //     FindObjectOfType<JsSend>().JsUpdateTrans(text);
-            // }
-            //
-            // if (Input.GetKeyDown("z"))
-            // {
-            //     string text = "[{\"id\":529,\"imageUrl\":\"https://p4.taihuoniao.com/scene_rendering/user_fodder/220517/628347579b25fefdacc58287\",\"name\":\"showcase-034_clone\",\"location\":[0,0,0],\"scaleS\":1,\"rotateS\":0,\"isDel\":false,\"nKind\":2,\"cloneBase\":\"\"}]";
-            //     FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            // }
+            if (Input.GetKeyDown("x"))
+            {
+                FindObjectOfType<JsSend>().JsFocusArt("showcase-011");
+            }
+
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);

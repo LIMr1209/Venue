@@ -390,7 +390,7 @@ namespace DefaultNamespace
             }
             else if (nKind == 3)
             {
-                StartCoroutine(PlayerVideoHelp.AddVideoCompent(obj, url));
+                StartCoroutine(PlayerVideoHelp.AddVideoComponent(obj, url));
             }
         }
     }

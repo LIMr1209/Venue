@@ -7,9 +7,14 @@ namespace DefaultNamespace
     public class PlayerVideoHelp
     {
 
-        public static IEnumerator AddVideoCompent(GameObject obj, string url)
+        public static IEnumerator AddVideoComponent(GameObject obj, string url)
         {
-            VideoPlayer videoPlayer = obj.AddComponent<VideoPlayer>();
+
+            VideoPlayer videoPlayer = obj.GetComponent<VideoPlayer>();
+            if (!videoPlayer)
+            {
+                videoPlayer = obj.AddComponent<VideoPlayer>();
+            }
 
             videoPlayer.playOnAwake = false;
 

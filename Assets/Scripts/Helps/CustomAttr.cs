@@ -41,6 +41,7 @@ namespace DefaultNamespace
             rotateS = artData.rotateS;
             scaleS = artData.scaleS;
             kind = artData.kind;
+            nKind = artData.nKind;
         }
         
         public void GetArtData(ref JsonData.ArtData artData)
