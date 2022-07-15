@@ -85,6 +85,7 @@ namespace DefaultNamespace
             public string imageUrl = ""; // 画框图片名
             public bool isDel = false; // 是否删除
             public int nKind = 0; // 模型 视频 图片
+            public int kind = 0;
             public float[] scale; // 画框缩放值
             public float[] rotate; // 画框旋转值
             public float[] location = new []{0.0f,0.0f,0.0f}; // 画框坐标值

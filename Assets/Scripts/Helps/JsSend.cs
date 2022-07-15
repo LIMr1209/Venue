@@ -67,6 +67,8 @@ namespace DefaultNamespace
         // 编辑器中 js 发送画框位置 图片等信息 有就更换 没有就忽略
         public void JsReplaceArtImage(string strParams)
         {
+            Debug.Log("接收初始化参数");
+            Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
             _opusShow.InitArtImage(data);
         }

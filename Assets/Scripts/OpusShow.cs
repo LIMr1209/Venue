@@ -267,21 +267,6 @@ namespace DefaultNamespace
             }
         }
 
-        public static CustomAttr GetCustomAttr(GameObject art)
-        {
-            CustomAttr customAttr = art.GetComponent<CustomAttr>();
-            if (!customAttr)
-            {
-                Debug.Log("添加自定义属性组件");
-                customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                customAttr.oldLocation = art.transform.localPosition;
-                customAttr.oldRotate = art.transform.localRotation;
-                customAttr.oldScale = art.transform.localScale;
-            }
-
-            return customAttr;
-        }
-
         public void UpdateArt(JsonData.ArtData artData)
         {
             GameObject baseArt = null;
@@ -303,19 +288,16 @@ namespace DefaultNamespace
                 art = CopyArt(baseArt);
             }
 
-            CustomAttr customAttr = GetCustomAttr(art);
-            if(!string.IsNullOrEmpty(artData.id))  customAttr.id = artData.id;
+            CustomAttr customAttr = CustomAttr.GetCustomAttr(art);
+            customAttr.SetArtData(artData);
             customAttr.cloneBase = baseArt!=null?baseArt.name:"";
-            customAttr.location = artData.location;
-            customAttr.rotateS = artData.rotateS;
-            customAttr.scaleS = artData.scaleS;
-            NewOnSetArtV3(art, artData, customAttr);
+            NewOnSetArtV3(art, customAttr);
             if (!string.IsNullOrEmpty(artData.imageUrl))
             {
                 if(artData.imageUrl == customAttr.imageUrl) return;
                 customAttr.imageUrl = artData.imageUrl;
                 GameObject paining = art.transform.GetChild(1).gameObject;
-                AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
+                AbInit.instances.ReplaceMaterialContent(paining, artData.imageUrl, artData.nKind);
             }
         }
 
@@ -397,12 +379,12 @@ namespace DefaultNamespace
             }
         }
 
-        public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i, CustomAttr customAttr)
+        public static void NewOnSetArtV3(GameObject art, CustomAttr customAttr)
         {
-            art.transform.localPosition = customAttr.oldLocation + new Vector3(i.location[0], i.location[1], i.location[2]);
+            art.transform.localPosition = customAttr.oldLocation + new Vector3(customAttr.location[0], customAttr.location[1], customAttr.location[2]);
             Vector3 oldScale = customAttr.oldScale;
-            art.transform.localScale = new Vector3(i.scaleS*oldScale.x,i.scaleS*oldScale.y, i.scaleS*oldScale.z);
-            art.transform.localRotation = customAttr.oldRotate * Quaternion.Euler(0, 0, i.rotateS);
+            art.transform.localScale = new Vector3(customAttr.scaleS*oldScale.x,customAttr.scaleS*oldScale.y, customAttr.scaleS*oldScale.z);
+            art.transform.localRotation = customAttr.oldRotate * Quaternion.Euler(0, 0, customAttr.rotateS);
             // art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
             // art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
             // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);

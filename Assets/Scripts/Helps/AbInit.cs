@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Video;
+
 // using UnityEngine.UI;
 
 namespace DefaultNamespace
@@ -367,20 +369,24 @@ namespace DefaultNamespace
             }
         }
 
-        public void ReplaceMaterialImage(GameObject obj, string url)
+        public void ReplaceMaterialContent(GameObject obj, string url, int nKind)
         {
-            Material material = obj.GetComponent<MeshRenderer>().material;
-            Material cloneMaterial = Instantiate(material);
-            obj.GetComponent<MeshRenderer>().material = cloneMaterial;
-            StartCoroutine(DownloadTexture(url, (texture) =>
-                {
-                    cloneMaterial.mainTexture = texture;
-                    // »­¿ò³ß´ç×ÔÊÊÓ¦
-                    // float proportion = 0.01f;
-                    // obj.transform.parent.localScale.x *= texture.height * proportion;
-                    // obj.transform.parent.localScale.z *= texture.height * proportion;
-                }
-            ));
+            if (nKind == 2)
+            {
+                Material material = obj.GetComponent<MeshRenderer>().material;
+                Material cloneMaterial = Instantiate(material);
+                obj.GetComponent<MeshRenderer>().material = cloneMaterial;
+                StartCoroutine(DownloadTexture(url, (texture) =>
+                    {
+                        cloneMaterial.mainTexture = texture;
+                        // obj.transform.parent.localScale = new Vector3(1, 1, 1);
+                    }
+                ));
+            }
+            else if (nKind == 3)
+            {
+                StartCoroutine(PlayerVideoHelp.AddVideoCompent(obj, url));
+            }
         }
     }
 }
