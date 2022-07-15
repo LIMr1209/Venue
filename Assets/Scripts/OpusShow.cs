@@ -3,6 +3,7 @@ using Cinemachine;
 using StarterAssets;
 using UnityEngine;
 using DG.Tweening;
+using Unity.VisualScripting;
 
 // using UnityEngine.EventSystems;
 
@@ -265,13 +266,24 @@ namespace DefaultNamespace
                 }
             }
         }
-        
+
+        public static CustomAttr GetCustomAttr(GameObject art)
+        {
+            CustomAttr customAttr = art.GetComponent<CustomAttr>();
+            if (!customAttr)
+            {
+                Debug.Log("添加自定义属性组件");
+                customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
+                customAttr.oldLocation = art.transform.localPosition;
+                customAttr.oldRotate = art.transform.localRotation;
+                customAttr.oldScale = art.transform.localScale;
+            }
+
+            return customAttr;
+        }
+
         public void UpdateArt(JsonData.ArtData artData)
         {
-            foreach (var i in artData.location)
-            {
-                Debug.Log(i);
-            }
             GameObject baseArt = null;
             GameObject art = GameObject.Find(artData.name);
             if (art && artData.isDel) // 删除了的 模型里面的画框
@@ -291,30 +303,20 @@ namespace DefaultNamespace
                 art = CopyArt(baseArt);
             }
 
-            CustomAttr customAttr = art.GetComponent<CustomAttr>();
-            Debug.Log("自定义属性组件");
-            Debug.Log(customAttr);
-            if (!customAttr)
-            {
-                Debug.Log("添加自定义属性组件");
-                customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                customAttr.oldLocation = art.transform.localPosition;
-                customAttr.oldRotate = art.transform.localRotation;
-                customAttr.oldScale = art.transform.localScale;
-            }
+            CustomAttr customAttr = GetCustomAttr(art);
             if(!string.IsNullOrEmpty(artData.id))  customAttr.id = artData.id;
-            if (!string.IsNullOrEmpty(artData.imageUrl))
-            {
-                GameObject paining = art.transform.GetChild(1).gameObject;
-                AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
-            }
-            customAttr.imageUrl = artData.imageUrl;
             customAttr.cloneBase = baseArt!=null?baseArt.name:"";
             customAttr.location = artData.location;
             customAttr.rotateS = artData.rotateS;
             customAttr.scaleS = artData.scaleS;
-            Debug.Log("移动");
             NewOnSetArtV3(art, artData, customAttr);
+            if (!string.IsNullOrEmpty(artData.imageUrl))
+            {
+                if(artData.imageUrl == customAttr.imageUrl) return;
+                customAttr.imageUrl = artData.imageUrl;
+                GameObject paining = art.transform.GetChild(1).gameObject;
+                AbInit.instances.ReplaceMaterialImage(paining, artData.imageUrl);
+            }
         }
 
         public GameObject CopyArt(GameObject art, bool select = false)
@@ -397,15 +399,10 @@ namespace DefaultNamespace
 
         public static void NewOnSetArtV3(GameObject art, JsonData.ArtData i, CustomAttr customAttr)
         {
-            Debug.Log(customAttr.oldLocation);
-            Debug.Log(new Vector3(i.location[0], i.location[1], i.location[2]));
             art.transform.localPosition = customAttr.oldLocation + new Vector3(i.location[0], i.location[1], i.location[2]);
             Vector3 oldScale = customAttr.oldScale;
             art.transform.localScale = new Vector3(i.scaleS*oldScale.x,i.scaleS*oldScale.y, i.scaleS*oldScale.z);
             art.transform.localRotation = customAttr.oldRotate * Quaternion.Euler(0, 0, i.rotateS);
-            Debug.Log(art.transform.localPosition);
-            Debug.Log(art.transform.localScale);
-            Debug.Log(art.transform.localRotation.eulerAngles);
             // art.transform.localPosition = new Vector3(i.location[0], i.location[1], i.location[2]);
             // art.transform.localScale = new Vector3(i.scaleS,i.scaleS, i.scaleS);
             // art.transform.localScale = new Vector3(i.scale[0], i.scale[1], i.scale[2]);

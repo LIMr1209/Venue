@@ -190,12 +190,8 @@ namespace DefaultNamespace
 
         public void SendArtData(Transform target)
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
-            CustomAttr customAttr = target.GetComponent<CustomAttr>();
-            if (!customAttr)
-            {
-                customAttr = target.gameObject.AddComponent(typeof(CustomAttr)) as CustomAttr;
-            }
+#if !UNITY_EDITOR && UNITY_WEBGL            
+            CustomAttr customAttr = OpusShow.GetCustomAttr(target.gameObject);
             JsonData.ArtData artData = new JsonData.ArtData();
             artData.name = target.gameObject.name;
             artData.id = customAttr.id;
@@ -203,10 +199,6 @@ namespace DefaultNamespace
             artData.isDel = customAttr.isDel;
             artData.nKind = customAttr.nKind;
             artData.cloneBase = customAttr.cloneBase;
-            // artData.scaleS = target.localScale[1];
-            // artData.location = new float[]
-            //     {target.localPosition[0], target.localPosition[1], target.localPosition[2]};
-            // artData.rotateS = target.localRotation.eulerAngles[1];
             artData.location = customAttr.location;
             artData.scaleS = customAttr.scaleS;
             artData.rotateS = customAttr.rotateS;
@@ -217,7 +209,7 @@ namespace DefaultNamespace
         public void UpdateCustomAttr(Vector3 movement)
         {
 #if !UNITY_EDITOR && UNITY_WEBGL
-            CustomAttr customAttr = _target.GetComponent<CustomAttr>();
+            CustomAttr customAttr = OpusShow.GetCustomAttr(_target.gameObject);
             if (!customAttr)
             {
                 customAttr = _target.gameObject.AddComponent(typeof(CustomAttr)) as CustomAttr;
