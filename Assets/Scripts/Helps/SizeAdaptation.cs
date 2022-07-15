@@ -24,9 +24,9 @@ namespace DefaultNamespace
         public static void SetSize(GameObject obj, Vector2 contentSize)
         {
             Transform parent = obj.transform.parent;
-            Vector2 realSize = Vector2.zero;
-            CustomAttr customAttr = parent.GetComponent<CustomAttr>();
-            if (customAttr.realSize ==Vector2.zero)
+            CustomAttr customAttr = CustomAttr.GetCustomAttr(parent.gameObject);
+            Vector2 realSize = customAttr.realSize;
+            if (customAttr.realSize == Vector2.zero)
             {
                 Vector3 objVector3Size = GetSize(obj);
                 realSize = new Vector2(objVector3Size.x, objVector3Size.y);

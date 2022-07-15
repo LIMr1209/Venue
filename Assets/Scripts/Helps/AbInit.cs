@@ -371,6 +371,10 @@ namespace DefaultNamespace
 
         public void ReplaceMaterialContent(GameObject obj, string url, int nKind)
         {
+            if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
+            {
+                Destroy(videoPlayer);
+            }
             if (nKind == 2)
             {
                 Material material = obj.GetComponent<MeshRenderer>().material;
@@ -379,7 +383,8 @@ namespace DefaultNamespace
                 StartCoroutine(DownloadTexture(url, (texture) =>
                     {
                         cloneMaterial.mainTexture = texture;
-                        // obj.transform.parent.localScale = new Vector3(1, 1, 1);
+                        Vector2 contentSize = new Vector2(texture.width, texture.height);
+                        SizeAdaptation.SetSize(obj, contentSize);
                     }
                 ));
             }
