@@ -28,7 +28,8 @@ namespace DefaultNamespace
             enabled = false;  // 默认不启动 前端发送场景url 后启动
 #else
             sceneModel = "scene";
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            //sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
 #endif
         }
 
@@ -61,9 +62,9 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
-                    if (GameObject.Find("default_camera"))
+                    if (GameObject.Find("Camera"))
                     {
-                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                        GameObject.Find("Camera").gameObject.SetActive(false);
                     }
                     OnSetLightMap(obj);
                     AfterScene();
