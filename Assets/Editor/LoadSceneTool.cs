@@ -30,7 +30,7 @@ public class LoadSceneTool : MonoBehaviour
     {
         ViewResult<sceneData> memberResult = null;
         Dictionary<string, string> memberRequest = new Dictionary<string, string>();
-        memberRequest["id"] = "101";
+        memberRequest["id"] = "102";
         RequestEditor.HttpSend(6, "get", memberRequest, (statusCode, error, body) =>
         {
             memberResult = JsonUtility.FromJson<ViewResult<sceneData>>(body);

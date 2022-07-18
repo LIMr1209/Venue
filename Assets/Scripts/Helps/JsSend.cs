@@ -12,12 +12,14 @@ namespace DefaultNamespace
         private OpusShow _opusShow;
         private AddController _addController;
         private ArtUpdateTrans _artUpdateTrans;
+        private ArtInit _artInit;
 
         public void Awake()
         {
             _initialScene = FindObjectOfType<InitialScene>();
             _abInit = FindObjectOfType<AbInit>();
             _opusShow = FindObjectOfType<OpusShow>();
+            _artInit = FindObjectOfType<ArtInit>();
             _addController = FindObjectOfType<AddController>();
             _artUpdateTrans = FindObjectOfType<ArtUpdateTrans>();
         }
@@ -25,7 +27,6 @@ namespace DefaultNamespace
         // 获取初始化参数 场景url 实例化场景对象
         public void GetInitParam(string strParams)
         {
-            Debug.Log(11111111);
             Debug.Log("接收到的场景url: " + strParams);
             _initialScene.sceneUrl = Path.Combine(strParams, "scene.ab").Replace("\\", "/");
             // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件
@@ -70,14 +71,14 @@ namespace DefaultNamespace
             Debug.Log("接收初始化参数");
             Debug.Log(strParams);
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            _opusShow.InitArtImage(data);
+            _artInit.InitArtImage(data);
         }
 
         // 编辑器中 js 发送已删除的画框
         public void JsInitDeleteArt(string strParams)
         {
             ArtData[] data = JsonHelper.GetJsonArray<ArtData>(strParams);
-            _opusShow.InitDeleteArt(data);
+            _artInit.InitDeleteArt(data);
         }
 
         public void JsUpdateTrans(string strParams)
@@ -85,31 +86,31 @@ namespace DefaultNamespace
             Debug.Log("接收编辑参数");
             Debug.Log(strParams);
             ArtData data = JsonUtility.FromJson<ArtData>(strParams);
-            _opusShow.UpdateArt(data);
+            _artInit.UpdateArt(data);
         }
 
         // 编辑器中 js 删除画框 清空 纹理 对象等内存
         public void JsDeleteArt(string artName)
         {
-            _opusShow.DeleteArt(artName);
+            _artInit.DeleteArt(artName);
         }
 
         // 编辑器中 js 复制画框 新名字 位置一样 引用得材质 需要复制一份
         public void JsCopyArt(string artName)
         {
-            _opusShow.CopyArt(artName, true);
+            _artInit.CopyArt(artName, true);
         }
 
         // 锁定画框
         public void JsLockArt(string artName)
         {
-            _opusShow.LockArt(artName, true);
+            _artInit.LockArt(artName, true);
         }
 
         // 解锁画框
         public void JsUnlockArt(string artName)
         {
-            _opusShow.LockArt(artName, false);
+            _artInit.LockArt(artName, false);
         }
     }
 }

@@ -36,7 +36,9 @@ namespace DefaultNamespace
         // scene 图层
         public static string focusArtLayer = "art"; // 聚焦层
         public static string lockArtlayer = "artLock"; // 锁定层
+        public static string frameLayer = "frame";
         public static string navMeshLayer = "ground"; // 寻路地板层
+        public static string playerLayer = "player";
 
         // public static Dictionary<string, Dictionary<string, string>> dic =
         //     new Dictionary<string, Dictionary<string, string>>();

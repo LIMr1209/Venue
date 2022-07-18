@@ -13,15 +13,10 @@ namespace DefaultNamespace
         private List<Material> materialsBuffer = new List<Material>();
         private HashSet<Renderer> highlightedRenderers = new HashSet<Renderer>();
         private static Material outlineMaterial;
-        private int _focusArtLayerNum;
-        private int _lockArtLayerNum;
-
 
         private void Awake()
         {
             _myCamera = GetComponent<Camera>();
-            _focusArtLayerNum = LayerMask.NameToLayer(Globle.focusArtLayer);
-            _lockArtLayerNum = LayerMask.NameToLayer(Globle.lockArtlayer);
             SetMaterial();
         }
 
@@ -38,7 +33,7 @@ namespace DefaultNamespace
                 {
                     int layer = hitInfo.collider.gameObject.layer;
 
-                    if (layer == _focusArtLayerNum || layer == _lockArtLayerNum)
+                    if (layer == LayerHelp.focusArtLayerNum || layer == LayerHelp.lockArtLayerNum)
                     {
                         ClearAndAddTarget(hitInfo.transform.parent);
                         _art = hitInfo.collider.gameObject;
@@ -168,45 +163,48 @@ namespace DefaultNamespace
 
         IEnumerator TransformSelected()
         {
-            while (Input.GetMouseButton(0))
-            {
-                Physics.IgnoreLayerCollision(6, 8, true);
-                RaycastHit hitInfo;
-                int layerMask = 1 << 6;
-                layerMask = ~layerMask;
-                // int layerMask = ~ LayerMask.NameToLayer(Globle.lockArtlayer);
-                if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
-                    layerMask))
-                {
-                    _target.localPosition = hitInfo.point;
-                }
-
-                yield return null;
-            }
-
-            Physics.IgnoreLayerCollision(6, 8, false);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(_target.position);
+            Vector3 mousePosOnScreen = Input.mousePosition;
+            mousePosOnScreen.z = screenPos.z;
+            Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePosOnScreen);
+            _target.position = mousePosInWorld;
+            yield return null;
+            // while (Input.GetMouseButton(0))
+            // {
+            //     Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
+            //     Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
+            //     RaycastHit hitInfo;
+            //     int layerMask = 1 << LayerHelp.focusArtLayerNum;
+            //     layerMask = ~layerMask;
+            //     if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
+            //         layerMask))
+            //     {
+            //         _target.localPosition = hitInfo.point;
+            //     }
+            //     yield return null;
+            // }
+            // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
+            // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
         }
 
 
         public void SendArtData(Transform target)
         {
-#if !UNITY_EDITOR && UNITY_WEBGL            
             CustomAttr customAttr = CustomAttr.GetCustomAttr(target.gameObject);
             JsonData.ArtData artData = new JsonData.ArtData();
             artData.name = target.gameObject.name;
             customAttr.GetArtData(ref artData);
+#if !UNITY_EDITOR && UNITY_WEBGL 
             Tools.selectTrans(JsonUtility.ToJson(artData));
 #endif
         }
 
         public void UpdateCustomAttr(Vector3 movement)
         {
-#if !UNITY_EDITOR && UNITY_WEBGL
             CustomAttr customAttr = CustomAttr.GetCustomAttr(_target.gameObject);
             customAttr.location[0] = customAttr.location[0] + movement.x;
             customAttr.location[1] = customAttr.location[1] + movement.y;
             customAttr.location[2] = customAttr.location[2] + movement.z;
-#endif
         }
     }
 }

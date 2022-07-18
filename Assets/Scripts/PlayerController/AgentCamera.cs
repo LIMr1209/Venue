@@ -24,7 +24,7 @@ namespace DefaultNamespace
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, 1000))
                 {
-                    if(_raycastHit.collider.gameObject.layer == LayerMask.NameToLayer(Globle.navMeshLayer) && _playerAgent)
+                    if(_raycastHit.collider.gameObject.layer == LayerHelp.navMeshLayerNum && _playerAgent)
                     {
                         _playerAgent.MovePoint(_raycastHit.point);
                     }

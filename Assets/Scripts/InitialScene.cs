@@ -37,15 +37,12 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
                  {
-                    Debug.Log(FindObjectOfType<AbInit>() + "3");
                     if (GameObject.Find("default_camera"))
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
-                    Debug.Log(FindObjectOfType<AbInit>() + "8");
                     OnSetLightMap(obj);
                     AfterScene();
-                    Debug.Log(FindObjectOfType<AbInit>() + "9");
                     Tools.loadScene();
                 }));
 #else
@@ -133,11 +130,6 @@ namespace DefaultNamespace
                 _count = 1;
                 fps = 60f/_deltaTime;
                 _deltaTime = 0;
-            }
-
-            if (Input.GetKeyDown("x"))
-            {
-                FindObjectOfType<JsSend>().JsFocusArt("showcase-011");
             }
 
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
