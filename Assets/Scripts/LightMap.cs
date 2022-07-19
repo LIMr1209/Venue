@@ -127,11 +127,33 @@ public class LightMap : MonoBehaviour
 
     public void OnLoadLightmap()
     {
-        if (null == rendererList || rendererList.Length == 0)
-        {
-            Debug.Log(gameObject.name + " 的 光照信息为空");
-            return;
-        }
+        //for (int i = 0; i < lightmapTextures.Length - 1; i++)
+        //{
+        //    string a1 = lightmapTextures[i].name;    //我们抓取当前字符当中的123
+        //    string b1 = System.Text.RegularExpressions.Regex.Replace(a1, @"[^0-9]+", "");
+        //    for (int j = 0; j < lightmapTextures.Length - 1 - i; j++)
+        //    {
+        //        string a2 = lightmapTextures[i].name;    //我们抓取当前字符当中的123
+        //        string b2 = System.Text.RegularExpressions.Regex.Replace(b1, @"[^0-9]+", "");
+        //        if (int.Parse(b2) > int.Parse(a2)) 
+        //        {
+        //            Texture2D temp = lightmapTextures[j + 1];
+        //            lightmapTextures[j + 1] = lightmapTextures[j];
+        //            lightmapTextures[j] = temp;
+        //        }
+        //    }
+        //}
+        //for (int i = 0; i < lightmapTexs.Length; i++)
+        //{
+        //    string str = lightmapTexs[i].name;    //我们抓取当前字符当中的123
+        //    string result = System.Text.RegularExpressions.Regex.Replace(str, @"[^0-9]+", "");
+        //    Debug.Log(result);
+        //}
+        //if (null == rendererList || rendererList.Length == 0)
+        //{
+        //    Debug.Log(gameObject.name + " 的 光照信息为空");
+        //    return;
+        //}
         Renderer[] renders = GetComponentsInChildren<Renderer>(true);
 
         for (int r = 0, rLength = renders.Length; r < rLength; ++r)
@@ -140,17 +162,17 @@ public class LightMap : MonoBehaviour
             renders[r].lightmapScaleOffset = rendererList[r].lightmapOffsetScale;
         }
 
-        if (null == lightmapTextures || lightmapTextures.Length == 0)
+        if (null == lightmapTexs || lightmapTexs.Length == 0)
         {
             return;
         }
         LightmapSettings.lightmapsMode = LightmapsMode.NonDirectional;
-        LightmapData[] ldata = new LightmapData[lightmapTextures.Length];
+        LightmapData[] ldata = new LightmapData[lightmapTexs.Length];
         LightmapSettings.lightmaps = null;
-        for (int t = 0, tLength = lightmapTextures.Length; t < tLength; ++t)
+        for (int t = 0, tLength = lightmapTexs.Length; t < tLength; ++t)
         {
             ldata[t] = new LightmapData();
-            ldata[t].lightmapColor = lightmapTextures[t];
+            ldata[t].lightmapColor = lightmapTexs[t];
         }
         LightmapSettings.lightmaps = ldata;
 

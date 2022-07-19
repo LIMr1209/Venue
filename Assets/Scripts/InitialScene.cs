@@ -26,13 +26,20 @@ namespace DefaultNamespace
             enabled = false;  // 默认不启动 前端发送场景url 后启动
 #else
             sceneModel = "scene";
-            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            //sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
 #endif
         }
 
 
         private void Start()
         {
+            int BeginIndex = sceneUrl.IndexOf("/scene");
+            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
+            string sceneManifestName = sceneModel + ".ab.manifest";
+            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
+
+
 #if !UNITY_EDITOR && UNITY_WEBGL
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
@@ -46,18 +53,13 @@ namespace DefaultNamespace
                     Tools.loadScene();
                 }));
 #else
-            int BeginIndex = sceneUrl.IndexOf("/scene");
-            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
-            string sceneManifestName = sceneModel + ".ab.manifest";
-            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
-
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(sceneModel, "", (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
                 {
-                    if (GameObject.Find("default_camera"))
+                    if (GameObject.Find("Camera"))
                     {
-                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                        GameObject.Find("Camera").gameObject.SetActive(false);
                     }
                     OnSetLightMap(obj);
                     AfterScene();
