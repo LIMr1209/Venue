@@ -55,7 +55,7 @@ namespace DefaultNamespace
             if(_artUpdateTrans.enabled) return;
             OnFocusArtDic();
             // 鼠标按下的时候发射射线
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0) && !controller.hasMoveVisualAngle)
             {
                 // if (isClick && !EventSystem.current.IsPointerOverGameObject())
                 if (isClick)

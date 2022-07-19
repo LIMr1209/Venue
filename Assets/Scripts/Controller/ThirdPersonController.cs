@@ -1,4 +1,5 @@
-﻿using DefaultNamespace;
+﻿using System.Collections;
+using DefaultNamespace;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -78,6 +79,9 @@ namespace StarterAssets
 
         [Tooltip("用于锁定所有轴上的摄像头位置")]
         public bool LockCameraPosition = false;
+
+        [Tooltip("是否移动视角")] 
+        public bool hasMoveVisualAngle = false;
 
         // cinemachine
         private float _cinemachineTargetYaw;
@@ -227,6 +231,9 @@ namespace StarterAssets
 
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                hasMoveVisualAngle = true;
+                StopCoroutine("MyMethod");
+                StartCoroutine("MyMethod");
             }else if (Keyboard.current[Key.Q].isPressed)
             {
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -248,6 +255,13 @@ namespace StarterAssets
             // 修正虚拟摄像机旋转
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
+        }
+
+        IEnumerator MyMethod()
+        {
+            yield return new WaitForSeconds(0.5f);
+            hasMoveVisualAngle = false;
+
         }
 
         private void Move()

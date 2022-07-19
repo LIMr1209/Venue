@@ -1,4 +1,5 @@
 ﻿using System;
+using StarterAssets;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,9 +16,13 @@ namespace DefaultNamespace
         private CharacterController _character;
         private int _animIDSpeed;
         private int _animIDJump;
+        private OpusShow _opusShow;
+        private ThirdPersonController _controller;
 
         private void Awake()
         {
+            _opusShow = FindObjectOfType<OpusShow>();
+            _controller = FindObjectOfType<ThirdPersonController>();
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(Aoe, "", (obj) =>
                     {
@@ -72,6 +77,16 @@ namespace DefaultNamespace
 
         public void MovePoint(Vector3 targetPos)
         {
+            if (_opusShow.enabled && _opusShow.isPlayerMove)
+            {
+                return;
+            }
+
+            if (_controller.hasMoveVisualAngle)
+            {
+                return;
+            }
+
             if (_animator.GetBool(_animIDJump))
             {
                 return;

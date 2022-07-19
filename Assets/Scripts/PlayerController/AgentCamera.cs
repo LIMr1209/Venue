@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using StarterAssets;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -6,10 +7,9 @@ namespace DefaultNamespace
     {
         private PlayerAgent _playerAgent;
         private RaycastHit _raycastHit;
-        private OpusShow _opusShow;
+        private ThirdPersonController _controller;
         private void Awake()
         {
-            _opusShow = FindObjectOfType<OpusShow>();
             enabled = false;
         }
 
@@ -20,7 +20,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            if (_opusShow.enabled && !_opusShow.isPlayerMove && Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonUp(0))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, 1000))
                 {

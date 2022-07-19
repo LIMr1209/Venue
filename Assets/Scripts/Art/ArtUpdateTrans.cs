@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using StarterAssets;
 using UnityEngine;
 
 namespace DefaultNamespace
@@ -13,6 +14,7 @@ namespace DefaultNamespace
         private List<Renderer> renderersBuffer = new List<Renderer>();
         private List<Material> materialsBuffer = new List<Material>();
         private HashSet<Renderer> highlightedRenderers = new HashSet<Renderer>();
+        private ThirdPersonController _controller;
         private static Material outlineMaterial;
 
         private void Awake()
@@ -23,6 +25,12 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            _controller = FindObjectOfType<ThirdPersonController>();
+        }
+
+        private void OnEnable()
+        {
+            _controller = FindObjectOfType<ThirdPersonController>();
         }
 
         private void Update()
@@ -48,7 +56,7 @@ namespace DefaultNamespace
 
             if (_art)
             {
-                // StartCoroutine(TransformSelected());
+                StartCoroutine(TransformSelected());
             }
         }
 
@@ -164,28 +172,30 @@ namespace DefaultNamespace
 
         IEnumerator TransformSelected()
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(_target.position);
-            Vector3 mousePosOnScreen = Input.mousePosition;
-            mousePosOnScreen.z = screenPos.z;
-            Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePosOnScreen);
-            _target.position = mousePosInWorld;
-            yield return null;
-            // while (Input.GetMouseButton(0))
-            // {
-            //     Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
-            //     Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
-            //     RaycastHit hitInfo;
-            //     int layerMask = 1 << LayerHelp.focusArtLayerNum;
-            //     layerMask = ~layerMask;
-            //     if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
-            //         layerMask))
-            //     {
-            //         _target.localPosition = hitInfo.point;
-            //     }
-            //     yield return null;
-            // }
-            // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
-            // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
+            // Vector3 screenPos = Camera.main.WorldToScreenPoint(_target.position);
+            // Vector3 mousePosOnScreen = Input.mousePosition;
+            // mousePosOnScreen.z = screenPos.z;
+            // Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePosOnScreen);
+            // _target.position = mousePosInWorld;
+            // yield return null;
+            while (Input.GetMouseButton(0))
+            {
+                if (_controller) _controller.LockCameraPosition = true;
+                Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
+                Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
+                RaycastHit hitInfo;
+                int layerMask = 1 << LayerHelp.focusArtLayerNum;
+                layerMask = ~layerMask;
+                if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
+                    layerMask))
+                {
+                    _target.localPosition = hitInfo.point;
+                }
+                yield return null;
+            }
+            if (_controller) _controller.LockCameraPosition = false;
+            Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
+            Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
         }
 
 
