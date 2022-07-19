@@ -28,6 +28,7 @@ namespace DefaultNamespace
             sceneModel = "scene";
             //sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
             sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
+        
 #endif
         }
 
@@ -55,7 +56,7 @@ namespace DefaultNamespace
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, false, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, true, (obj) =>
                  {
                      if (GameObject.Find("Camera"))
                      {
@@ -101,6 +102,7 @@ namespace DefaultNamespace
             LightMap lightMap = obj.GetComponent<LightMap>();
             if (!lightMap) return;
             lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
+            Debug.Log("OnSetLightMap"+AbInit.instances.AssetBundelLightMapDic.Count);
             foreach (var item in AbInit.instances.AssetBundelLightMapDic)
             {
                 if (item.Key.Contains("lightmap"))
@@ -111,6 +113,7 @@ namespace DefaultNamespace
                     string bundleName = item.Key.Substring(BeginIndex, len);
                     Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
                     lightMap.OnAddLightmapTexs(texture2D);
+                    Debug.Log(texture2D.name + 44);
                 }
             }
             lightMap.i = 0;

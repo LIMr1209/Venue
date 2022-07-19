@@ -114,6 +114,7 @@ namespace DefaultNamespace
 
         public IEnumerator OnWebRequestAssetBundleManifestScene(string url,string name)
         {
+            Debug.Log("进入OnWebRequestAssetBundleManifestScene协程");
             if (sceneManifestList.Count != 0) yield break;
             string depsUrl = null;
             string data = null;
@@ -137,8 +138,10 @@ namespace DefaultNamespace
                     int len = LastIndex - BeginIndex;
                     string bundleName = s.Substring(BeginIndex, len);
                     sceneManifestList.Add(bundleName);
+                    Debug.Log(bundleName);
                 }
             }
+            Debug.Log(sceneManifestList.Count);
         }
 
 
@@ -306,7 +309,6 @@ namespace DefaultNamespace
             Vector3 rotate, GameObjectCallback callback = null)
         {
             yield return StartCoroutine(OnLoadSceneLightmapAB());
-
             AssetBundle AB = null;
             // UnityWebRequest requestAB = UnityWebRequest.Get(url);
             UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(url);
@@ -364,7 +366,11 @@ namespace DefaultNamespace
 
         private IEnumerator OnLoadSceneLightmapAB()
         {
-            yield return sceneManifestList.Count != 0;
+            while (sceneManifestList.Count == 0)
+            {
+                yield return null;
+            }
+            Debug.Log("OnLoadSceneLightmapAB sceneManifestList.Count : " + sceneManifestList.Count);
             string[] deps = new string[sceneManifestList.Count];
             for (int i = 0; i < sceneManifestList.Count; i++)
             {
