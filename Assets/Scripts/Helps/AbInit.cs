@@ -104,6 +104,10 @@ namespace DefaultNamespace
 
         public void ReloadManifest()
         {
+            foreach (var i in AssetBundelLightMapDic)
+            {
+                i.Value.UnloadAsync(false);
+            }   
             assetBundleManifest.UnloadAsync(false);
         }
 
