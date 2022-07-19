@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace DefaultNamespace
 
         private void Awake()
         {
+            _opusShow = FindObjectOfType<OpusShow>();
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
                     {
@@ -55,7 +57,6 @@ namespace DefaultNamespace
 
         // private void Start()
         // {
-        //     _opusShow = FindObjectOfType<OpusShow>();
         //     characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
         //     StartCoroutine(
         //         AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
@@ -89,12 +90,13 @@ namespace DefaultNamespace
 
         private void SwithVisul()
         {
-            if (visual) AddThird();
-            else AddFirst();
+            if (visual) StartCoroutine(AddThird());
+            else StartCoroutine(AddFirst());
         }
 
-        public void AddFirst()
+        public IEnumerator AddFirst()
         {
+            yield return _player != null;
             Vector3 location = Vector3.zero;
             Vector3 rotation = Vector3.zero;
             AddFirst(location, rotation);
@@ -110,10 +112,12 @@ namespace DefaultNamespace
                 visual = true;
                 SetFollowCameraBody();
             }
+            if (_opusShow && !_opusShow.enabled) _opusShow.enabled = true;
         }
 
-        public void AddThird()
+        public IEnumerator  AddThird()
         {
+            yield return _player != null;
             Vector3 location = Vector3.zero;
             Vector3 rotation = Vector3.zero;
             AddThird(location, rotation);
@@ -129,6 +133,7 @@ namespace DefaultNamespace
                 visual = false;
                 SetFollowCameraBody();
             }
+            if (_opusShow && !_opusShow.enabled) _opusShow.enabled = true;
         }
 
         public void SetFollowCameraBody()

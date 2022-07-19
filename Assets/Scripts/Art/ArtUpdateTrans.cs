@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -202,9 +203,12 @@ namespace DefaultNamespace
         public void UpdateCustomAttr(Vector3 movement)
         {
             CustomAttr customAttr = CustomAttr.GetCustomAttr(_target.gameObject);
-            customAttr.location[0] = customAttr.location[0] + movement.x;
-            customAttr.location[1] = customAttr.location[1] + movement.y;
-            customAttr.location[2] = customAttr.location[2] + movement.z;
+            customAttr.location[0] = customAttr.location[0] + Convert.ToSingle(Math.Round(movement.x, 2));
+            customAttr.location[1] = customAttr.location[1] + Convert.ToSingle(Math.Round(movement.y, 2));
+            customAttr.location[2] = customAttr.location[2] + Convert.ToSingle(Math.Round(movement.z, 2));
+            // customAttr.location[0] = customAttr.location[0] + movement.x;
+            // customAttr.location[1] = customAttr.location[1] + movement.y;
+            // customAttr.location[2] = customAttr.location[2] + movement.z;
         }
     }
 }

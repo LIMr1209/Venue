@@ -16,6 +16,7 @@ namespace DefaultNamespace
     {
         public static AbInit instances;
         public AssetBundleManifest manifest;
+        public AssetBundle assetBundleManifest;
         public List<string> sceneManifestList = new List<string>();
 
         float time = 0;
@@ -97,8 +98,13 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
 #endif
-            AssetBundle assetBundleManifest = AssetBundle.LoadFromMemory(abData);
+            assetBundleManifest = AssetBundle.LoadFromMemory(abData);
             manifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
+        }
+
+        public void ReloadManifest()
+        {
+            assetBundleManifest.UnloadAsync(false);
         }
 
 
@@ -226,7 +232,7 @@ namespace DefaultNamespace
                 callback(obj);
             }
 
-            // AB.UnloadAsync(false);
+            AB.UnloadAsync(false);
         }
 
         public delegate void MaterialCallback(Material material);

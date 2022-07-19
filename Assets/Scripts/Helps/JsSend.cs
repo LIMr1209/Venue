@@ -1,5 +1,6 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static DefaultNamespace.JsonData;
 
 namespace DefaultNamespace
@@ -111,6 +112,13 @@ namespace DefaultNamespace
         public void JsUnlockArt(string artName)
         {
             _artInit.LockArt(artName, false);
+        }
+        
+        // ÷ÿ÷√≥°æ∞
+        public void JsReloadScene()
+        {
+            _abInit.ReloadManifest();
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

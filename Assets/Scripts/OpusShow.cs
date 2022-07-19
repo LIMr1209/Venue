@@ -223,7 +223,7 @@ namespace DefaultNamespace
                 AddshowcaseList = false;
             }
 
-            if (IsActionTi)
+            if (IsActionTi && Player)
             {
 
                 Ray ray = new Ray(Player.position + new Vector3(0, 1.7f, 0), Player.forward * 3);

@@ -79,11 +79,7 @@ namespace DefaultNamespace
         public void AfterScene()
         {
             AddController controller = FindObjectOfType<AddController>();
-            if(controller) controller.AddThird();
-            OpusShow opusShow = FindObjectOfType<OpusShow>();
-            if (opusShow) opusShow.enabled = true;
-
-
+            if(controller) StartCoroutine(controller.AddThird());
             Light[] lights = FindObjectsOfType<Light>();
             foreach (Light i in lights)
             {
@@ -130,6 +126,11 @@ namespace DefaultNamespace
                 _count = 1;
                 fps = 60f/_deltaTime;
                 _deltaTime = 0;
+            }
+
+            if (Input.GetKeyDown("z"))
+            {
+                FindObjectOfType<JsSend>().JsReloadScene();
             }
 
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
