@@ -44,31 +44,29 @@ namespace DefaultNamespace
 
 #if !UNITY_EDITOR && UNITY_WEBGL
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, true, (obj) =>
                  {
-                    Debug.Log(FindObjectOfType<AbInit>() + "3");
+
                     if (GameObject.Find("default_camera"))
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
-                    Debug.Log(FindObjectOfType<AbInit>() + "8");
                     OnSetLightMap(obj);
                     AfterScene();
-                    Debug.Log(FindObjectOfType<AbInit>() + "9");
                     Tools.loadScene();
                 }));
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, (obj) =>
-                {
-                    if (GameObject.Find("Camera"))
-                    {
-                        GameObject.Find("Camera").gameObject.SetActive(false);
-                    }
-                    OnSetLightMap(obj);
-                    AfterScene();
-                }));
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, false, (obj) =>
+                 {
+                     if (GameObject.Find("Camera"))
+                     {
+                         GameObject.Find("Camera").gameObject.SetActive(false);
+                     }
+                     OnSetLightMap(obj);
+                     AfterScene();
+                 }));
 #endif
 
 
