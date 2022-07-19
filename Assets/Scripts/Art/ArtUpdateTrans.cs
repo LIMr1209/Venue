@@ -28,15 +28,16 @@ namespace DefaultNamespace
             _controller = FindObjectOfType<ThirdPersonController>();
         }
 
-        private void OnEnable()
+        public void ResetController()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
         }
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0))
             {
+                if(_controller && _controller.hasMoveVisualAngle)  return;
                 RaycastHit hitInfo;
                 if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
                 {

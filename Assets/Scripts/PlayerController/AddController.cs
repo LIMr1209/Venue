@@ -27,10 +27,12 @@ namespace DefaultNamespace
         private GameObject _mask;
         private bool _switchCharacter;
         public float zoomSpeed = 10.0f;
+        private ArtUpdateTrans _artUpdateTrans;
 
         private void Awake()
         {
             _opusShow = FindObjectOfType<OpusShow>();
+            _artUpdateTrans = FindObjectOfType<ArtUpdateTrans>();
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
                     {
@@ -113,6 +115,7 @@ namespace DefaultNamespace
                 SetFollowCameraBody();
             }
             if (_opusShow && !_opusShow.enabled) _opusShow.enabled = true;
+            if (_artUpdateTrans && _artUpdateTrans.enabled) _artUpdateTrans.ResetController();
         }
 
         public IEnumerator  AddThird()
@@ -134,6 +137,7 @@ namespace DefaultNamespace
                 SetFollowCameraBody();
             }
             if (_opusShow && !_opusShow.enabled) _opusShow.enabled = true;
+            if (_artUpdateTrans && _artUpdateTrans.enabled) _artUpdateTrans.ResetController();
         }
 
         public void SetFollowCameraBody()

@@ -259,7 +259,7 @@ namespace StarterAssets
 
         IEnumerator MyMethod()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             hasMoveVisualAngle = false;
 
         }
