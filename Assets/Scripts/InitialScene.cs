@@ -58,7 +58,7 @@ namespace DefaultNamespace
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, false, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, true, (obj) =>
                  {
                      if (GameObject.Find("Camera"))
                      {
@@ -130,7 +130,7 @@ namespace DefaultNamespace
             /*#if !UNITY_EDITOR && UNITY_WEBGL
             Debug.Log("游戏焦点: "+hasFocus);
             WebGLInput.captureAllKeyboardInput = hasFocus;
-#endif*/
+            #endif*/
         }
 
 
