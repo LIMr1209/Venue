@@ -1,6 +1,4 @@
-﻿using System.IO;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEngine;
 namespace DefaultNamespace
 {
     public class InitialScene : MonoBehaviour
@@ -46,7 +44,6 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, true, (obj) =>
                  {
-
                     if (GameObject.Find("default_camera"))
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
@@ -72,7 +69,7 @@ namespace DefaultNamespace
 
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_01", "", (material) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_02", "", (material) =>
                 {
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;
@@ -84,11 +81,7 @@ namespace DefaultNamespace
         public void AfterScene()
         {
             AddController controller = FindObjectOfType<AddController>();
-            if(controller) controller.AddThird();
-            OpusShow opusShow = FindObjectOfType<OpusShow>();
-            if (opusShow) opusShow.enabled = true;
-
-
+            if(controller) StartCoroutine(controller.AddThird());
             Light[] lights = FindObjectsOfType<Light>();
             foreach (Light i in lights)
             {
@@ -124,20 +117,10 @@ namespace DefaultNamespace
             lightMap.OnLoadLightmap();
         }
 
-        
-        private void OnApplicationFocus(bool hasFocus)
-        {
-            /*#if !UNITY_EDITOR && UNITY_WEBGL
-            Debug.Log("游戏焦点: "+hasFocus);
-            WebGLInput.captureAllKeyboardInput = hasFocus;
-            #endif*/
-        }
 
 
         private void Update()
         {
-
-
             _count++;
             _deltaTime += Time.deltaTime;
 
@@ -147,44 +130,11 @@ namespace DefaultNamespace
                 fps = 60f/_deltaTime;
                 _deltaTime = 0;
             }
-            // if (Input.GetKeyDown(KeyCode.C))
-            // {
-            //     var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));
-            //     for (int i = 0; i < tArray.Length; i++)
-            //     {
-            //         MeshRenderer t = tArray[i] as MeshRenderer;
-            //         //这个很重要，博主发现如果没有这个代码，unity是不会察觉到编辑器有改动的，自然设置完后直接切换场景改变是不被保存
-            //         //的  如果不加这个代码  在做完更改后 自己随便手动修改下场景里物体的状态 在保存就好了 
-            //         t.gameObject.AddComponent<BoxCollider>();
-            //         if (t.gameObject.TryGetComponent<MeshCollider>(out MeshCollider meshCollider))
-            //         {
-            //             meshCollider.enabled = false;
-            //         }
-            //
-            //     }
-            // }
-
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
             // string[] names = QualitySettings.names;
 
-            //if (Input.GetKeyDown(KeyCode.N))
-            //{
-            //    //string text =
-            //        //"[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://cdn1.d3ingo.com/scene_rendering/user_fodder/220517/628342319b25fefdacc58282.jpg\"}]";
-            //    string text =
-            //        "[{\"name\": \"paintings-022\", \"id\":\"398\", \"imageUrl\": \"https://p4.taihuoniao.com/exhibition_cover/220630/d547f9dd55b1714b1656582308823-0.jpg-m4_3.jpg\",\"quaternion\":[0.7071067811865476,0,0.7071067811865475,0],\"location\":[-0.0036220550537109375,0.003346681594848633,-0.00887298583984375],\"scale\":[0.09148947149515152,0.09148947149515152,0.12227702528948403],\"rotate\":[0,1.5707963267948966,0]}]";
-            //    FindObjectOfType<JsSend>().JsReplaceArtImage(text);
-            //}
-            // if (Input.GetKeyDown(KeyCode.M))
-            // {
-            //     Tools.showFocusWindow(Convert.ToString(398));
-            // }
-            // if (Input.GetKeyDown(KeyCode.B))
-            // {
-            //     Tools.showFocusWindow("test");
-            // }
         }
     }
 }

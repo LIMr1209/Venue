@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using StarterAssets;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -6,7 +7,7 @@ namespace DefaultNamespace
     {
         private PlayerAgent _playerAgent;
         private RaycastHit _raycastHit;
-
+        private ThirdPersonController _controller;
         private void Awake()
         {
             enabled = false;
@@ -19,13 +20,11 @@ namespace DefaultNamespace
 
         private void Update()
         {
-
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonUp(0))
             {
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out _raycastHit, 1000))
                 {
-                    // 地板图层 7 ground
-                    if(_raycastHit.collider.gameObject.layer == 7 && _playerAgent)
+                    if(_raycastHit.collider.gameObject.layer == LayerHelp.navMeshLayerNum && _playerAgent)
                     {
                         _playerAgent.MovePoint(_raycastHit.point);
                     }

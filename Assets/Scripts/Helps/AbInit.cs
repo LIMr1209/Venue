@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Video;
+
 // using UnityEngine.UI;
 
 namespace DefaultNamespace
@@ -14,6 +16,7 @@ namespace DefaultNamespace
     {
         public static AbInit instances;
         public AssetBundleManifest manifest;
+        public AssetBundle assetBundleManifest;
         public List<string> sceneManifestList = new List<string>();
 
         float time = 0;
@@ -95,8 +98,17 @@ namespace DefaultNamespace
 #if !UNITY_EDITOR && UNITY_WEBGL
                 abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
 #endif
-            AssetBundle assetBundleManifest = AssetBundle.LoadFromMemory(abData);
+            assetBundleManifest = AssetBundle.LoadFromMemory(abData);
             manifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
+        }
+
+        public void ReloadManifest()
+        {
+            foreach (var i in AssetBundelLightMapDic)
+            {
+                i.Value.UnloadAsync(false);
+            }   
+            assetBundleManifest.UnloadAsync(false);
         }
 
 
@@ -221,7 +233,7 @@ namespace DefaultNamespace
                 callback(obj);
             }
 
-            // AB.UnloadAsync(false);
+            AB.UnloadAsync(false);
         }
 
         public delegate void MaterialCallback(Material material);
@@ -412,11 +424,29 @@ namespace DefaultNamespace
             }
         }
 
-        public void ReplaceMaterialImage(GameObject obj, string url)
+        public void ReplaceMaterialContent(GameObject obj, string url, int nKind)
         {
-            Material material = obj.GetComponent<MeshRenderer>().material;
-            StartCoroutine(DownloadTexture(url, (texture) => { material.mainTexture = texture; }
-            ));
+            if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
+            {
+                Destroy(videoPlayer);
+            }
+            if (nKind == 2)
+            {
+                Material material = obj.GetComponent<MeshRenderer>().material;
+                Material cloneMaterial = Instantiate(material);
+                obj.GetComponent<MeshRenderer>().material = cloneMaterial;
+                StartCoroutine(DownloadTexture(url, (texture) =>
+                    {
+                        cloneMaterial.mainTexture = texture;
+                        Vector2 contentSize = new Vector2(texture.width, texture.height);
+                        SizeAdaptation.SetSize(obj, contentSize);
+                    }
+                ));
+            }
+            else if (nKind == 3)
+            {
+                StartCoroutine(PlayerVideoHelp.AddVideoComponent(obj, url));
+            }
         }
     }
 }
