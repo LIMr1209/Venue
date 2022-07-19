@@ -56,7 +56,7 @@ namespace DefaultNamespace
 
             if (_art)
             {
-                StartCoroutine(TransformSelected());
+                // StartCoroutine(TransformSelected());
             }
         }
 
