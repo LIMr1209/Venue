@@ -56,7 +56,7 @@ namespace DefaultNamespace
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, true, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, false, (obj) =>
                  {
                      if (GameObject.Find("Camera"))
                      {
@@ -70,7 +70,7 @@ namespace DefaultNamespace
 
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_02", "", (material) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_03", "", (material) =>
                 {
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;

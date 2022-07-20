@@ -17,7 +17,7 @@ namespace DefaultNamespace
 
         public static string QiNiuPrefix = "unity/venue/dev"; // 七牛资源前缀
 
-        public static string AssetVision = "2022071903"; // 资源版本
+        public static string AssetVision = "2022071904"; // 资源版本
 
         public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy"; //七牛 AccessKey
         public static string QiNiuSecretKey = "r-NUrKsnRBEwTQxbLONVrK9tPuncXyHmcq4BkSc7"; //七牛 QiNiuSecretKey
@@ -34,11 +34,11 @@ namespace DefaultNamespace
         public static string sceneViewRoute = "api/scene_model/info";  // 场景详情 urlId 6
         
         // scene 图层
-        public static string focusArtLayer = "art"; // 聚焦层
-        public static string lockArtlayer = "artLock"; // 锁定层
-        public static string frameLayer = "frame";
+        public static string focusArtLayer = "art"; // 聚焦层画
+        public static string lockArtlayer = "artLock"; // 锁定层画
+        public static string frameLayer = "frame";  // 画框
         public static string navMeshLayer = "ground"; // 寻路地板层
-        public static string playerLayer = "player";
+        public static string playerLayer = "player"; // 玩家
 
         // public static Dictionary<string, Dictionary<string, string>> dic =
         //     new Dictionary<string, Dictionary<string, string>>();
