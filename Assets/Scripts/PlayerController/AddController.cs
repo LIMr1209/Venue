@@ -42,8 +42,9 @@ namespace DefaultNamespace
                             .GetCinemachineComponent<Cinemachine3rdPersonFollow>();
                     }
                 ));
-
+            
             characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
+
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb,
                     new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>

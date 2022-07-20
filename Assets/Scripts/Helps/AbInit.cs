@@ -114,7 +114,6 @@ namespace DefaultNamespace
 
         public IEnumerator OnWebRequestAssetBundleManifestScene(string url,string name)
         {
-            Debug.Log("进入OnWebRequestAssetBundleManifestScene协程");
             if (sceneManifestList.Count != 0) yield break;
             string depsUrl = null;
             string data = null;
@@ -138,10 +137,8 @@ namespace DefaultNamespace
                     int len = LastIndex - BeginIndex;
                     string bundleName = s.Substring(BeginIndex, len);
                     sceneManifestList.Add(bundleName);
-                    Debug.Log(bundleName);
                 }
             }
-            Debug.Log(sceneManifestList.Count);
         }
 
 
@@ -364,13 +361,35 @@ namespace DefaultNamespace
         }
 
 
+        public IEnumerator OnWebRequestLoadAssetBundleShowCase(string name, Vector3 point,
+           Vector3 rotate, GameObjectCallback callback = null)
+        {
+            string path = Path.Combine(Application.dataPath, "AssetsBundles");
+            string abPath = Path.Combine(path, name).Replace("\\", "/") + ".ab";
+            UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
+            yield return requestAB.SendWebRequest();
+            if (!string.IsNullOrEmpty(requestAB.error))
+            {
+                throw new Exception("请求资源包 " + name + " 错误 " + requestAB.error + " " + abPath);
+            }
+            byte[] abData = requestAB.downloadHandler.data;
+            AssetBundle AB = AssetBundle.LoadFromMemory(abData);
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+            if (callback != null)
+            {
+                callback(obj);
+            }
+
+            AB.UnloadAsync(false);
+        }
+
+
         private IEnumerator OnLoadSceneLightmapAB()
         {
             while (sceneManifestList.Count == 0)
             {
                 yield return null;
             }
-            Debug.Log("OnLoadSceneLightmapAB sceneManifestList.Count : " + sceneManifestList.Count);
             string[] deps = new string[sceneManifestList.Count];
             for (int i = 0; i < sceneManifestList.Count; i++)
             {
@@ -385,7 +404,7 @@ namespace DefaultNamespace
 #endif
             foreach (var item in deps)
             {
-                if (!AssetBundelLightMapDic.ContainsKey("lightmap"))
+                if (!AssetBundelLightMapDic.ContainsKey(item))
                 {
                     string depPath = Path.Combine(deppath, item).Replace("\\", "/");
                     UnityWebRequest dep = UnityWebRequest.Get(depPath);
