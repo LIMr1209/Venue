@@ -16,7 +16,8 @@ namespace DefaultNamespace
         public int kind = 0;
         public Vector3 oldLocation;
         public Quaternion oldRotate;
-        public Vector3 oldScale;
+        public Vector3 oldScale; // 换画后 记录自适应的值
+        public Vector3 originScale; // 最初的缩放
         public Vector2 realSize = Vector2.zero;
         
         public static CustomAttr GetCustomAttr(GameObject art)
@@ -26,9 +27,10 @@ namespace DefaultNamespace
             {
                 Debug.Log("添加自定义属性组件");
                 customAttr = art.AddComponent(typeof(CustomAttr)) as CustomAttr;
-                customAttr.oldLocation = art.transform.localPosition;
-                customAttr.oldRotate = art.transform.localRotation;
-                customAttr.oldScale = art.transform.localScale;
+                Transform transform = art.transform;
+                customAttr.oldLocation = transform.localPosition;
+                customAttr.oldRotate = transform.localRotation;
+                customAttr.originScale = customAttr.oldScale = transform.localScale;
             }
 
             return customAttr;

@@ -34,11 +34,11 @@ namespace DefaultNamespace
         public static string sceneViewRoute = "api/scene_model/info";  // 场景详情 urlId 6
         
         // scene 图层
-        public static string focusArtLayer = "art"; // 聚焦层
-        public static string lockArtlayer = "artLock"; // 锁定层
-        public static string frameLayer = "frame";
+        public static string focusArtLayer = "art"; // 聚焦层画
+        public static string lockArtlayer = "artLock"; // 锁定层画
+        public static string frameLayer = "frame";  // 画框
         public static string navMeshLayer = "ground"; // 寻路地板层
-        public static string playerLayer = "player";
+        public static string playerLayer = "player"; // 玩家
 
         // public static Dictionary<string, Dictionary<string, string>> dic =
         //     new Dictionary<string, Dictionary<string, string>>();

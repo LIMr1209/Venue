@@ -71,13 +71,12 @@ namespace DefaultNamespace
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, true));
                 }));
 
-
 #endif
 
 
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_02", "", (material) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_03", "", (material) =>
                 {
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;
