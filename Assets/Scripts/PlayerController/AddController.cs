@@ -73,16 +73,6 @@ namespace DefaultNamespace
                 // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
             }
 
-            if (Input.GetKeyDown("z"))
-            {
-                characterId = "02";
-                UpdateCharacter();
-            }
-            if (Input.GetKeyDown("x"))
-            {
-                characterId = "03";
-                UpdateCharacter();
-            }
         }
 
         private void SwithVisul()
