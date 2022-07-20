@@ -13,6 +13,7 @@ namespace DefaultNamespace
 
         [HideInInspector]
         public string sceneUrl;
+        public string showcaseUrl;
         private float _deltaTime;
         private int _count;
         public float fps;
@@ -27,8 +28,9 @@ namespace DefaultNamespace
 #else
             sceneModel = "scene";
             //sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
-            sceneUrl = "https://s3.taihuoniao.com/unity/scene.ab";
-        
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220712/62cd6618950fa0e307a92f78/scene.ab";
+            showcaseUrl = "https://cdn1.d3ingo.com/model_scene/220712/62cd6618950fa0e307a92f78/showcaseroot.ab";
+
 #endif
         }
 
@@ -51,20 +53,24 @@ namespace DefaultNamespace
                     }
                     OnSetLightMap(obj);
                     AfterScene();
+                     StartCoroutine(AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, true));
                     Tools.loadScene();
                 }));
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl(sceneModel, sceneUrl, false, (obj) =>
-                 {
-                     if (GameObject.Find("Camera"))
-                     {
-                         GameObject.Find("Camera").gameObject.SetActive(false);
-                     }
-                     OnSetLightMap(obj);
-                     AfterScene();
-                 }));
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, true, (obj) =>
+                {
+                    if (GameObject.Find("default_camera"))
+                    {
+                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                    }
+                    OnSetLightMap(obj);
+                    AfterScene();
+                    StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, true));
+                }));
+
 #endif
 
 
@@ -102,7 +108,6 @@ namespace DefaultNamespace
             LightMap lightMap = obj.GetComponent<LightMap>();
             if (!lightMap) return;
             lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
-            Debug.Log("OnSetLightMap"+AbInit.instances.AssetBundelLightMapDic.Count);
             foreach (var item in AbInit.instances.AssetBundelLightMapDic)
             {
                 if (item.Key.Contains("lightmap"))
@@ -113,17 +118,21 @@ namespace DefaultNamespace
                     string bundleName = item.Key.Substring(BeginIndex, len);
                     Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
                     lightMap.OnAddLightmapTexs(texture2D);
-                    Debug.Log(texture2D.name + 44);
                 }
             }
             lightMap.i = 0;
             lightMap.OnLoadLightmap();
+            
         }
 
 
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                
+            }
             _count++;
             _deltaTime += Time.deltaTime;
 

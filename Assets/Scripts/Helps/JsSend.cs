@@ -30,6 +30,7 @@ namespace DefaultNamespace
         {
             Debug.Log("接收到的场景url: " + strParams);
             _initialScene.sceneUrl = Path.Combine(strParams, "scene.ab").Replace("\\", "/");
+            _initialScene.showcaseUrl = Path.Combine(strParams, "showcaseroot.ab").Replace("\\", "/");
             // 默认脚本组件禁用, 接收到前端的参数 启用脚本组件
             _abInit.enabled = true;
             _initialScene.enabled = true;
