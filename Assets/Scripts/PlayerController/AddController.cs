@@ -2,6 +2,7 @@
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace DefaultNamespace
 {
@@ -15,7 +16,7 @@ namespace DefaultNamespace
 
         // private string armatureAb = "playerarmature";
         private string armatureAb = "figurebase";
-        [HideInInspector] public string characterId="01";
+        [HideInInspector] public string characterId="00";
         [HideInInspector] public string characterAb;
 
         private GameObject _playerFollowCamera;
@@ -57,23 +58,6 @@ namespace DefaultNamespace
                 ));
         }
 
-        // private void Start()
-        // {
-        //     characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
-        //     StartCoroutine(
-        //         AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
-        //             new Vector3(0, -180, 0), (obj) =>
-        //             {
-        //                 _mask = obj;
-        //                 _mask.transform.SetParent(_player.transform, false);
-        //                 ShaderProblem.ResetMeshShader(obj); // 解决shader问题
-        //                 _opusShow.enabled = true;
-        //                 AddThird();
-        //             }));
-
-
-        // }
-
         private void Update()
         {
             if (_switchCharacter)
@@ -88,6 +72,16 @@ namespace DefaultNamespace
                 // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
             }
 
+            if (Input.GetKeyDown("z"))
+            {
+                characterId = "02";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("x"))
+            {
+                characterId = "03";
+                UpdateCharacter();
+            }
         }
 
         private void SwithVisul()
@@ -161,14 +155,20 @@ namespace DefaultNamespace
             _opusShow.enabled = false;
             characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
             _switchCharacter = true;
-                
+            
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, new Vector3(0, 0, 0),
-                    new Vector3(0, -180, 0), (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, _player.transform.position,
+                    _player.transform.rotation.eulerAngles, (obj) =>
                     {
-                        Destroy(_mask);
-                        _mask = obj;
-                        _mask.transform.SetParent(_player.transform, false);
+                        Quaternion old = _player.transform.Find("PlayerCameraRoot").transform.rotation;
+                        Destroy(_player);
+                        _player = obj;
+                        _player.transform.Find("PlayerCameraRoot").transform.rotation = old;
+                        _player.GetComponent<PlayerInput>().enabled = false;
+                        _player.GetComponent<PlayerInput>().enabled = true;
+                        cinemachineTarget =
+                            _player.transform.Find("PlayerCameraRoot").GetComponent<Transform>();
+                        _cinemachineVirtualCamera.Follow = cinemachineTarget;
                         ShaderProblem.ResetMeshShader(_player); // 解决shader问题
                         _opusShow.enabled = true;
                         _switchCharacter = false;
@@ -178,13 +178,13 @@ namespace DefaultNamespace
 
         public void SetCharacterColorAni()
         {
-            float t = Mathf.PingPong(Time.time, 1);
-            Color c = Color.Lerp(Color.white, Color.gray, t);
-            SkinnedMeshRenderer rend = _mask.GetComponentInChildren<SkinnedMeshRenderer>();
-            foreach (Material material in rend.sharedMaterials)
-            {
-                material.color = c;
-            }
+            // float t = Mathf.PingPong(Time.time, 1);
+            // Color c = Color.Lerp(Color.white, Color.gray, t);
+            // SkinnedMeshRenderer rend = _player.GetComponentInChildren<SkinnedMeshRenderer>();
+            // foreach (Material material in rend.sharedMaterials)
+            // {
+            //     material.color = c;
+            // }
         }
     }
 }
