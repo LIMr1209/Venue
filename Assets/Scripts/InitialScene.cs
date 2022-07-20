@@ -53,7 +53,7 @@ namespace DefaultNamespace
                     }
                     OnSetLightMap(obj);
                     AfterScene();
-                    AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot",sceneUrl, true));
+                     StartCoroutine(AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, true));
                     Tools.loadScene();
                 }));
 #else
