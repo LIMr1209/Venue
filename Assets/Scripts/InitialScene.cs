@@ -59,16 +59,16 @@ namespace DefaultNamespace
 #else
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, true, (obj) =>
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, false, (obj) =>
                 {
                     if (GameObject.Find("default_camera"))
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
                     OnSetLightMap(obj);
-                    AfterScene();
                     StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, true));
+               AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, false));
+                    AfterScene();
                 }));
 
 #endif
@@ -81,6 +81,7 @@ namespace DefaultNamespace
                     Shader shader1 = Shader.Find("Skybox/Panoramic");
                     material.shader = shader1;
                     RenderSettings.skybox = material;
+                    OnChangeEnvironment();
                     DynamicGI.UpdateEnvironment();
                 })); 
         }
@@ -123,6 +124,15 @@ namespace DefaultNamespace
             lightMap.i = 0;
             lightMap.OnLoadLightmap();
             
+        }
+
+        private void OnChangeEnvironment()
+        {
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = Color.white;
+            RenderSettings.ambientEquatorColor = Color.white;
+            RenderSettings.ambientGroundColor = Color.black;
+            RenderSettings.ambientIntensity = 0.6f;
         }
 
 
