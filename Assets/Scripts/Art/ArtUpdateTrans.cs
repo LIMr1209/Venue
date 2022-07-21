@@ -17,12 +17,13 @@ namespace DefaultNamespace
         private ThirdPersonController _controller;
         private static Material _outlineMaterial;
         private Vector3 _deviationPosition;
-        private float _distance; // 画框和摄像机两点距离的平方
-        private float _yaw;
-        private float _arcLength;
+        public float _distance; // 画框和摄像机两点距离的平方
         private GameObject _player;
         private float _weightX = 0.25f;
         private float _weightY = 0.25f;
+        public bool groundCheck;
+        public bool wallCheck;
+        public float checkRadius = 0.5f;
 
         private void Awake()
         {
@@ -64,23 +65,19 @@ namespace DefaultNamespace
                 }
             }
 
-            if (_art && Input.GetMouseButtonDown(0))
-            {
-                RaycastHit hitInfo;
-                if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
-                {
-                    if (_target == hitInfo.collider.gameObject.transform.parent)
-                    {
-                        _deviationPosition = hitInfo.point - _target.localPosition; // 拖动时候得偏移量
-                        _distance = Vector3.Distance(_myCamera.transform.position, hitInfo.point); // 计算距离
-                        _arcLength = 0.0f;
-                        _yaw = 0;
-                        // Vector3 dir=(_myCamera.transform.position-hitInfo.point).normalized; //起始点到目标点的方向向量
-                        // float angle=Vector2.SignedAngle(Vector2.left, dir);
-                        // StartCoroutine(TransformSelected());
-                    }
-                }
-            }
+            // if (_art && Input.GetMouseButtonDown(0))
+            // {
+            //     RaycastHit hitInfo;
+            //     if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
+            //     {
+            //         if (_target == hitInfo.collider.gameObject.transform.parent)
+            //         {
+            //             _deviationPosition = hitInfo.point - _target.localPosition; // 拖动时候得偏移量
+            //             _distance = Vector3.Distance(_myCamera.transform.position, _target.transform.position); // 计算距离
+            //             StartCoroutine(TransformSelected());
+            //         }
+            //     }
+            // }
         }
 
 
@@ -195,29 +192,29 @@ namespace DefaultNamespace
 
         IEnumerator TransformSelected()
         {
-            // _target.transform.GetChild(0).gameObject.layer = LayerHelp.frameLayerNum;
-            MeshCollider[] artColliders = new[]
+            MeshCollider[] artColliders =
             {
                 _target.transform.GetChild(0).gameObject.GetComponent<MeshCollider>(),
+                
                 _target.transform.GetChild(1).gameObject.GetComponent<MeshCollider>()
             };
             foreach (var i in artColliders)
             {
                 i.enabled = false;
             }
-                
+
             while (Input.GetMouseButton(0))
             {
                 if (_controller) _controller.LockCameraPosition = true; // 禁用控制器 旋转视角
-                
+
                 // 忽略 人物与 画框的碰撞
                 // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
                 // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
-                
+
                 // 设置坐标系
-                float mouseY = Input.GetAxis("Mouse Y");
-                _yaw += mouseY * _weightY;
-                
+                // float mouseY = Input.GetAxis("Mouse Y");
+                // _yaw += mouseY * _weightY;
+
                 // float mouseX = Input.GetAxis("Mouse X");
                 // _arcLength += mouseX * weightX;
                 // Debug.Log("距离 "+ _distance);
@@ -226,38 +223,62 @@ namespace DefaultNamespace
                 // double perimeter = _distance * 2 * Math.PI;
                 // double angle = 360 * (_distance / perimeter);
                 // Debug.Log("角度 "+ angle);
+
+
+                // float x = Mathf.Sin(0 * Mathf.Deg2Rad) * _distance;
+                // float z = Mathf.Cos(0 * Mathf.Deg2Rad) * _distance;
+                // Vector3 worldPoint = _myCamera.transform.TransformPoint(new Vector3(x, _yaw, z)-_deviationPosition);
+                // _target.localPosition = worldPoint;
+                // 画框位置跟随鼠标
+                Vector3 mousePosOnScreen = Input.mousePosition;
+                mousePosOnScreen.z = _distance-_myCamera.transform.position.z;
+                Vector3 mousePosInWorld = _myCamera.ScreenToWorldPoint(mousePosOnScreen);
+                _target.position = mousePosInWorld - _deviationPosition;
+                // // 画框朝向跟随摄像头
+                // Vector3 lookPos = _myCamera.transform.position - _target.position;
+                // lookPos.y = 0;
+                // Quaternion rotation = Quaternion.LookRotation(lookPos);
+                // _target.rotation = rotation;
+                // _target.transform.Rotate(new Vector3(0, 90, 0));
+                // // 触地后鼠标继续向下  距离减少
+                // // 检测地面 鼠标上下鼠标 调整距离 上距离 最高不超过初始距离
+                // Vector3 bottomPosition = _target.transform.position;
+                // groundCheck = Physics.CheckSphere(bottomPosition, checkRadius, 1<<LayerHelp.groundLayerNum,
+                //     QueryTriggerInteraction.Ignore);
+                //
+                // // 检测墙体 做吸附效果
+                // Vector3 spherePosition = _target.transform.position;
+                // wallCheck = Physics.CheckSphere(spherePosition, checkRadius, 1<<LayerHelp.wallLayerNum,
+                //     QueryTriggerInteraction.Ignore);
                 
                 
-                float x = Mathf.Sin(0 * Mathf.Deg2Rad) * _distance;
-                float z = Mathf.Cos(0 * Mathf.Deg2Rad) * _distance;
-                Vector3 worldPoint = _myCamera.transform.TransformPoint(new Vector3(x, _yaw, z)-_deviationPosition);
-                _target.localPosition = worldPoint;
-                // 设置朝向 
-                Vector3 lookPos = _myCamera.transform.position - _target.position;
-                lookPos.y = 0;
-                Quaternion rotation = Quaternion.LookRotation(lookPos);
-                _target.rotation = rotation;
-                _target.transform.Rotate(new Vector3(0,90,0));
-                
-                // 吸附效果 
-                // RaycastHit hitInfo;
-                // int layerMask = 1 << LayerHelp.focusArtLayerNum;
-                // layerMask = ~layerMask;
-                // if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
-                //     layerMask))
-                // {
-                // _target.localPosition = hitInfo.point - _deviationPosition;
-                // }
 
                 yield return null;
             }
+
             foreach (var i in artColliders)
             {
                 i.enabled = true;
             }
+
             if (_controller) _controller.LockCameraPosition = false;
             // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
             // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (_target)
+            {
+                Color transparentGreen = Color.green;
+                Color transparentBlue = Color.blue;
+                Color transparentRed = Color.red;
+
+                if (groundCheck) Gizmos.color = transparentGreen;
+                else if (wallCheck) Gizmos.color = transparentBlue;
+                else Gizmos.color = transparentRed;
+                Gizmos.DrawSphere(_target.position,checkRadius); 
+            }
         }
 
 

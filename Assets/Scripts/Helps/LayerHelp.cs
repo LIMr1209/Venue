@@ -6,8 +6,8 @@ namespace DefaultNamespace
     {
         public static int focusArtLayerNum = LayerMask.NameToLayer(Globle.focusArtLayer);
         public static int lockArtLayerNum = LayerMask.NameToLayer(Globle.lockArtlayer);
-        public static int frameLayerNum = LayerMask.NameToLayer(Globle.frameLayer);
         public static int playerLayerNum = LayerMask.NameToLayer(Globle.playerLayer);
-        public static int navMeshLayerNum = LayerMask.NameToLayer(Globle.navMeshLayer);
+        public static int groundLayerNum = LayerMask.NameToLayer(Globle.groundLayer);
+        public static int wallLayerNum = LayerMask.NameToLayer(Globle.wallLayer);
     }
 }

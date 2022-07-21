@@ -29,11 +29,13 @@ namespace DefaultNamespace
         private bool _switchCharacter;
         public float zoomSpeed = 10.0f;
         private ArtUpdateTrans _artUpdateTrans;
+        private AgentCamera _agentCamera;
 
         private void Awake()
         {
             _opusShow = FindObjectOfType<OpusShow>();
             _artUpdateTrans = FindObjectOfType<ArtUpdateTrans>();
+            _agentCamera = FindObjectOfType<AgentCamera>();
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObject(thirdFollowCameraAb, controllerAb, (obj) =>
                     {
@@ -71,6 +73,57 @@ namespace DefaultNamespace
                 // float scroll = Input.GetAxis("Mouse ScrollWheel");
                 // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
                 // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
+            }
+
+            if (Input.GetKeyDown("0"))
+            {
+                characterId = "00";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("1"))
+            {
+                characterId = "01";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("2"))
+            {
+                characterId = "02";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("3"))
+            {
+                characterId = "03";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("4"))
+            {
+                characterId = "04";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("5"))
+            {
+                characterId = "05";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("6"))
+            {
+                characterId = "06";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("7"))
+            {
+                characterId = "07";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("8"))
+            {
+                characterId = "08";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("9"))
+            {
+                characterId = "09";
+                UpdateCharacter();
             }
 
         }
@@ -144,17 +197,19 @@ namespace DefaultNamespace
         public void UpdateCharacter()
         {
             _opusShow.enabled = false;
+            _agentCamera.enabled = false;
             characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
             _switchCharacter = true;
+            Vector3 oldPosition = _player.transform.position;
+            Quaternion oldQuaternion = _player.transform.Find("PlayerCameraRoot").transform.rotation;
             
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, _player.transform.position,
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, oldPosition,
                     _player.transform.rotation.eulerAngles, (obj) =>
                     {
-                        Quaternion old = _player.transform.Find("PlayerCameraRoot").transform.rotation;
                         Destroy(_player);
                         _player = obj;
-                        _player.transform.Find("PlayerCameraRoot").transform.rotation = old;
+                        _player.transform.Find("PlayerCameraRoot").transform.rotation = oldQuaternion;
                         _player.GetComponent<PlayerInput>().enabled = false;
                         _player.GetComponent<PlayerInput>().enabled = true;
                         cinemachineTarget =
@@ -162,6 +217,7 @@ namespace DefaultNamespace
                         _cinemachineVirtualCamera.Follow = cinemachineTarget;
                         ShaderProblem.ResetMeshShader(_player); // 解决shader问题
                         _opusShow.enabled = true;
+                        _agentCamera.enabled = true;
                         _switchCharacter = false;
                     }
                 ));

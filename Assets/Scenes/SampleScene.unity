@@ -217,6 +217,37 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &313496055
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 313496056}
+  m_Layer: 0
+  m_Name: navmesh_aoe
+  m_TagString: aoe
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &313496056
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313496055}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.61517, y: 1.7221495, z: 2.8323781}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1048134850
 Transform:
   m_ObjectHideFlags: 0
@@ -7777,6 +7808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneModel: scene
   sceneUrl: https://cdn1.d3ingo.com/model_scene/220627/62b96fe7baae4131bab41cd1/scene.ab
+  showcaseUrl: 
   fps: 0
 --- !u!114 &4895661117118384628
 MonoBehaviour:
@@ -7868,11 +7900,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4769131518862341615}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b64f55fe14f747bbafd1b7d45c6e8dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _distance: 0
+  groundCheck: 0
+  wallCheck: 0
+  checkRadius: 0.5
 --- !u!114 &4895661117118384635
 MonoBehaviour:
   m_ObjectHideFlags: 0

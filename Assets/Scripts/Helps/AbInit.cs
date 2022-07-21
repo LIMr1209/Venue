@@ -451,10 +451,10 @@ namespace DefaultNamespace
 
         public void ReplaceMaterialContent(GameObject obj, string url, int nKind)
         {
-            if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
-            {
-                Destroy(videoPlayer);
-            }
+            // if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
+            // {
+            //     Destroy(videoPlayer);
+            // }
             if (nKind == 2)
             {
                 Material material = obj.GetComponent<MeshRenderer>().material;

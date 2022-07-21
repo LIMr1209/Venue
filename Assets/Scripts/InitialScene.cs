@@ -140,7 +140,7 @@ namespace DefaultNamespace
             // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
             // int qualityLevel = QualitySettings.GetQualityLevel();
             // QualitySettings.SetQualityLevel (5, true);
-            // string[] names = QualitySettings.names;
+            // string[] names = QualitySettings.names;  
 
         }
     }

@@ -1,5 +1,4 @@
-﻿using System;
-using StarterAssets;
+﻿using StarterAssets;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +10,7 @@ namespace DefaultNamespace
         private LineRenderer _lineRenderer;
 
         private const string Aoe = "aoe";
+        private GameObject _aoe;
         private GameObject _target;
         private Animator _animator;
         private CharacterController _character;
@@ -23,15 +23,24 @@ namespace DefaultNamespace
         {
             _opusShow = FindObjectOfType<OpusShow>();
             _controller = FindObjectOfType<ThirdPersonController>();
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(Aoe, "", (obj) =>
-                    {
-                        _target = obj;
-                        _target.SetActive(false);
-                        ShaderProblem.ResetParticleShader(_target);
-                    }
-                ));
-               
+            _target = GameObject.FindWithTag("aoe");
+            int childCount = _target.transform.childCount;
+            if (childCount==0)
+            {
+                StartCoroutine(
+                    AbInit.instances.OnWebRequestLoadAssetBundleGameObject(Aoe, "", (obj) =>
+                        {
+                            _aoe = obj;
+                            _aoe.transform.SetParent(_target.transform, false);
+                            _aoe.SetActive(false);
+                            ShaderProblem.ResetParticleShader(_aoe);
+                        }
+                    ));
+            }
+            else
+            {
+                _aoe = _target.transform.GetChild(0).gameObject;
+            }
         }
 
         private void Start()
@@ -58,8 +67,8 @@ namespace DefaultNamespace
                 agent.SetDestination(transform.position);
             }
             DrawPath(); // 绘制路径
-            if (_target) {
-                _target.SetActive(agent.hasPath);
+            if (_aoe) {
+                _aoe.SetActive(agent.hasPath);
             }
             if (_animator && agent.hasPath)
             {
@@ -98,9 +107,9 @@ namespace DefaultNamespace
                 agent.enabled = true;
             }
             agent.SetDestination(targetPos); // 导航
-            if (_target)
+            if (_aoe)
             {
-                _target.transform.position = targetPos;
+                _aoe.transform.position = targetPos;
             }
         }   
 
