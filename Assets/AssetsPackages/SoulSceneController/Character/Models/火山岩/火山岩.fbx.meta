@@ -4,27 +4,63 @@ ModelImporter:
   serializedVersion: 21202
   internalIDToNameTable:
   - first:
-      74: -1757999939766284761
-    second: FairyArmature|Applaud_FairyArmature
+      74: -2021228404797811968
+    second: FairyArmature|FairyArmature|Applaud
   - first:
-      74: -5463386894559618320
-    second: FairyArmature|Dead_FairyArmature
+      74: 1019399612231122437
+    second: FairyArmature|FairyArmature|Dead
   - first:
-      74: -6248738532289586621
-    second: FairyArmature|Jump_FairyArmature
+      74: -7301171889166156648
+    second: FairyArmature|FairyArmature|FairyArmature|Applaud
   - first:
-      74: -1296232395992282150
-    second: FairyArmature|No_FairyArmature
+      74: 9129559410772225379
+    second: FairyArmature|FairyArmature|FairyArmature|Dead
   - first:
-      74: 2988094649342618724
-    second: FairyArmature|Smile_FairyArmature
+      74: 8919310927148760100
+    second: FairyArmature|FairyArmature|FairyArmature|Jump
   - first:
-      74: 931707120474186910
-    second: FairyArmature|Wave_FairyArmature
+      74: 7489006866068302550
+    second: FairyArmature|FairyArmature|FairyArmature|No
   - first:
-      74: -5447875061142143641
-    second: FairyArmature|Yes_FairyArmature
-  externalObjects: {}
+      74: 3410743224640096070
+    second: FairyArmature|FairyArmature|FairyArmature|Smile
+  - first:
+      74: 3301135383443439122
+    second: FairyArmature|FairyArmature|FairyArmature|Wave
+  - first:
+      74: 3373652134370952348
+    second: FairyArmature|FairyArmature|FairyArmature|Yes
+  - first:
+      74: -1197286203564115140
+    second: FairyArmature|FairyArmature|Jump
+  - first:
+      74: 1346413987762266998
+    second: FairyArmature|FairyArmature|No
+  - first:
+      74: 3227840912061042596
+    second: FairyArmature|FairyArmature|Smile
+  - first:
+      74: -5552321655710913886
+    second: FairyArmature|FairyArmature|Wave
+  - first:
+      74: 6657602355541278254
+    second: FairyArmature|FairyArmature|Yes
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: baking_Color
+    second: {fileID: 2800000, guid: 2db37c9d08a9fa147947691af42d82bf, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: baking_Emit
+    second: {fileID: 2800000, guid: a0999f2ca37698d47b12822c7fd03cb3, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: baking_Roughness
+    second: {fileID: 2800000, guid: db0c6471c4850e447bafd09e17bb90e8, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
