@@ -15,7 +15,7 @@ namespace DefaultNamespace
         public static string AbBucket = "frstatic"; // 项目ab包 上传空间名
         public static string ServiceHost = "http://render-dev.d3ingo.com"; // 后端业务 域名
 
-        public static string QiNiuPrefix = "unity/venue/dev"; // 七牛资源前缀
+        public static string QiNiuPrefix = "unity/venue/pro"; // 七牛资源前缀
 
         public static string AssetVision = "2022072115"; // 资源版本
 
