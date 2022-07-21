@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 namespace DefaultNamespace
 {
     public class InitialScene : MonoBehaviour
@@ -17,6 +18,7 @@ namespace DefaultNamespace
         private float _deltaTime;
         private int _count;
         public float fps;
+        private bool isWeb;
 
         private void Awake()
         {
@@ -42,12 +44,37 @@ namespace DefaultNamespace
             string sceneManifestName = sceneModel + ".ab.manifest";
             StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
 
-            bool isWeb;
+            
 #if !UNITY_EDITOR && UNITY_WEBGL
             isWeb = true;
 #else
             isWeb = false;
 #endif
+
+
+            StartCoroutine(OnLoadSceneandOther());
+
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_03", "", (material) =>
+                {
+                    Shader shader1 = Shader.Find("Skybox/Panoramic");
+                    material.shader = shader1;
+                    RenderSettings.skybox = material;
+                    OnChangeEnvironment();
+                    DynamicGI.UpdateEnvironment();
+                })); 
+        }
+
+        public IEnumerator OnLoadSceneandOther()
+        {
+            GameObject showcaserootobj = null;
+            GameObject sceneobj = null;
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, isWeb, (obj) =>
+                {
+                    showcaserootobj = obj;
+                    showcaserootobj.SetActive(false);
+                }));
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, isWeb, (obj) =>
                 {
@@ -56,25 +83,24 @@ namespace DefaultNamespace
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
                     OnSetLightMap(obj);
-                    StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, isWeb,
-                    (obj) =>
-                    {
-                        AfterScene();
-                    }));
+                    sceneobj = obj;
+                    sceneobj.SetActive(false);
                 }));
-
-
-
-
-            StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_03", "", (material) =>
+            while (showcaserootobj == null || sceneobj == null)
+            {
+                yield return null;
+            }
+            showcaserootobj.SetActive(true);
+            sceneobj.SetActive(true);
+            AfterScene();
+            for (int i = 0; i < sceneobj.transform.childCount; i++)
+            {
+                if (sceneobj.transform.GetChild(i).name.Contains("空气墙"))
                 {
-                    Shader shader1 = Shader.Find("Skybox/Panoramic");
-                    material.shader = shader1;
-                    RenderSettings.skybox = material;
-                    DynamicGI.UpdateEnvironment();
-                })); 
+                    sceneobj.transform.GetChild(i).GetComponent<Renderer>().material = Resources.Load("Boli") as Material;
+                }
+            }
+
         }
 
         public void AfterScene()
@@ -118,6 +144,15 @@ namespace DefaultNamespace
             lightMap.i = 0;
             lightMap.OnLoadLightmap();
             
+        }
+
+        private void OnChangeEnvironment()
+        {
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = Color.white;
+            RenderSettings.ambientEquatorColor = Color.white;
+            RenderSettings.ambientGroundColor = Color.black;
+            RenderSettings.ambientIntensity = 0.6f;
         }
 
 
