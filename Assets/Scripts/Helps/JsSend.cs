@@ -63,8 +63,14 @@ namespace DefaultNamespace
         // 更换角色
         public void JsUpdateCharacter(string characterId)
         {
-            _addController.characterId = characterId;
-            _addController.UpdateCharacter();
+            if (characterId != _addController.characterId)
+            {
+                _addController.characterId = characterId;
+                _addController.UpdateCharacter();
+#if !UNITY_EDITOR && UNITY_WEBGL
+                Tools.updateEnd();
+#endif
+            }
         }
 
         // 编辑器中 js 发送画框位置 图片等信息 有就更换 没有就忽略

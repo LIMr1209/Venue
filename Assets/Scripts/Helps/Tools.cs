@@ -29,5 +29,10 @@ namespace DefaultNamespace
         [DllImport("__Internal")]
         public static extern void unSelectTrans(); // 取消选中
         
+        [DllImport("__Internal")]
+        public static extern void updateEnd(); // 更新角色完成
+        
+        
+        
     }
 }

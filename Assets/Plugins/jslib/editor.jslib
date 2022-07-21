@@ -10,4 +10,7 @@ mergeInto(LibraryManager.library, {
         var data = UTF8ToString(artData);
         __UnityLib__.change_mouse(styleName);
     },
+    updateEnd:function () {
+        __UnityLib__.update_end();
+    },
 });
