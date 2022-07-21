@@ -139,6 +139,7 @@ namespace DefaultNamespace
                     sceneManifestList.Add(bundleName);
                 }
             }
+            //sceneManifestList.Add("boli");
         }
 
 
@@ -305,7 +306,10 @@ namespace DefaultNamespace
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
-            yield return StartCoroutine(OnLoadSceneLightmapAB());
+            if (name == "scene")
+            {
+                yield return StartCoroutine(OnLoadSceneLightmapAB());
+            }
             AssetBundle AB = null;
             // UnityWebRequest requestAB = UnityWebRequest.Get(url);
             UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(url);
@@ -340,7 +344,10 @@ namespace DefaultNamespace
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectScene(string name, string url, Vector3 point,
             Vector3 rotate, GameObjectCallback callback = null)
         {
-            yield return StartCoroutine(OnLoadSceneLightmapAB());
+            if (name == "scene")
+            {
+                yield return StartCoroutine(OnLoadSceneLightmapAB());
+            }
             string path = Path.Combine(Application.dataPath, "AssetsBundles");
             string abPath = Path.Combine(path, name).Replace("\\", "/") + ".ab";
             UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
@@ -425,6 +432,7 @@ namespace DefaultNamespace
                 }
             }
         }
+
 
 
         public delegate void TextureCallback(Texture obj);
