@@ -11,11 +11,18 @@ namespace DefaultNamespace
         private Transform _target;
         private GameObject _art;
         private Camera _myCamera;
-        private List<Renderer> renderersBuffer = new List<Renderer>();
-        private List<Material> materialsBuffer = new List<Material>();
-        private HashSet<Renderer> highlightedRenderers = new HashSet<Renderer>();
+        private List<Renderer> _renderersBuffer = new List<Renderer>();
+        private List<Material> _materialsBuffer = new List<Material>();
+        private HashSet<Renderer> _highlightedRenderers = new HashSet<Renderer>();
         private ThirdPersonController _controller;
-        private static Material outlineMaterial;
+        private static Material _outlineMaterial;
+        private Vector3 _deviationPosition;
+        private float _distance; // 画框和摄像机两点距离的平方
+        private float _yaw;
+        private float _arcLength;
+        private GameObject _player;
+        private float _weightX = 0.25f;
+        private float _weightY = 0.25f;
 
         private void Awake()
         {
@@ -26,18 +33,20 @@ namespace DefaultNamespace
         private void Start()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
+            _player = GameObject.FindGameObjectWithTag("Player");
         }
 
         public void ResetController()
         {
             _controller = FindObjectOfType<ThirdPersonController>();
+            _player = GameObject.FindGameObjectWithTag("Player");
         }
 
         private void Update()
         {
             if (Input.GetMouseButtonUp(0))
             {
-                if(_controller && _controller.hasMoveVisualAngle)  return;
+                if (_controller && _controller.hasMoveVisualAngle) return;
                 RaycastHit hitInfo;
                 if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
                 {
@@ -55,9 +64,22 @@ namespace DefaultNamespace
                 }
             }
 
-            if (_art)
+            if (_art && Input.GetMouseButtonDown(0))
             {
-                // StartCoroutine(TransformSelected());
+                RaycastHit hitInfo;
+                if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity))
+                {
+                    if (_target == hitInfo.collider.gameObject.transform.parent)
+                    {
+                        _deviationPosition = hitInfo.point - _target.localPosition; // 拖动时候得偏移量
+                        _distance = Vector3.Distance(_myCamera.transform.position, hitInfo.point); // 计算距离
+                        _arcLength = 0.0f;
+                        _yaw = 0;
+                        // Vector3 dir=(_myCamera.transform.position-hitInfo.point).normalized; //起始点到目标点的方向向量
+                        // float angle=Vector2.SignedAngle(Vector2.left, dir);
+                        // StartCoroutine(TransformSelected());
+                    }
+                }
             }
         }
 
@@ -87,13 +109,13 @@ namespace DefaultNamespace
 
         void ClearHighlightedRenderers()
         {
-            GetTargetRenderers(renderersBuffer);
-            RemoveHighlightedRenderers(renderersBuffer);
+            GetTargetRenderers(_renderersBuffer);
+            RemoveHighlightedRenderers(_renderersBuffer);
         }
 
         void AddHighlightedRenderers()
         {
-            GetTargetRenderers(renderersBuffer);
+            GetTargetRenderers(_renderersBuffer);
             AddTargetHighlightedRenderers();
         }
 
@@ -113,25 +135,25 @@ namespace DefaultNamespace
                 return;
             }
 
-            for (int i = 0; i < renderersBuffer.Count; i++)
+            for (int i = 0; i < _renderersBuffer.Count; i++)
             {
-                Renderer render = renderersBuffer[i];
+                Renderer render = _renderersBuffer[i];
                 if (render != null)
                 {
-                    materialsBuffer.Clear();
-                    materialsBuffer.AddRange(render.sharedMaterials);
+                    _materialsBuffer.Clear();
+                    _materialsBuffer.AddRange(render.sharedMaterials);
 
-                    if (materialsBuffer.Contains(outlineMaterial))
+                    if (_materialsBuffer.Contains(_outlineMaterial))
                     {
-                        materialsBuffer.Remove(outlineMaterial);
-                        render.materials = materialsBuffer.ToArray();
+                        _materialsBuffer.Remove(_outlineMaterial);
+                        render.materials = _materialsBuffer.ToArray();
                     }
                 }
 
-                highlightedRenderers.Remove(render);
+                _highlightedRenderers.Remove(render);
             }
 
-            renderersBuffer.Clear();
+            _renderersBuffer.Clear();
         }
 
         void AddTargetHighlightedRenderers()
@@ -141,62 +163,101 @@ namespace DefaultNamespace
                 return;
             }
 
-            for (int i = 0; i < renderersBuffer.Count; i++)
+            for (int i = 0; i < _renderersBuffer.Count; i++)
             {
-                Renderer render = renderersBuffer[i];
+                Renderer render = _renderersBuffer[i];
 
-                if (!highlightedRenderers.Contains(render))
+                if (!_highlightedRenderers.Contains(render))
                 {
-                    materialsBuffer.Clear();
-                    materialsBuffer.AddRange(render.sharedMaterials);
+                    _materialsBuffer.Clear();
+                    _materialsBuffer.AddRange(render.sharedMaterials);
 
-                    if (!materialsBuffer.Contains(outlineMaterial))
+                    if (!_materialsBuffer.Contains(_outlineMaterial))
                     {
-                        materialsBuffer.Add(outlineMaterial);
-                        render.materials = materialsBuffer.ToArray();
+                        _materialsBuffer.Add(_outlineMaterial);
+                        render.materials = _materialsBuffer.ToArray();
                     }
 
-                    highlightedRenderers.Add(render);
+                    _highlightedRenderers.Add(render);
                 }
             }
 
-            materialsBuffer.Clear();
+            _materialsBuffer.Clear();
         }
 
         void SetMaterial()
         {
-            if (outlineMaterial == null)
+            if (_outlineMaterial == null)
             {
-                outlineMaterial = new Material(Shader.Find("Custom/Outline"));
+                _outlineMaterial = new Material(Shader.Find("Custom/Outline"));
             }
         }
 
         IEnumerator TransformSelected()
         {
-            // Vector3 screenPos = Camera.main.WorldToScreenPoint(_target.position);
-            // Vector3 mousePosOnScreen = Input.mousePosition;
-            // mousePosOnScreen.z = screenPos.z;
-            // Vector3 mousePosInWorld = Camera.main.ScreenToWorldPoint(mousePosOnScreen);
-            // _target.position = mousePosInWorld;
-            // yield return null;
+            // _target.transform.GetChild(0).gameObject.layer = LayerHelp.frameLayerNum;
+            MeshCollider[] artColliders = new[]
+            {
+                _target.transform.GetChild(0).gameObject.GetComponent<MeshCollider>(),
+                _target.transform.GetChild(1).gameObject.GetComponent<MeshCollider>()
+            };
+            foreach (var i in artColliders)
+            {
+                i.enabled = false;
+            }
+                
             while (Input.GetMouseButton(0))
             {
-                if (_controller) _controller.LockCameraPosition = true;
-                Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
-                Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
-                RaycastHit hitInfo;
-                int layerMask = 1 << LayerHelp.focusArtLayerNum;
-                layerMask = ~layerMask;
-                if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
-                    layerMask))
-                {
-                    _target.localPosition = hitInfo.point;
-                }
+                if (_controller) _controller.LockCameraPosition = true; // 禁用控制器 旋转视角
+                
+                // 忽略 人物与 画框的碰撞
+                // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, true);
+                // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, true);
+                
+                // 设置坐标系
+                float mouseY = Input.GetAxis("Mouse Y");
+                _yaw += mouseY * _weightY;
+                
+                // float mouseX = Input.GetAxis("Mouse X");
+                // _arcLength += mouseX * weightX;
+                // Debug.Log("距离 "+ _distance);
+                // Debug.Log("弧长 "+ _arcLength);
+                // 圆的周长 
+                // double perimeter = _distance * 2 * Math.PI;
+                // double angle = 360 * (_distance / perimeter);
+                // Debug.Log("角度 "+ angle);
+                
+                
+                float x = Mathf.Sin(0 * Mathf.Deg2Rad) * _distance;
+                float z = Mathf.Cos(0 * Mathf.Deg2Rad) * _distance;
+                Vector3 worldPoint = _myCamera.transform.TransformPoint(new Vector3(x, _yaw, z)-_deviationPosition);
+                _target.localPosition = worldPoint;
+                // 设置朝向 
+                Vector3 lookPos = _myCamera.transform.position - _target.position;
+                lookPos.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                _target.rotation = rotation;
+                _target.transform.Rotate(new Vector3(0,90,0));
+                
+                // 吸附效果 
+                // RaycastHit hitInfo;
+                // int layerMask = 1 << LayerHelp.focusArtLayerNum;
+                // layerMask = ~layerMask;
+                // if (Physics.Raycast(_myCamera.ScreenPointToRay(Input.mousePosition), out hitInfo, Mathf.Infinity,
+                //     layerMask))
+                // {
+                // _target.localPosition = hitInfo.point - _deviationPosition;
+                // }
+
                 yield return null;
             }
+            foreach (var i in artColliders)
+            {
+                i.enabled = true;
+            }
             if (_controller) _controller.LockCameraPosition = false;
-            Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
-            Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
+            // Physics.IgnoreLayerCollision(LayerHelp.focusArtLayerNum, LayerHelp.playerLayerNum, false);
+            // Physics.IgnoreLayerCollision(LayerHelp.frameLayerNum, LayerHelp.playerLayerNum, false);
         }
 
 
@@ -206,7 +267,7 @@ namespace DefaultNamespace
             JsonData.ArtData artData = new JsonData.ArtData();
             artData.name = target.gameObject.name;
             customAttr.GetArtData(ref artData);
-#if !UNITY_EDITOR && UNITY_WEBGL 
+#if !UNITY_EDITOR && UNITY_WEBGL
             Tools.selectTrans(JsonUtility.ToJson(artData));
 #endif
         }

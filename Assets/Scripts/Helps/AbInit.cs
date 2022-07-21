@@ -173,7 +173,7 @@ namespace DefaultNamespace
             path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
             path = path.Replace("\\", "/");
 #else
-            path = Path.Combine(Application.dataPath, "AssetsBundles");
+            path = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
 #endif
             if (AssetBundelGameObjectDic.ContainsKey((name)))
             {
@@ -217,7 +217,7 @@ namespace DefaultNamespace
 #endif
                 //abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
                 AB = AssetBundle.LoadFromMemory(abData);
-                AssetBundelGameObjectDic.Add(name, AB);
+                // AssetBundelGameObjectDic.Add(name, AB);
             }
 
             if (AB == null)
