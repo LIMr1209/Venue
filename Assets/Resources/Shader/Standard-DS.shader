@@ -46,7 +46,7 @@ Shader "Standard-DoubleSided"
 	SubShader
 	{
 		Tags { "RenderType"="Opaque" "PerformanceChecks"="False" }
-		LOD 300
+		LOD 300 
 	
 
 		// ------------------------------------------------------------------
