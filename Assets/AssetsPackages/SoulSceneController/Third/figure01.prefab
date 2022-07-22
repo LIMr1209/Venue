@@ -204,7 +204,7 @@ MonoBehaviour:
     m_Bits: 641
   CinemachineCameraTarget: {fileID: 4895566153197881808}
   TopClamp: 70
-  BottomClamp: -30
+  BottomClamp: -10
   CameraAngleOverride: 0
   LockCameraPosition: 0
   hasMoveVisualAngle: 0
