@@ -97,7 +97,8 @@ namespace DefaultNamespace
             {
                 if (sceneobj.transform.GetChild(i).name.Contains("空气墙"))
                 {
-                    sceneobj.transform.GetChild(i).GetComponent<Renderer>().material = Resources.Load("Boli") as Material;
+                    sceneobj.transform.GetChild(i).GetComponent<Renderer>().material.shader =
+                        Shader.Find("Particles/Standard Surface"); ;
                 }
             }
 

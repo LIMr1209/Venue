@@ -139,7 +139,6 @@ namespace DefaultNamespace
                     sceneManifestList.Add(bundleName);
                 }
             }
-            //sceneManifestList.Add("boli");
         }
 
 
