@@ -238,13 +238,13 @@ namespace StarterAssets
             {
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw -= QElookSpeed * deltaTimeMultiplier;
+                _cinemachineTargetYaw -= QElookSpeed * Time.deltaTime * 60;
                 _input.qlook = false;
             }else if (Keyboard.current[Key.E].isPressed)
             {
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += QElookSpeed * deltaTimeMultiplier;
+                _cinemachineTargetYaw += QElookSpeed * Time.deltaTime * 60;
                 _input.elook = false;
             }
 
@@ -259,7 +259,7 @@ namespace StarterAssets
 
         IEnumerator MyMethod()
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.5f);
             hasMoveVisualAngle = false;
 
         }
