@@ -24,7 +24,32 @@ ModelImporter:
   - first:
       74: -5447875061142143641
     second: FairyArmature|Yes_FairyArmature
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u4E3B\u4F53"
+    second: {fileID: 2100000, guid: 0df331a5535b7f847a867db9e8ad045d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u624B"
+    second: {fileID: 2100000, guid: 0c4e2a55f70b5cf4f8bd3dd5b43c3c0b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u73AF"
+    second: {fileID: 2100000, guid: c1a9d68a055df2042b749773fe4bca66, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u773C\u775B"
+    second: {fileID: 2100000, guid: 78c769daa6c3c9940a0b95f80ebf73c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u9762\u90E8"
+    second: {fileID: 2100000, guid: 38a2d975a0d80c743b7c2aa1a8365ce9, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

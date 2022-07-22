@@ -67,9 +67,6 @@ namespace DefaultNamespace
             {
                 _addController.characterId = characterId;
                 _addController.UpdateCharacter();
-#if !UNITY_EDITOR && UNITY_WEBGL
-                Tools.updateEnd();
-#endif
             }
         }
 

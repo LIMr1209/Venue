@@ -139,7 +139,6 @@ namespace DefaultNamespace
                     sceneManifestList.Add(bundleName);
                 }
             }
-            //sceneManifestList.Add("boli");
         }
 
 
@@ -463,7 +462,7 @@ namespace DefaultNamespace
             // {
             //     Destroy(videoPlayer);
             // }
-            if (nKind == 2)
+            if (nKind == 2 || nKind == 1)
             {
                 Material material = obj.GetComponent<MeshRenderer>().material;
                 Material cloneMaterial = Instantiate(material);
