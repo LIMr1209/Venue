@@ -219,6 +219,9 @@ namespace DefaultNamespace
                         _opusShow.enabled = true;
                         _agentCamera.enabled = true;
                         _switchCharacter = false;
+#if !UNITY_EDITOR && UNITY_WEBGL
+                        Tools.updateEnd();
+#endif
                     }
                 ));
         }
