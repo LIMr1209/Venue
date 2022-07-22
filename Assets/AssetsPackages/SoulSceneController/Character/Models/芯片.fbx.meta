@@ -24,7 +24,42 @@ ModelImporter:
   - first:
       74: -5447875061142143641
     second: FairyArmature|Yes_FairyArmature
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u624B"
+    second: {fileID: 2100000, guid: db858811429b21d4ba151d6e68d856d8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u73AF"
+    second: {fileID: 2100000, guid: 6f330af9cb1583f47801775b0c521166, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u73BB\u7483"
+    second: {fileID: 2100000, guid: f0268b007187dae46a4630148ea659d2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u773C\u775B"
+    second: {fileID: 2100000, guid: e529983ebe96b0948a3fdd0327609c6c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u8111\u58F3"
+    second: {fileID: 2100000, guid: 8b015a42fdb3e2742bbf3e7f0608f7de, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u82AF\u7247"
+    second: {fileID: 2100000, guid: ef1af7e8472fa87469ff30b71cd96a55, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "\u9762\u90E8"
+    second: {fileID: 2100000, guid: b7e497858b4eded4a9f2da9b19541a2e, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

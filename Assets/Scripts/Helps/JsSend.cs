@@ -63,6 +63,7 @@ namespace DefaultNamespace
         // 更换角色
         public void JsUpdateCharacter(string characterId)
         {
+            Debug.Log("接收到的角色ID "+characterId);
             if (characterId != _addController.characterId)
             {
                 _addController.characterId = characterId;

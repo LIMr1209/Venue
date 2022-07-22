@@ -236,6 +236,55 @@ namespace DefaultNamespace
             AB.UnloadAsync(false);
         }
 
+        public IEnumerator OnWebRequestLoadAssetBundleController(string name, string parent, Vector3 point,
+            Vector3 rotate, GameObjectCallback callback = null)
+        {
+            yield return manifest != null;
+            AssetBundle AB = null;
+            string path = null;
+#if !UNITY_EDITOR && UNITY_WEBGL
+            path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
+            path = path.Replace("\\", "/");
+#else
+            path = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
+#endif
+            if (AssetBundelGameObjectDic.ContainsKey((name)))
+            {
+                AB = AssetBundelGameObjectDic[name];
+            }
+            else
+            {
+                string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
+                // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
+                UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
+                yield return requestAB.SendWebRequest();
+                if (!string.IsNullOrEmpty(requestAB.error))
+                {
+                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error+" "+abPath);
+                }
+
+                // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
+                byte[] abData = requestAB.downloadHandler.data;
+#if !UNITY_EDITOR && UNITY_WEBGL
+                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+#endif
+                //abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
+                AB = AssetBundle.LoadFromMemory(abData);
+                AssetBundelGameObjectDic.Add(name, AB);
+            }
+
+            if (AB == null)
+            {
+                throw (new Exception("资源包"+name+"加载错误"));
+            }
+
+            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+            if (callback != null)
+            {
+                callback(obj);
+            }
+        }
+
         public delegate void MaterialCallback(Material material);
         public IEnumerator OnWebRequestLoadAssetBundleMaterial(string name, string parent="", MaterialCallback callback = null)
         {

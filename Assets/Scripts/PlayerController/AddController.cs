@@ -49,7 +49,7 @@ namespace DefaultNamespace
             characterAb = String.Format("figure{0}", characterId.PadLeft(2, '0'));
 
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb,
+                AbInit.instances.OnWebRequestLoadAssetBundleController(characterAb, controllerAb,
                     new Vector3(0, 0, 0), new Vector3(0, -180, 0), (obj) =>
                     {
                         _player = obj;
@@ -202,12 +202,12 @@ namespace DefaultNamespace
             _switchCharacter = true;
             Vector3 oldPosition = _player.transform.position;
             Quaternion oldQuaternion = _player.transform.Find("PlayerCameraRoot").transform.rotation;
+            Destroy(_player);
             
             StartCoroutine(
-                AbInit.instances.OnWebRequestLoadAssetBundleGameObject(characterAb, controllerAb, oldPosition,
+                AbInit.instances.OnWebRequestLoadAssetBundleController(characterAb, controllerAb, oldPosition,
                     _player.transform.rotation.eulerAngles, (obj) =>
                     {
-                        Destroy(_player);
                         _player = obj;
                         _player.transform.Find("PlayerCameraRoot").transform.rotation = oldQuaternion;
                         _player.GetComponent<PlayerInput>().enabled = false;
