@@ -231,27 +231,36 @@ namespace DefaultNamespace
                 // _target.localPosition = worldPoint;
                 // 画框位置跟随鼠标
                 Vector3 mousePosOnScreen = Input.mousePosition;
-                mousePosOnScreen.z = _distance-_myCamera.transform.position.z;
+                mousePosOnScreen.z = _distance;
                 Vector3 mousePosInWorld = _myCamera.ScreenToWorldPoint(mousePosOnScreen);
                 _target.position = mousePosInWorld - _deviationPosition;
                 // // 画框朝向跟随摄像头
-                // Vector3 lookPos = _myCamera.transform.position - _target.position;
-                // lookPos.y = 0;
-                // Quaternion rotation = Quaternion.LookRotation(lookPos);
-                // _target.rotation = rotation;
-                // _target.transform.Rotate(new Vector3(0, 90, 0));
+                Vector3 lookPos = _myCamera.transform.position - _target.position;
+                lookPos.y = 0;
+                Quaternion rotation = Quaternion.LookRotation(lookPos);
+                _target.rotation = rotation;
+                _target.transform.Rotate(new Vector3(0, 90, 0));
                 // // 触地后鼠标继续向下  距离减少
                 // // 检测地面 鼠标上下鼠标 调整距离 上距离 最高不超过初始距离
-                // Vector3 bottomPosition = _target.transform.position;
+                // Vector3 bottomPosition = _target.position;
                 // groundCheck = Physics.CheckSphere(bottomPosition, checkRadius, 1<<LayerHelp.groundLayerNum,
                 //     QueryTriggerInteraction.Ignore);
-                //
-                // // 检测墙体 做吸附效果
-                // Vector3 spherePosition = _target.transform.position;
-                // wallCheck = Physics.CheckSphere(spherePosition, checkRadius, 1<<LayerHelp.wallLayerNum,
-                //     QueryTriggerInteraction.Ignore);
                 
-                
+                // 检测墙体 做吸附效果
+                RaycastHit raycastHit;
+                if (Physics.Raycast(_target.position, _target.TransformDirection(Vector3.right), out raycastHit, checkRadius, 1 << LayerHelp.wallLayerNum))
+                {
+                    wallCheck = true;
+                    Vector3 newLookPos = raycastHit.collider.transform.position - _target.position;
+                    newLookPos.y = 0;
+                    Quaternion newRotation = Quaternion.LookRotation(newLookPos);
+                    _target.rotation = newRotation;
+                    _target.transform.Rotate(new Vector3(0, -90, 0));
+                }
+                else
+                {
+                    wallCheck = false;
+                }
 
                 yield return null;
             }
@@ -277,7 +286,7 @@ namespace DefaultNamespace
                 if (groundCheck) Gizmos.color = transparentGreen;
                 else if (wallCheck) Gizmos.color = transparentBlue;
                 else Gizmos.color = transparentRed;
-                Gizmos.DrawSphere(_target.position,checkRadius); 
+                Gizmos.DrawRay(_target.position,_target.TransformDirection(Vector3.right) * checkRadius); 
             }
         }
 

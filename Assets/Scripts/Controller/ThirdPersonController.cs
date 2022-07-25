@@ -223,6 +223,11 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            if (Input.GetMouseButtonUp(0) && hasMoveVisualAngle)
+            {
+                hasMoveVisualAngle = false;
+            }
+
             // 如果有输入且摄像头位置不固定 并且鼠标左键按下
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition && Input.GetMouseButton(0))
             {
@@ -232,8 +237,6 @@ namespace StarterAssets
                 _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
                 hasMoveVisualAngle = true;
-                StopCoroutine("MyMethod");
-                StartCoroutine("MyMethod");
             }else if (Keyboard.current[Key.Q].isPressed)
             {
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
@@ -255,13 +258,6 @@ namespace StarterAssets
             // 修正虚拟摄像机旋转
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
-        }
-
-        IEnumerator MyMethod()
-        {
-            yield return new WaitForSeconds(0.5f);
-            hasMoveVisualAngle = false;
-
         }
 
         private void Move()
