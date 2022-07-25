@@ -6,12 +6,12 @@ namespace DefaultNamespace
     {
         public static Vector3 GetSize(GameObject obj)
         {
-            Renderer renderer = obj.GetComponent<Renderer>();
+            // Renderer renderer = obj.GetComponent<Renderer>();
             Collider collider = obj.GetComponent<Collider>();
-            if (renderer)
-            {
-                return renderer.localBounds.size;
-            }
+            // if (renderer)
+            // {
+            //     return renderer.localBounds.size;
+            // }
 
             if (collider)
             {
@@ -29,7 +29,7 @@ namespace DefaultNamespace
             if (customAttr.realSize == Vector2.zero)
             {
                 Vector3 objVector3Size = GetSize(obj);
-                realSize = new Vector2(objVector3Size.y, objVector3Size.z);
+                realSize = new Vector2(objVector3Size.z, objVector3Size.y);
                 customAttr.realSize = realSize;
             }
 
