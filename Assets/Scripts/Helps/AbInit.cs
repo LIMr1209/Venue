@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
@@ -18,27 +16,25 @@ namespace DefaultNamespace
         public AssetBundleManifest manifest;
         public AssetBundle assetBundleManifest;
         public List<string> sceneManifestList = new List<string>();
+        public Dictionary<string, AssetBundle> AssetBundelDeps = new Dictionary<string, AssetBundle>();
+        public Dictionary<string, AssetBundle> AssetBundelDic = new Dictionary<string, AssetBundle>();
+        public Dictionary<string, AssetBundle> AssetBundelLightMapDic = new Dictionary<string, AssetBundle>();
+
+        public delegate void Callback<T>(T obj);
 
         float time = 0;
         float lodingindex = 0;
 
-        // Slider slider;
-
-
         private void Awake()
         {
             instances = this;
-            // OnWebRequestAssetBundleManifest();
 #if !UNITY_EDITOR && UNITY_WEBGL
             enabled = false; // 默认不启动 前端发送场景url 后启动
 #endif
         }
 
-
         private void Start()
         {
-            // slider = transform.Find("Mask/Slider").GetComponent<Slider>();
-            // AssetBundle.UnloadAllAssetBundles(true);
             StartCoroutine(OnWebRequestAssetBundleManifest());
         }
 
@@ -50,7 +46,6 @@ namespace DefaultNamespace
             if(lodingindex<=1){
                 Tools.sendProcess(lodingindex);
             }
-            
 #endif
         }
 
@@ -60,7 +55,6 @@ namespace DefaultNamespace
             {
                 if (lodingindex <= 1)
                 {
-                    // slider.value = lodingindex;
                     lodingindex += 0.007f;
 
                     time = Time.time;
@@ -71,54 +65,190 @@ namespace DefaultNamespace
         public void FinishSlider()
         {
             lodingindex = 1;
-            // slider.value = lodingindex;
-            // transform.Find("Mask").gameObject.SetActive(false);
         }
-        
-        public IEnumerator OnWebRequestAssetBundleManifest()
+
+        // 获取ab包 AssetsBundles目录路径 
+        private string GetAssetsBundlesPath()
         {
-            if (manifest) yield break;
-            string path = null;
+            string path = "";
 #if !UNITY_EDITOR && UNITY_WEBGL
             path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
             path = path.Replace("\\", "/");
 #else
             path = Path.Combine(Application.dataPath, "AssetsBundles");
 #endif
-            // UnityWebRequest deps = UnityWebRequestAssetBundle.GetAssetBundle(path + "/AssetsBundles");
+            return path;
+        }
+
+        // 获取ab包 bytes 并解密
+        private Byte[] GetAbBytes(Byte[] data, bool encryption = true)
+        {
+            if (!encryption)
+            {
+                return data;
+            }
+            else
+            {
+#if !UNITY_EDITOR && UNITY_WEBGL
+                data = Aes.AESDecrypt(data, Globle.AesKey, Globle.AesIv);
+#endif
+                return data;
+            }
+        }
+
+        // 根据url 请求ab 包
+        IEnumerator GetAssetBundle(string url, Callback<AssetBundle> callback = null, bool needUnload = true, bool encryption=false)
+        {
+            AssetBundle AB;
+            UnityWebRequest dep = UnityWebRequest.Get(url);
+            yield return dep.SendWebRequest();
+            if (!string.IsNullOrEmpty(dep.error))
+            {
+                throw new Exception(dep.error);
+            }
+
+            byte[] depBytes = GetAbBytes(dep.downloadHandler.data, encryption);
+            AB = AssetBundle.LoadFromMemory(depBytes);
+            if(AB == null) throw (new Exception("资源包加载错误"));
+            if (callback != null) callback(AB);
+            if (needUnload) AB.UnloadAsync(false);
+        }
+        
+
+        // 加载项目 ab 包 
+        IEnumerator GetAssetBundle(string name, string parent, Callback<AssetBundle> callback = null, bool needUnload = true)
+        {
+            yield return manifest != null;
+            AssetBundle AB;
+            string path = GetAssetsBundlesPath();
+            if (AssetBundelDic.ContainsKey((name)))
+            {
+                AB = AssetBundelDic[name];
+            }
+            else
+            {
+//                string relativePath = Path.Combine(parent, name).Replace("\\", "/") + ".ab";
+//                string[] depslist = manifest.GetAllDependencies(relativePath);
+//                foreach (string _name in depslist)
+//                {
+//                    if (!AssetBundelDeps.ContainsKey(_name))
+//                    {
+//                        string depPath = Path.Combine(path, _name);
+//                        // UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
+//                        UnityWebRequest dep = UnityWebRequest.Get(depPath);
+//                        yield return dep.SendWebRequest();
+//                        byte[] depBytes = dep.downloadHandler.data;
+//#if !UNITY_EDITOR && UNITY_WEBGL
+//                         depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
+//#endif
+//                        AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
+//                    }
+//                }
+                string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
+                UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
+                yield return requestAB.SendWebRequest();
+                if (!string.IsNullOrEmpty(requestAB.error))
+                {
+                    throw new Exception("请求资源包 " + name + " 错误 " + requestAB.error);
+                }
+
+                byte[] abData = GetAbBytes(requestAB.downloadHandler.data);
+                AB = AssetBundle.LoadFromMemory(abData);
+            }
+            if (AB == null) throw (new Exception("资源包" + name + "加载错误"));
+            if (callback != null) callback(AB);
+            if (needUnload) AB.UnloadAsync(false);
+            if(!needUnload) AssetBundelDic.Add(name, AB);
+        }
+
+        // 加载 AssetBundles 总依赖
+        public IEnumerator OnWebRequestAssetBundleManifest()
+        {
+            if (manifest) yield break;
+            string path = GetAssetsBundlesPath();
             string depsUrl = Path.Combine(path, "AssetsBundles").Replace("\\", "/");
             UnityWebRequest deps = UnityWebRequest.Get(depsUrl);
             yield return deps.SendWebRequest();
 
             if (!string.IsNullOrEmpty(deps.error))
             {
-                throw new Exception(deps.error);
+                throw new Exception("加载总依赖错误:"+deps.error);
             }
-            byte[] abData = deps.downloadHandler.data;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-#endif
+
+            byte[] abData = GetAbBytes(deps.downloadHandler.data);
             assetBundleManifest = AssetBundle.LoadFromMemory(abData);
             manifest = assetBundleManifest.LoadAsset<AssetBundleManifest>("assetbundlemanifest");
         }
 
+        // 重置场景时 需要卸载ab包
         public void ReloadManifest()
         {
             foreach (var i in AssetBundelLightMapDic)
             {
                 i.Value.UnloadAsync(false);
-            }   
+            }
+
             assetBundleManifest.UnloadAsync(false);
         }
 
 
-        public IEnumerator OnWebRequestAssetBundleManifestScene(string url,string name)
+        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "",
+            Callback<GameObject> callback = null, bool needUnload = true)
+        {
+            Vector3 point = Vector3.zero;
+            Vector3 rotate = new Vector3(0, 0, 0);
+            yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, needUnload, callback));
+        }
+
+        // 加载 游戏对象 ab包
+        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point,
+            Vector3 rotate, bool needUnload = true, Callback<GameObject> callback = null)
+        {
+            
+            AssetBundle AB = null;
+            yield return StartCoroutine(GetAssetBundle(name, parent, (assetbundle) =>
+            {
+                AB = assetbundle;
+                GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
+                if (callback != null) callback(obj);
+            }, needUnload));
+        }
+
+
+        // 加载 材质ab 包
+        public IEnumerator OnWebRequestLoadAssetBundleMaterial(string name, string parent = "",
+            Callback<Material> callback = null)
+        {
+            AssetBundle AB = null;
+            yield return StartCoroutine(GetAssetBundle(name, parent, (assetbundle) =>
+            {
+                AB = assetbundle;
+                Material material = AB.LoadAsset<Material>(name);
+                if (callback != null) callback(material);
+            }));
+        }
+        
+        // 加载贴图 ab 包
+
+        public IEnumerator OnWebRequestLoadAssetBundleTexture(string name, string parent = "",
+            Callback<Texture> callback = null)
+        {
+            AssetBundle AB = null;
+            yield return StartCoroutine(GetAssetBundle(name, parent, (assetbundle) =>
+            {
+                AB = assetbundle;
+                Texture texture = AB.LoadAsset<Texture>(name);
+                if (callback != null) callback(texture);
+            }));
+        }
+        
+        public IEnumerator OnWebRequestAssetBundleManifestScene(string url, string name)
         {
             if (sceneManifestList.Count != 0) yield break;
             string depsUrl = null;
             string data = null;
 #if !UNITY_EDITOR && UNITY_WEBGL
-            depsUrl= Path.Combine(url, name).Replace("\\", "/");
+            depsUrl = Path.Combine(url, name).Replace("\\", "/");
 #else
             depsUrl = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
             depsUrl = Path.Combine(depsUrl, name).Replace("\\", "/");
@@ -141,303 +271,48 @@ namespace DefaultNamespace
             }
         }
 
-
-
-
-
-
-
-
-        public Dictionary<string, AssetBundle> AssetBundelDeps = new Dictionary<string, AssetBundle>();
-        public Dictionary<string, AssetBundle> AssetBundelGameObjectDic = new Dictionary<string, AssetBundle>();
-        public Dictionary<string, AssetBundle> AssetBundelLightMapDic = new Dictionary<string, AssetBundle>();
-
-        public delegate void GameObjectCallback(GameObject obj);
-
-        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent = "",
-            GameObjectCallback callback = null)
-        {
-            Vector3 point = Vector3.zero;
-            Vector3 rotate = new Vector3(0, 0, 0);
-            yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObject(name, parent, point, rotate, callback));
-        }
-
-
-        public IEnumerator OnWebRequestLoadAssetBundleGameObject(string name, string parent, Vector3 point,
-            Vector3 rotate, GameObjectCallback callback = null)
-        {
-            yield return manifest != null;
-            AssetBundle AB = null;
-            string path = null;
-#if !UNITY_EDITOR && UNITY_WEBGL
-            path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-            path = path.Replace("\\", "/");
-#else
-            path = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
-#endif
-            if (AssetBundelGameObjectDic.ContainsKey((name)))
-            {
-                AB = AssetBundelGameObjectDic[name];
-            }
-            else
-            {
-//                string relativePath = Path.Combine(parent, name).Replace("\\", "/") + ".ab";
-//                string[] depslist = manifest.GetAllDependencies(relativePath);
-//                foreach (string _name in depslist)
-//                {
-//                    if (!AssetBundelDeps.ContainsKey(_name))
-//                    {
-//                        string depPath = Path.Combine(path, _name);
-//                        // UnityWebRequest dep = UnityWebRequestAssetBundle.GetAssetBundle(depPath);
-//                        UnityWebRequest dep = UnityWebRequest.Get(depPath);
-//                        yield return dep.SendWebRequest();
-//                        byte[] depBytes = dep.downloadHandler.data;
-//#if !UNITY_EDITOR && UNITY_WEBGL
-//                         depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
-//#endif
-//                        AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
-//                    }
-//                }
-
-
-
-                string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
-                // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
-                UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
-                yield return requestAB.SendWebRequest();
-                if (!string.IsNullOrEmpty(requestAB.error))
-                {
-                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error+" "+abPath);
-                }
-
-                // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
-                byte[] abData = requestAB.downloadHandler.data;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-#endif
-                //abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-                AB = AssetBundle.LoadFromMemory(abData);
-                // AssetBundelGameObjectDic.Add(name, AB);
-            }
-
-            if (AB == null)
-            {
-                throw (new Exception("资源包"+name+"加载错误"));
-            }
-
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-            // obj.transform.localPosition = point;
-            // obj.transform.localRotation = Quaternion.Euler(rotate);
-            if (callback != null)
-            {
-                callback(obj);
-            }
-
-            AB.UnloadAsync(false);
-        }
-
-        public IEnumerator OnWebRequestLoadAssetBundleController(string name, string parent, Vector3 point,
-            Vector3 rotate, GameObjectCallback callback = null)
-        {
-            yield return manifest != null;
-            AssetBundle AB = null;
-            string path = null;
-#if !UNITY_EDITOR && UNITY_WEBGL
-            path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-            path = path.Replace("\\", "/");
-#else
-            path = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
-#endif
-            if (AssetBundelGameObjectDic.ContainsKey((name)))
-            {
-                AB = AssetBundelGameObjectDic[name];
-            }
-            else
-            {
-                string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
-                // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
-                UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
-                yield return requestAB.SendWebRequest();
-                if (!string.IsNullOrEmpty(requestAB.error))
-                {
-                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error+" "+abPath);
-                }
-
-                // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
-                byte[] abData = requestAB.downloadHandler.data;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-#endif
-                //abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-                AB = AssetBundle.LoadFromMemory(abData);
-                AssetBundelGameObjectDic.Add(name, AB);
-            }
-
-            if (AB == null)
-            {
-                throw (new Exception("资源包"+name+"加载错误"));
-            }
-
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-            if (callback != null)
-            {
-                callback(obj);
-            }
-        }
-
-        public delegate void MaterialCallback(Material material);
-        public IEnumerator OnWebRequestLoadAssetBundleMaterial(string name, string parent="", MaterialCallback callback = null)
-        {
-            AssetBundle AB = null;
-            string path = null;
-#if !UNITY_EDITOR && UNITY_WEBGL
-            path = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-            path = path.Replace("\\", "/");
-#else
-            path = Path.Combine(Application.dataPath, "AssetsBundles");
-#endif
-            if (AssetBundelGameObjectDic.ContainsKey((name)))
-            {
-                AB = AssetBundelGameObjectDic[name];
-            }
-            else
-            {
-                string abPath = Path.Combine(path, parent, name).Replace("\\", "/") + ".ab";
-                // UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(abPath);
-                UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
-                yield return requestAB.SendWebRequest();
-                if (!string.IsNullOrEmpty(requestAB.error))
-                {
-                    throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error);
-                }
-
-                // AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
-                byte[] abData = requestAB.downloadHandler.data;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-#endif
-                AB = AssetBundle.LoadFromMemory(abData);
-                AssetBundelGameObjectDic.Add(name, AB);
-            }
-
-            if (AB == null)
-            {
-                throw (new Exception("资源包"+name+"加载错误"));
-            }
-
-            Material material = AB.LoadAsset<Material>(name);
-            if (callback != null)
-            {
-                callback(material);
-            }
-
-            AB.UnloadAsync(false);
-        }
-
-
-
-
         public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, bool isWeb,
-            GameObjectCallback callback = null)
+            Callback<GameObject> callback = null)
         {
-            Vector3 point = Vector3.zero;
-            Vector3 rotate = new Vector3(0, 0, 0);
             if (isWeb)
             {
-                yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObjectUrl(name, url, point, rotate, callback));
+                yield return StartCoroutine(
+                    OnWebRequestLoadAssetBundleGameObjectUrl(name, url, callback));
             }
             else
             {
-                yield return StartCoroutine(OnWebRequestLoadAssetBundleGameObjectScene(name, url, point, rotate, callback));
+                yield return StartCoroutine(
+                    OnWebRequestLoadAssetBundleGameObjectScene(name, callback));
             }
         }
-        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Vector3 point,
-            Vector3 rotate, GameObjectCallback callback = null)
+
+        public IEnumerator OnWebRequestLoadAssetBundleGameObjectUrl(string name, string url, Callback<GameObject> callback = null)
         {
             if (name == "scene")
             {
                 yield return StartCoroutine(OnLoadSceneLightmapAB());
             }
-            AssetBundle AB = null;
-            // UnityWebRequest requestAB = UnityWebRequest.Get(url);
-            UnityWebRequest requestAB = UnityWebRequestAssetBundle.GetAssetBundle(url);
-            yield return requestAB.SendWebRequest();
-            if (!string.IsNullOrEmpty(requestAB.error))
+            yield return StartCoroutine(GetAssetBundle(url, (assetbundle) =>
             {
-                throw new Exception("请求资源包 "+name+" 错误 "+ requestAB.error);
+                GameObject obj = Instantiate(assetbundle.LoadAsset<GameObject>(name));
+                if (callback != null) callback(obj);
+            }));
+        }
+
+
+        public IEnumerator OnWebRequestLoadAssetBundleGameObjectScene(string name, Callback<GameObject> callback = null)
+        {
+            if (name == "scene")
+            {
+                yield return StartCoroutine(OnLoadSceneLightmapAB());
             }
+            yield return StartCoroutine(GetAssetBundle(name, "", (assetbundle) =>
+            {
+                GameObject obj = Instantiate(assetbundle.LoadAsset<GameObject>(name));
+                if (callback != null) callback(obj);
+            }));
             
-            AB = DownloadHandlerAssetBundle.GetContent(requestAB); 
-
-            // byte[] abData = requestAB.downloadHandler.data;
-            // abData = Aes.AESDecrypt(abData, Globle.AesKey, Globle.AesIv);
-
-            // AB = AssetBundle.LoadFromMemory(abData);
-
-            if (AB == null)
-            {
-                throw (new Exception("资源包"+name+"加载错误"));
-            }
-
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-            if (callback != null)
-            {
-                callback(obj);
-            }
-
-            AB.UnloadAsync(false);
         }
-
-
-        public IEnumerator OnWebRequestLoadAssetBundleGameObjectScene(string name, string url, Vector3 point,
-            Vector3 rotate, GameObjectCallback callback = null)
-        {
-            if (name == "scene")
-            {
-                yield return StartCoroutine(OnLoadSceneLightmapAB());
-            }
-            string path = Path.Combine(Application.dataPath, "AssetsBundles");
-            string abPath = Path.Combine(path, name).Replace("\\", "/") + ".ab";
-            UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
-            yield return requestAB.SendWebRequest();
-            if (!string.IsNullOrEmpty(requestAB.error))
-            {
-                throw new Exception("请求资源包 " + name + " 错误 " + requestAB.error + " " + abPath);
-            }
-            byte[] abData = requestAB.downloadHandler.data;
-            AssetBundle AB = AssetBundle.LoadFromMemory(abData);
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-            if (callback != null)
-            {
-                callback(obj);
-            }
-
-            AB.UnloadAsync(false);
-        }
-
-
-        public IEnumerator OnWebRequestLoadAssetBundleShowCase(string name, Vector3 point,
-           Vector3 rotate, GameObjectCallback callback = null)
-        {
-            string path = Path.Combine(Application.dataPath, "AssetsBundles");
-            string abPath = Path.Combine(path, name).Replace("\\", "/") + ".ab";
-            UnityWebRequest requestAB = UnityWebRequest.Get(abPath);
-            yield return requestAB.SendWebRequest();
-            if (!string.IsNullOrEmpty(requestAB.error))
-            {
-                throw new Exception("请求资源包 " + name + " 错误 " + requestAB.error + " " + abPath);
-            }
-            byte[] abData = requestAB.downloadHandler.data;
-            AssetBundle AB = AssetBundle.LoadFromMemory(abData);
-            GameObject obj = Instantiate(AB.LoadAsset<GameObject>(name), point, Quaternion.Euler(rotate));
-            if (callback != null)
-            {
-                callback(obj);
-            }
-
-            AB.UnloadAsync(false);
-        }
-
 
         private IEnumerator OnLoadSceneLightmapAB()
         {
@@ -445,47 +320,31 @@ namespace DefaultNamespace
             {
                 yield return null;
             }
+
             string[] deps = new string[sceneManifestList.Count];
             for (int i = 0; i < sceneManifestList.Count; i++)
             {
                 deps[i] = sceneManifestList[i] + ".ab";
             }
-            string deppath = null;
-#if !UNITY_EDITOR && UNITY_WEBGL
-            deppath = Path.Combine(Globle.AssetHost, Globle.QiNiuPrefix, Globle.AssetVision, Globle.AssetBundleDir);
-            deppath = deppath.Replace("\\", "/");
-#else
-            deppath = Path.Combine(Application.dataPath, "AssetsBundles").Replace("\\", "/");
-#endif
+
+            string deppath = GetAssetsBundlesPath();
             foreach (var item in deps)
             {
                 if (!AssetBundelLightMapDic.ContainsKey(item))
                 {
                     string depPath = Path.Combine(deppath, item).Replace("\\", "/");
-                    UnityWebRequest dep = UnityWebRequest.Get(depPath);
-                    yield return dep.SendWebRequest();
-                    if (!string.IsNullOrEmpty(dep.error))
+                    StartCoroutine(GetAssetBundle(depPath, (assetbundle) =>
                     {
-                        throw new Exception(dep.error);
-                    }
-                    byte[] depBytes = dep.downloadHandler.data;
-#if !UNITY_EDITOR && UNITY_WEBGL
-                    depBytes = Aes.AESDecrypt(depBytes, Globle.AesKey, Globle.AesIv);
-#endif
-                    AssetBundle andep = AssetBundle.LoadFromMemory(depBytes);
-                    if (!AssetBundelLightMapDic.ContainsKey(item))
-                    {
-                        AssetBundelLightMapDic.Add(item, andep);
-                    }
+                        if (!AssetBundelLightMapDic.ContainsKey(item))
+                        {
+                            AssetBundelLightMapDic.Add(item, assetbundle);
+                        }
+                    },false, true));
                 }
             }
         }
 
-
-
-        public delegate void TextureCallback(Texture obj);
-
-        public IEnumerator DownloadTexture(string url, TextureCallback callback = null)
+        public IEnumerator DownloadTexture(string url, Callback<Texture> callback = null)
         {
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);
             yield return www.SendWebRequest();
@@ -495,6 +354,7 @@ namespace DefaultNamespace
                 {
                     throw new Exception("贴图加载错误");
                 }
+
                 throw new Exception(www.error);
             }
 
@@ -514,6 +374,7 @@ namespace DefaultNamespace
                     Destroy(videoPlayer);
                 }
             }
+
             if (nKind == 2 || nKind == 1)
             {
                 Material material = obj.GetComponent<MeshRenderer>().material;

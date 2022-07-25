@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DefaultNamespace
 {
@@ -12,6 +13,11 @@ namespace DefaultNamespace
                 return renderer.localBounds.size;
             }
             return Vector3.zero;
+        }
+        
+        static bool ApproximatelyEqual(double value1, double value2, double acceptableDifference)
+        {
+            return Math.Abs(value1 - value2) <= acceptableDifference;
         }
 
         public static void SetSize(GameObject obj, Vector2 contentSize)
@@ -31,9 +37,16 @@ namespace DefaultNamespace
             float contentAspectRatio = contentSize.x / contentSize.y;
             float objAspectRatio = realSize.x / realSize.y;
             Vector2 newObjSize = Vector2.zero;
+
+            // 比例近似等于1
+            if (ApproximatelyEqual(objAspectRatio, 1.0, 0.001))
+            {
+                objAspectRatio = 1.0f;
+            }
+
             if (contentAspectRatio > 1.0f)
             {
-                if (objAspectRatio > 1.0f || objAspectRatio == 1f)
+                if (objAspectRatio > 1.0f || objAspectRatio == 1.0f)
                 {
                     // 高缩小
                     newObjSize.x = realSize.x;

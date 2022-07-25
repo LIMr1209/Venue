@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+
 namespace DefaultNamespace
 {
     public class InitialScene : MonoBehaviour
@@ -62,6 +64,12 @@ namespace DefaultNamespace
                     RenderSettings.skybox = material;
                     OnChangeEnvironment();
                     DynamicGI.UpdateEnvironment();
+                })); 
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleTexture("reflectionprobe_03", "", (texture) =>
+                {
+                    RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
+                    RenderSettings.customReflection = texture;
                 })); 
         }
 
