@@ -505,12 +505,15 @@ namespace DefaultNamespace
             }
         }
 
-        public void ReplaceMaterialContent(GameObject obj, string url, int nKind)
+        public void ReplaceMaterialContent(GameObject obj, string url, int nKind, bool init)
         {
-            // if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
-            // {
-            //     Destroy(videoPlayer);
-            // }
+            if (!init)
+            {
+                if (obj.TryGetComponent<VideoPlayer>(out VideoPlayer videoPlayer))
+                {
+                    Destroy(videoPlayer);
+                }
+            }
             if (nKind == 2 || nKind == 1)
             {
                 Material material = obj.GetComponent<MeshRenderer>().material;

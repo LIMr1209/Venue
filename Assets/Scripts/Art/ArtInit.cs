@@ -47,7 +47,7 @@ namespace DefaultNamespace
                 if (!init && artData.imageUrl == customAttr.imageUrl) return;
                 customAttr.imageUrl = artData.imageUrl;
                 GameObject paining = art.transform.GetChild(1).gameObject;
-                AbInit.instances.ReplaceMaterialContent(paining, artData.imageUrl, artData.nKind);
+                AbInit.instances.ReplaceMaterialContent(paining, artData.imageUrl, artData.nKind, init);
             }
         }
 

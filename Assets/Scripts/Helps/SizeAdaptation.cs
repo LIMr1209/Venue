@@ -6,18 +6,11 @@ namespace DefaultNamespace
     {
         public static Vector3 GetSize(GameObject obj)
         {
-            // Renderer renderer = obj.GetComponent<Renderer>();
-            Collider collider = obj.GetComponent<Collider>();
-            // if (renderer)
-            // {
-            //     return renderer.localBounds.size;
-            // }
-
-            if (collider)
+            Renderer renderer = obj.GetComponent<Renderer>();
+            if (renderer)
             {
-                return collider.bounds.size;
+                return renderer.localBounds.size;
             }
-
             return Vector3.zero;
         }
 
@@ -29,7 +22,8 @@ namespace DefaultNamespace
             if (customAttr.realSize == Vector2.zero)
             {
                 Vector3 objVector3Size = GetSize(obj);
-                realSize = new Vector2(objVector3Size.z, objVector3Size.y);
+                Vector3 localScale = obj.transform.localScale;
+                realSize = new Vector2(objVector3Size.y * localScale.y, objVector3Size.z * localScale.z);
                 customAttr.realSize = realSize;
             }
 
@@ -70,7 +64,8 @@ namespace DefaultNamespace
 
             Vector2 scaleRatio = new Vector2(newObjSize.x / realSize.x, newObjSize.y / realSize.y);
 
-            parent.localScale = new Vector3(customAttr.originScale.x * customAttr.scaleS, customAttr.originScale.y * scaleRatio.x * customAttr.scaleS,
+            parent.localScale = new Vector3(customAttr.originScale.x * customAttr.scaleS,
+                customAttr.originScale.y * scaleRatio.x * customAttr.scaleS,
                 customAttr.originScale.z * scaleRatio.y * customAttr.scaleS);
 
             customAttr.oldScale = parent.localScale;
