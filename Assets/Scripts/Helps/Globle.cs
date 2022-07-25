@@ -1,13 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace
 {
     public class Globle : MonoBehaviour
     {
+        // public static Globle instances;
         // 全局变量
         public static string AssetHost = "https://s3.taihuoniao.com"; // 资源文件 域名 frstatic bucket空间
         public static string FrfileHost = "https://cdn1.d3ingo.com"; //  资源文件 frfile bucket 域名
@@ -15,9 +17,9 @@ namespace DefaultNamespace
         public static string AbBucket = "frstatic"; // 项目ab包 上传空间名
         public static string ServiceHost = "http://render-dev.d3ingo.com"; // 后端业务 域名
 
-        public static string QiNiuPrefix; // 七牛资源前缀
+        public static string QiNiuPrefix = "unity/venue/pro"; // 七牛资源前缀
 
-        public static string AssetVision; // 资源版本
+        public static string AssetVision = "2022072501"; // 资源版本
 
         public static string QiNiuAccessKey = "ERh7qjVSy0v42bQ0fftrFeKYZG39XbzRlaJO4NFy"; //七牛 AccessKey
         public static string QiNiuSecretKey = "r-NUrKsnRBEwTQxbLONVrK9tPuncXyHmcq4BkSc7"; //七牛 QiNiuSecretKey
@@ -42,21 +44,33 @@ namespace DefaultNamespace
 
         public static Dictionary<string, Dictionary<string, string>> dic =
             new Dictionary<string, Dictionary<string, string>>();
-        
-        static Globle()
+
+        // private void Awake()
+        // {
+        //     instances = this;
+        //     StartCoroutine(ReadConfig());
+        // }
+
+        public IEnumerator ReadConfig()
         {
-            string configPath = Path.Combine(Application.streamingAssetsPath, "config.txt");
-            LoadConfig(configPath);
+            
+            string[] lines = null;
+#if !UNITY_EDITOR && UNITY_WEBGL
+            UnityWebRequest request = UnityWebRequest.Get("https://s3.taihuoniao.com/unity/venue/pro/VenueBuild/streamingAssetsPath/config.txt"); //URL 是需要获取的网址地址
+            yield return request.SendWebRequest();
+            string data = request.downloadHandler.text;
+            lines = data.Split(Environment.NewLine.ToCharArray());
+#else
+            string configPath = Path.Combine(Application.streamingAssetsPath, "config.txt").Replace("\\","/");
+            lines = File.ReadAllLines(configPath);
+#endif            
+            LoadConfig(lines);
+            yield return null;
         }
         
-        static void LoadConfig(string configPath)
+        static void LoadConfig(string[] lines)
         {
-            string[] lines = null;
-            if (File.Exists(configPath))
-            {
-                lines = File.ReadAllLines(configPath);
-                BuildDic(lines);
-            }
+            BuildDic(lines);
             QiNiuPrefix = dic["Asset"]["QiNiuPrefix"];
             AssetVision = dic["Asset"]["Vision"];
         }
