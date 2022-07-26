@@ -6,6 +6,8 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 #if STARTER_ASSETS_PACKAGES_CHECKED
 using Cinemachine;
+using DefaultNamespace;
+
 #endif
 
 namespace StarterAssets
@@ -160,6 +162,8 @@ namespace StarterAssets
             prefabInstance.transform.localPosition = Vector3.zero;
             prefabInstance.transform.localEulerAngles = Vector3.zero;
             prefabInstance.transform.localScale = Vector3.one;
+            PlayerAgent playerAgent = prefabInstance.GetComponent<PlayerAgent>();
+            if (playerAgent) playerAgent.enabled = false;
         }
 #endif
     }

@@ -25,6 +25,8 @@ namespace DefaultNamespace
             _opusShow = FindObjectOfType<OpusShow>();
             _controller = FindObjectOfType<ThirdPersonController>();
             _target = GameObject.FindWithTag("aoe");
+            if (!_target) return;
+
             int childCount = _target.transform.childCount;
             if (childCount==0)
             {

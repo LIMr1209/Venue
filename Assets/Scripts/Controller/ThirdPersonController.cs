@@ -84,7 +84,7 @@ namespace StarterAssets
         public bool hasMoveVisualAngle = false;
 
         // cinemachine
-        public float _cinemachineTargetYaw;
+        public float cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
         // player
@@ -148,7 +148,7 @@ namespace StarterAssets
 
         private void Start()
         {
-            _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
+            cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
             _playerAgent = GetComponent<PlayerAgent>();
             _hasAnimator = TryGetComponent(out _animator);
@@ -234,26 +234,26 @@ namespace StarterAssets
                 //Don't multiply mouse input by Time.deltaTime;
                 float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
                 hasMoveVisualAngle = true;
             }else if (Keyboard.current[Key.Q].isPressed)
             {
-                _cinemachineTargetYaw -= _QElookSpeed * Time.deltaTime;
+                cinemachineTargetYaw -= _QElookSpeed * Time.deltaTime;
                 _input.qlook = false;
             }else if (Keyboard.current[Key.E].isPressed)
             {
-                _cinemachineTargetYaw += _QElookSpeed * Time.deltaTime;
+                cinemachineTargetYaw += _QElookSpeed * Time.deltaTime;
                 _input.elook = false;
             }
 
             // 夹紧旋转，使我们的值限制为360度
-            _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+            cinemachineTargetYaw = ClampAngle(cinemachineTargetYaw, float.MinValue, float.MaxValue);
             _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
             // 修正虚拟摄像机旋转
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+                cinemachineTargetYaw, 0.0f);
         }
 
         private void Move()
@@ -266,7 +266,7 @@ namespace StarterAssets
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // 如果没有输入，将目标速度设置为0
             if (_input.move == Vector2.zero) targetSpeed = 0.0f;
-            if (_playerAgent)
+            if (_playerAgent && _playerAgent.enabled)
             {
                 targetSpeed = _playerAgent.agent.hasPath? _playerAgent.agent.velocity.magnitude: targetSpeed;
             }
