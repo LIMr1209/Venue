@@ -18,6 +18,7 @@ namespace DefaultNamespace
         private int _animIDJump;
         private OpusShow _opusShow;
         private ThirdPersonController _controller;
+        private bool _stop;
 
         private void Awake()
         {
@@ -33,7 +34,7 @@ namespace DefaultNamespace
                             _aoe = obj;
                             _aoe.transform.SetParent(_target.transform, false);
                             _aoe.SetActive(false);
-                            ShaderProblem.ResetParticleShader(_aoe);
+                            ShaderProblem.ResetMeshShader(_aoe);
                         }
                     ));
             }
@@ -62,9 +63,12 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            if(agent.hasPath && (Input.GetKeyDown(KeyCode.Space) ||Input.GetKeyDown(KeyCode.W) ||Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) ))  // 代理中 触发 人物控制器后 停止代理
-            {
-                agent.SetDestination(transform.position);
+            if(Input.GetKeyDown(KeyCode.Space) ||Input.GetKeyDown(KeyCode.W) ||Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D)){
+                _stop = false;
+                if (agent.hasPath) // 代理中 触发 人物控制器后 停止代理
+                {
+                    agent.SetDestination(transform.position);
+                }
             }
             DrawPath(); // 绘制路径
             if (_aoe) {
@@ -78,9 +82,9 @@ namespace DefaultNamespace
 
         private void LateUpdate()
         {
-            if (agent.hasPath)
+            if (agent.hasPath || _stop)
             {
-                _character.transform.position = agent.nextPosition;  // 人物控制器的位置 跟着代理
+                _character.transform.position = agent.nextPosition;  // _character的位置 跟着代理位置
             }
         }
 
@@ -101,9 +105,16 @@ namespace DefaultNamespace
                 return;
             }
 
+            if (agent.hasPath)
+            {
+                _stop = true;
+                agent.Warp(targetPos);
+                return;
+            }
+
             if (!agent.hasPath)
             {
-                agent.enabled = false; // 重新启动 让代理的位置跟着代理  问题就是 连续点击寻路时会卡顿
+                agent.enabled = false; // 重新启动 让agent代理的位置跟着_character
                 agent.enabled = true;
             }
             agent.SetDestination(targetPos); // 导航

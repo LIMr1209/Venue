@@ -74,6 +74,63 @@ namespace DefaultNamespace
                 // Debug.Log(_playerFollowCamera3rdBody.ShoulderOffset);
                 // _playerFollowCamera3rdBody.ShoulderOffset += _player.transform.forward * scroll * zoomSpeed;
             }
+#if UNITY_EDITOR
+            if (Input.GetKeyDown("0"))
+            {
+                characterId = "00";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("1"))
+            {
+                characterId = "01";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("2"))
+            {
+                characterId = "02";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("3"))
+            {
+                characterId = "03";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("4"))
+            {
+                characterId = "04";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("5"))
+            {
+                characterId = "05";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("6"))
+            {
+                characterId = "06";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("7"))
+            {
+                characterId = "07";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("8"))
+            {
+                characterId = "08";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("9"))
+            {
+                characterId = "09";
+                UpdateCharacter();
+            }
+            if (Input.GetKeyDown("z"))
+            {
+                characterId = "10";
+                UpdateCharacter();
+            }
+#endif
         }
 
         private void SwithVisul()

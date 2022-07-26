@@ -41,8 +41,8 @@ namespace StarterAssets
         [Tooltip("重力")]
         public float Gravity = -15.0f;
         
-        [Tooltip("QE look ")]
-        public float QElookSpeed = 0.1f;
+        // [Tooltip("QE look ")]
+        private float _QElookSpeed = 60.0f;
 
         [Space(10)]
         [Tooltip("再次跳跃所需的时间。设置为0f可立即再次跳转")]
@@ -84,7 +84,7 @@ namespace StarterAssets
         public bool hasMoveVisualAngle = false;
 
         // cinemachine
-        private float _cinemachineTargetYaw;
+        public float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
 
         // player
@@ -239,15 +239,11 @@ namespace StarterAssets
                 hasMoveVisualAngle = true;
             }else if (Keyboard.current[Key.Q].isPressed)
             {
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw -= QElookSpeed * Time.deltaTime * 60;
+                _cinemachineTargetYaw -= _QElookSpeed * Time.deltaTime;
                 _input.qlook = false;
             }else if (Keyboard.current[Key.E].isPressed)
             {
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
-
-                _cinemachineTargetYaw += QElookSpeed * Time.deltaTime * 60;
+                _cinemachineTargetYaw += _QElookSpeed * Time.deltaTime;
                 _input.elook = false;
             }
 

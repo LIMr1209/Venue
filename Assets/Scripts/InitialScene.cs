@@ -80,6 +80,7 @@ namespace DefaultNamespace
             StartCoroutine(
                 AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, isWeb, (obj) =>
                 {
+                    ShaderProblem.ResetMeshShader(obj);
                     showcaserootobj = obj;
                     showcaserootobj.SetActive(false);
                 }));
@@ -90,6 +91,8 @@ namespace DefaultNamespace
                     {
                         GameObject.Find("default_camera").gameObject.SetActive(false);
                     }
+
+                    ShaderProblem.ResetMeshShader(obj);
                     OnSetLightMap(obj);
                     sceneobj = obj;
                     sceneobj.SetActive(false);
@@ -101,20 +104,6 @@ namespace DefaultNamespace
             showcaserootobj.SetActive(true);
             sceneobj.SetActive(true);
             AfterScene();
-            if (sceneobj.transform.Find("shuimu/boli"))
-            {
-                sceneobj.transform.Find("shuimu/boli").GetComponent<Renderer>().material.shader =
-                        Shader.Find("Particles/Standard Surface");
-            }
-            for (int i = 0; i < sceneobj.transform.childCount; i++)
-            {
-                if (sceneobj.transform.GetChild(i).name.Contains("空气墙"))
-                {
-                    sceneobj.transform.GetChild(i).GetComponent<Renderer>().material.shader =
-                        Shader.Find("Particles/Standard Surface"); 
-                }
-            }
-
         }
 
         public void AfterScene()

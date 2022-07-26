@@ -31,52 +31,41 @@ namespace DefaultNamespace
             {
                 GameObject go = obj as GameObject;
 
-                SkinnedMeshRenderer[] rends = go.GetComponentsInChildren<SkinnedMeshRenderer>();
+                SkinnedMeshRenderer[] skinnedMeshRenderers = go.GetComponentsInChildren<SkinnedMeshRenderer>();
+                ParticleSystemRenderer[] particleSystemRenderers = go.GetComponentsInChildren<ParticleSystemRenderer>();
+                MeshRenderer[] meshRenderers = go.GetComponentsInChildren<MeshRenderer>();
+                
 
-                if (null != rends)
+                if (null != skinnedMeshRenderers)
 
                 {
-                    foreach (SkinnedMeshRenderer item in rends)
+                    foreach (SkinnedMeshRenderer item in skinnedMeshRenderers)
 
                     {
-                        Material[] materialsArr = item.sharedMaterials;
+                        Material[] materialsArr = item.materials;
 
                         foreach (Material m in materialsArr)
 
                             listMat.Add(m);
                     }
                 }
-            }
-
-            ResetShader(listMat);
-        }
-
-        // 粒子 
-        public static void ResetParticleShader(Object obj)
-        {
-            List<Material> listMat = new List<Material>();
-
-            listMat.Clear();
-
-            if (obj is Material)
-
-            {
-                Material m = obj as Material;
-
-                listMat.Add(m);
-            }
-
-            else if (obj is GameObject)
-
-            {
-                GameObject go = obj as GameObject;
-
-                ParticleSystemRenderer[] rends = go.GetComponentsInChildren<ParticleSystemRenderer>();
-
-                if (null != rends)
+                if (null != particleSystemRenderers)
 
                 {
-                    foreach (ParticleSystemRenderer item in rends)
+                    foreach (ParticleSystemRenderer item in particleSystemRenderers)
+
+                    {
+                        Material[] materialsArr = item.materials;
+
+                        foreach (Material m in materialsArr)
+
+                            listMat.Add(m);
+                    }
+                }
+                if (null != meshRenderers)
+
+                {
+                    foreach (MeshRenderer item in meshRenderers)
 
                     {
                         Material[] materialsArr = item.materials;

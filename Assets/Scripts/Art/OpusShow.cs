@@ -114,12 +114,15 @@ namespace DefaultNamespace
             transform.DORotateQuaternion(Player.rotation, 0.1f).OnComplete(() =>
             {
                 // 启用人物控制器
+                controller._cinemachineTargetYaw = 180.0f;
+                
                 if (controller) controller.enabled = true;
                 if (virtualCamera) virtualCamera.enabled = true;
+                Debug.Log(controller.CinemachineCameraTarget.transform.rotation.eulerAngles);
                 isClick = true;
                 IsActionTi = true;
 #if !UNITY_EDITOR && UNITY_WEBGL
-                    Tools.canalFocus();  // 调用前端取消聚焦
+                Tools.canalFocus();  // 调用前端取消聚焦
 #endif
             });
             isPlayerMove = false;

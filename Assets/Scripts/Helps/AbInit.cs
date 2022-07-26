@@ -154,11 +154,11 @@ namespace DefaultNamespace
 
                 byte[] abData = GetAbBytes(requestAB.downloadHandler.data);
                 AB = AssetBundle.LoadFromMemory(abData);
+                if(!needUnload) AssetBundelDic.Add(name, AB);
             }
             if (AB == null) throw (new Exception("资源包" + name + "加载错误"));
             if (callback != null) callback(AB);
             if (needUnload) AB.UnloadAsync(false);
-            if(!needUnload) AssetBundelDic.Add(name, AB);
         }
 
         // 加载 AssetBundles 总依赖
