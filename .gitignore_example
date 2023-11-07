@@ -77,3 +77,8 @@ crashlytics-build.properties
 
 # custom 
 .gitignore
+.vsconfig/
+Assets/AssetsBundles
+Assets/AssetsBundles.meta
+Assets/StreamingAssets/config.txt
+Assets/StreamingAssets/config.txt.meta

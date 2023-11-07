@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0025: 使用属性的表达式主体
+csharp_style_expression_bodied_properties = false

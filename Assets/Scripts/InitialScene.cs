@@ -1,6 +1,6 @@
-﻿using System;
+﻿using System.Collections;
 using UnityEngine;
-using UnityEditor;
+using UnityEngine.Rendering;
 
 namespace DefaultNamespace
 {
@@ -11,24 +11,171 @@ namespace DefaultNamespace
         // 将需要动态加载的文件放入其中，例如Texture，Sprite，prefab等等。
         // 在脚本中调用API接口Resources.Load()相关接口即可。
         // 此种方式只能访问Resources文件夹下的资源。
-        public string sceneModel = "Models/场馆";
+        [HideInInspector]
+        public string sceneModel;
+
+        [HideInInspector]
+        public string sceneUrl;
+        public string showcaseUrl;
+        private float _deltaTime;
+        private int _count;
+        public float fps;
+        private bool isWeb;
 
         private void Awake()
         {
-            GameObject model = Resources.Load<GameObject>(sceneModel);
-            GameObject newModel = Instantiate(model, new Vector3(1,1,1), Quaternion.identity);
-            // var tArray = Resources.FindObjectsOfTypeAll(typeof(MeshRenderer ));
-            MeshRenderer[] meshRender = newModel.gameObject.GetComponentsInChildren<MeshRenderer>();
-            foreach (MeshRenderer t in meshRender)
-            {
-                t.gameObject.AddComponent<MeshCollider>();
-            }
+#if !UNITY_EDITOR && UNITY_WEBGL
+            WebGLInput.captureAllKeyboardInput = false;
+            Debug.Log("通知发送场景url");
+            Tools.loadScene(); // 通知发送场景url
+            enabled = false;  // 默认不启动 前端发送场景url 后启动
+#else
+            sceneModel = "scene";
+            //sceneUrl = "https://cdn1.d3ingo.com/model_scene/220704/62c2646573844135b7385a6f/scene.ab";
+            sceneUrl = "https://cdn1.d3ingo.com/model_scene/220712/62cd6618950fa0e307a92f78/scene.ab";
+            showcaseUrl = "https://cdn1.d3ingo.com/model_scene/220712/62cd6618950fa0e307a92f78/showcaseroot.ab";
+
+#endif
+        }
+
+
+        private void Start()
+        {
+            int BeginIndex = sceneUrl.IndexOf("/scene");
+            string scenemanifestUrl = sceneUrl.Substring(0, BeginIndex);
+            string sceneManifestName = sceneModel + ".ab.manifest";
+            StartCoroutine(AbInit.instances.OnWebRequestAssetBundleManifestScene(scenemanifestUrl, sceneManifestName));
+
             
-            Camera[] cameras = newModel.gameObject.GetComponentsInChildren<Camera>();
-            foreach (Camera c in cameras)
+#if !UNITY_EDITOR && UNITY_WEBGL
+            isWeb = true;
+#else
+            isWeb = false;
+#endif
+
+
+            StartCoroutine(OnLoadSceneandOther());
+
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleMaterial("skybox_03", "", (material) =>
+                {
+                    Shader shader1 = Shader.Find("Skybox/Panoramic");
+                    material.shader = shader1;
+                    RenderSettings.skybox = material;
+                    OnChangeEnvironment();
+                    DynamicGI.UpdateEnvironment();
+                })); 
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleTexture("reflectionprobe_03", "", (texture) =>
+                {
+                    RenderSettings.defaultReflectionMode = DefaultReflectionMode.Custom;
+                    RenderSettings.customReflection = texture;
+                })); 
+        }
+
+        public IEnumerator OnLoadSceneandOther()
+        {
+            GameObject showcaserootobj = null;
+            GameObject sceneobj = null;
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("showcaseroot", showcaseUrl, isWeb, (obj) =>
+                {
+                    ShaderProblem.ResetMeshShader(obj);
+                    showcaserootobj = obj;
+                    showcaserootobj.SetActive(false);
+                }));
+            StartCoroutine(
+                AbInit.instances.OnWebRequestLoadAssetBundleGameObjectUrl("scene", sceneUrl, isWeb, (obj) =>
+                {
+                    if (GameObject.Find("default_camera"))
+                    {
+                        GameObject.Find("default_camera").gameObject.SetActive(false);
+                    }
+
+                    ShaderProblem.ResetMeshShader(obj);
+                    OnSetLightMap(obj);
+                    sceneobj = obj;
+                    sceneobj.SetActive(false);
+                }));
+            while (showcaserootobj == null || sceneobj == null)
             {
-                c.enabled = false;
+                yield return null;
             }
+            showcaserootobj.SetActive(true);
+            sceneobj.SetActive(true);
+            AfterScene();
+        }
+
+        public void AfterScene()
+        {
+            AddController controller = FindObjectOfType<AddController>();
+            if(controller) StartCoroutine(controller.AddThird());
+            Light[] lights = FindObjectsOfType<Light>();
+            foreach (Light i in lights)
+            {
+                if (i.gameObject.name != "Directional Light")
+                {
+                    i.gameObject.SetActive(false);
+                }
+            }
+
+            RunTimeBakeNavMesh runTimeBakeNavMesh = FindObjectOfType<RunTimeBakeNavMesh>();
+            runTimeBakeNavMesh.BakeNav(); // 动态烘培导航区域
+            AbInit.instances.FinishSlider();
+#if !UNITY_EDITOR && UNITY_WEBGL
+            Tools.loadScene();
+#endif
+        }
+
+        public void OnSetLightMap(GameObject obj)
+        {
+            LightMap lightMap = obj.GetComponent<LightMap>();
+            if (!lightMap) return;
+            lightMap.OnCreatLightmapTexs(AbInit.instances.AssetBundelLightMapDic.Count);
+            foreach (var item in AbInit.instances.AssetBundelLightMapDic)
+            {
+                if (item.Key.Contains("lightmap"))
+                {
+                    int BeginIndex = item.Key.IndexOf("/")+1;
+                    int LastIndex = item.Key.IndexOf(".");
+                    int len = LastIndex - BeginIndex;
+                    string bundleName = item.Key.Substring(BeginIndex, len);
+                    Texture2D texture2D = item.Value.LoadAsset<Texture2D>(bundleName);
+                    lightMap.OnAddLightmapTexs(texture2D);
+                }
+            }
+            lightMap.i = 0;
+            lightMap.OnLoadLightmap();
+            
+        }
+
+        private void OnChangeEnvironment()
+        {
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor = Color.white;
+            RenderSettings.ambientEquatorColor = Color.white;
+            RenderSettings.ambientGroundColor = Color.black;
+            RenderSettings.ambientIntensity = 0.6f;
+        }
+
+
+
+        private void Update()
+        {
+            _count++;
+            _deltaTime += Time.deltaTime;
+
+            if (_count % 60 == 0)
+            {
+                _count = 1;
+                fps = 60f/_deltaTime;
+                _deltaTime = 0;
+            }
+            // 可以通过编辑>项目设置>质量找到质量级别列表。您可以添加、删除或编辑这些。
+            // int qualityLevel = QualitySettings.GetQualityLevel();
+            // QualitySettings.SetQualityLevel (5, true);
+            // string[] names = QualitySettings.names;  
+
         }
     }
 }
